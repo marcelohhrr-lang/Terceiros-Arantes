@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arantes Marmoraria — Gestão de Terceiros</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<style>
+:root{
+  --black:      #111111;
+  --dark:       #1C1C1C;
+  --charcoal:   #2E2E2E;
+  --mid:        #555555;
+  --gray:       #888888;
+  --light-gray: #D8D8D8;
+  --pale:       #F2F2F2;
+  --bg:         #EBEBEB;
+  --white:      #FFFFFF;
+  --accent:     #3A3A3A;
+  --border:     #CCCCCC;
+  --green:      #2E5E1E;
+  --green-light:#DFF0D8;
+  --red:        #7A1C1C;
+  --red-light:  #FAE8E8;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,sans-serif;font-size:14px;color:var(--dark);background:var(--bg);min-height:100vh;}
+
+header{background:var(--black);border-bottom:3px solid var(--mid);padding:0;margin-bottom:1.5rem;}
+.header-inner{max-width:980px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:20px;}
+.header-logo img{height:50px;display:block;filter:brightness(0) invert(1);}
+.header-divider{width:1px;height:38px;background:var(--mid);}
+.header-title h1{font-family:Georgia,serif;font-size:15px;font-weight:normal;color:var(--pale);letter-spacing:.07em;text-transform:uppercase;}
+.header-title p{font-size:10px;color:var(--gray);letter-spacing:.1em;margin-top:3px;text-transform:uppercase;}
+.header-badge{font-size:10px;color:var(--gray);letter-spacing:.08em;text-transform:uppercase;text-align:right;line-height:1.6;margin-left:auto;}
+
+.container{max-width:980px;margin:0 auto;padding:0 16px 40px;}
+
+.tabs{display:flex;gap:4px;margin-bottom:1.4rem;flex-wrap:wrap;border-bottom:2px solid var(--border);}
+.tab-btn{padding:9px 20px;border-radius:4px 4px 0 0;font-size:11px;font-weight:700;border:1.5px solid transparent;border-bottom:none;background:transparent;color:var(--gray);cursor:pointer;letter-spacing:.06em;text-transform:uppercase;margin-bottom:-2px;transition:all .15s;}
+.tab-btn:hover:not(.active){background:var(--pale);color:var(--charcoal);}
+.tab-btn.active{background:var(--white);color:var(--black);border-color:var(--border);border-bottom-color:var(--white);font-weight:700;}
+.section{display:none;}.section.active{display:block;}
+
+.card{background:var(--white);border:1px solid var(--border);border-radius:3px;padding:1.3rem;margin-bottom:1rem;box-shadow:0 1px 5px rgba(0,0,0,.07);}
+.card-title{font-family:Georgia,serif;font-size:12px;font-weight:normal;color:var(--charcoal);letter-spacing:.09em;text-transform:uppercase;margin-bottom:.9rem;padding-bottom:.6rem;border-bottom:1.5px solid var(--pale);}
+
+.form-row{display:grid;gap:10px;margin-bottom:10px;}
+.col2{grid-template-columns:1fr 1fr;}
+.col3{grid-template-columns:1fr 1fr 1fr;}
+.col4{grid-template-columns:1fr 1fr 1fr 90px;}
+@media(max-width:620px){.col2,.col3,.col4{grid-template-columns:1fr;}}
+.field label{font-size:10px;color:var(--mid);display:block;margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;}
+.field input,.field select{display:block;width:100%;padding:8px 10px;font-size:13px;color:var(--dark);background:var(--white);border:1px solid var(--light-gray);border-radius:3px;outline:none;font-family:Arial,sans-serif;transition:border-color .15s,box-shadow .15s;}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23555' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;appearance:none;-webkit-appearance:none;}
+.field input:focus,.field select:focus{border-color:var(--charcoal);box-shadow:0 0 0 2px rgba(0,0,0,.08);}
+
+.btn-primary{padding:9px 22px;border-radius:3px;font-size:11px;font-weight:700;border:none;background:var(--charcoal);color:var(--white);cursor:pointer;letter-spacing:.08em;text-transform:uppercase;transition:background .15s;}
+.btn-primary:hover{background:var(--black);}
+.btn-green{padding:9px 20px;border-radius:3px;font-size:11px;font-weight:700;border:none;background:var(--green);color:var(--white);cursor:pointer;letter-spacing:.07em;text-transform:uppercase;}
+.btn-green:hover{background:#3c7a26;}
+.btn-orange{padding:9px 20px;border-radius:3px;font-size:11px;font-weight:700;border:none;background:#5A4010;color:var(--white);cursor:pointer;letter-spacing:.07em;text-transform:uppercase;}
+.btn-orange:hover{background:#7A5818;}
+.btn-pdf{padding:7px 13px;border-radius:3px;font-size:11px;font-weight:700;border:none;background:var(--red);color:var(--white);cursor:pointer;letter-spacing:.05em;text-transform:uppercase;}
+.btn-pdf:hover{background:#5a1010;}
+.btn-html{padding:7px 13px;border-radius:3px;font-size:11px;font-weight:700;border:1.5px solid var(--charcoal);background:var(--white);color:var(--charcoal);cursor:pointer;letter-spacing:.05em;text-transform:uppercase;}
+.btn-html:hover{background:var(--pale);}
+.btn-danger{padding:4px 8px;border-radius:3px;font-size:12px;border:none;background:transparent;color:var(--light-gray);cursor:pointer;}
+.btn-danger:hover{color:var(--red);}
+.btn-sm{padding:5px 12px;font-size:11px;font-weight:700;border-radius:3px;border:1px solid var(--border);background:var(--pale);color:var(--charcoal);cursor:pointer;letter-spacing:.05em;text-transform:uppercase;}
+.btn-sm:hover{background:var(--light-gray);}
+.btn-sm.green{border-color:var(--green);background:var(--green-light);color:var(--green);}
+.btn-sm.green:hover{background:#c5e0b8;}
+.btn-sm.revert{border-color:var(--mid);background:var(--pale);color:var(--mid);}
+.btn-sm.revert:hover{background:var(--light-gray);color:var(--dark);}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:.8rem;}
+
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{text-align:left;padding:8px 10px;font-size:10px;font-weight:700;color:var(--white);border-bottom:none;text-transform:uppercase;letter-spacing:.07em;background:var(--charcoal);}
+td{padding:8px 10px;border-bottom:1px solid var(--pale);color:var(--dark);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--pale);}
+
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:2px;letter-spacing:.04em;}
+.bm{background:#e0eaf5;color:#1a3a60;}
+.bg{background:#dff0d8;color:#1a4010;}
+.bq{background:#fdf0dc;color:#5a3800;}
+.bqz{background:#ede8f8;color:#3a2080;}
+.bl{background:#ebebeb;color:#333333;}
+
+.rom-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-left:3px solid var(--charcoal);border-radius:3px;margin-bottom:6px;background:var(--white);cursor:pointer;transition:background .12s;}
+.rom-item:hover{background:var(--pale);}
+.rom-num{font-family:Georgia,serif;font-weight:bold;color:var(--charcoal);font-size:14px;white-space:nowrap;min-width:50px;}
+.rom-info{flex:1;font-size:12px;color:var(--gray);}
+
+.detail-back{font-size:11px;color:var(--charcoal);cursor:pointer;margin-bottom:.9rem;display:inline-flex;align-items:center;gap:5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;}
+.detail-back:hover{text-decoration:underline;}
+.empty-state{text-align:center;padding:2rem;color:var(--light-gray);font-size:12px;letter-spacing:.04em;}
+
+.ac-cliente-box{border:1px solid var(--border);border-left:3px solid var(--mid);border-radius:3px;padding:.9rem;margin-bottom:.7rem;background:var(--pale);}
+.ac-cliente-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;}
+.ac-cliente-nome{font-family:Georgia,serif;font-size:13px;color:var(--dark);}
+.ac-cliente-pedido{font-size:11px;color:var(--gray);margin-left:8px;letter-spacing:.04em;}
+.ac-item-row{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.ac-item-row:last-child{border-bottom:none;}
+.ac-item-mod{font-weight:700;min-width:90px;color:var(--charcoal);}
+.ac-item-desc{color:var(--gray);flex:1;}
+.ac-item-qtd{color:var(--dark);min-width:32px;text-align:right;font-weight:700;}
+
+.kanban-wrap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;}
+@media(max-width:700px){.kanban-wrap{grid-template-columns:1fr;}}
+.kanban-col{border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+.kanban-header{padding:11px 16px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:space-between;letter-spacing:.09em;text-transform:uppercase;}
+.kanban-header.liberado{background:var(--black);color:var(--pale);border-bottom:2px solid var(--mid);}
+.kanban-header.entregue{background:var(--green);color:#DFF0D8;border-bottom:2px solid #3c7a26;}
+.kanban-header.instalado{background:#2E4A6E;color:#D6E8FF;border-bottom:2px solid #4A7AB5;}
+.hist-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;padding:2px 0;}
+.hist-toggle:hover .hist-arrow{color:var(--charcoal);}
+.hist-arrow{font-size:13px;color:var(--gray);transition:transform .2s;display:inline-block;}
+.hist-arrow.open{transform:rotate(180deg);}
+.hist-body{overflow:hidden;transition:max-height .3s ease;max-height:0;}
+.hist-body.open{max-height:9999px;}
+.kanban-body{padding:10px;background:var(--bg);min-height:140px;display:flex;flex-direction:column;gap:8px;}
+.kanban-body.drag-over{background:var(--light-gray);outline:2px dashed var(--charcoal);}
+.k-card{background:var(--white);border:1px solid var(--border);border-left:3px solid var(--mid);border-radius:3px;padding:10px 12px;cursor:grab;box-shadow:0 1px 4px rgba(0,0,0,.07);transition:box-shadow .12s;}
+.k-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.12);}
+.k-card:active{cursor:grabbing;}
+.k-card.dragging{opacity:.4;}
+.k-client{font-family:Georgia,serif;font-size:13px;color:var(--dark);}
+.k-order{font-size:11px;color:var(--gray);margin-top:2px;}
+.dl-track{height:4px;background:var(--pale);border-radius:2px;overflow:hidden;margin-top:8px;}
+.dl-fill{height:100%;border-radius:2px;}
+.dl-ok{background:#3c7a26;}.dl-warn{background:#8a6010;}.dl-late{background:var(--red);}
+.dl-label{font-size:10px;color:var(--gray);margin-top:3px;display:flex;justify-content:space-between;}
+.k-actions{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;}
+.count-badge{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:1px 8px;font-size:11px;font-weight:700;}
+
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;z-index:999;}
+.amb-tag{display:inline-flex;align-items:center;gap:5px;background:var(--pale);border:1px solid var(--border);border-radius:3px;padding:3px 9px;font-size:11px;font-weight:700;color:var(--charcoal);letter-spacing:.04em;}
+.amb-tag button{background:none;border:none;cursor:pointer;color:var(--gray);font-size:12px;padding:0;line-height:1;}
+.amb-tag button:hover{color:var(--red);}
+.k-empresa{font-size:11px;color:var(--mid);margin-top:3px;font-style:italic;}
+.k-ambientes{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;}
+.k-amb-pill{font-size:10px;font-weight:700;background:var(--pale);border:1px solid var(--border);border-radius:2px;padding:2px 7px;color:var(--charcoal);letter-spacing:.04em;}
+.modal-box{background:var(--white);border:1px solid var(--border);border-radius:4px;padding:1.6rem;min-width:290px;max-width:360px;box-shadow:0 12px 40px rgba(0,0,0,.25);}
+.modal-title{font-family:Georgia,serif;font-size:15px;color:var(--dark);margin-bottom:.8rem;letter-spacing:.04em;}
+.modal-actions{display:flex;gap:8px;margin-top:1rem;justify-content:flex-end;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-logo">
+      <img src="https://arantesmarmoraria.com.br/wp-content/uploads/2025/09/logo-1-1024x285.webp" alt="Arantes Marmoraria">
+    </div>
+    <div class="header-divider"></div>
+    <div class="header-title">
+      <h1>Sistema de Gestão de Terceiros</h1>
+      <p>Romaneios · Controle de Entregas · Kanban de Projetos</p>
+    </div>
+    <div class="header-badge">Desde 1998<br>São José dos Campos</div>
+    <div id="sb-status" style="font-size:10px;color:#888;letter-spacing:.06em;text-align:right;min-width:100px;">Conectando...</div>
+  </div>
+</header>
+
+<div class="container">
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('tab-mat')">📝 Romaneio de Material</button>
+  <button class="tab-btn" onclick="showTab('tab-ac')">🔧 Romaneio de Acessórios</button>
+  <button class="tab-btn" onclick="showTab('tab-kb')">📋 Kanban de Projetos</button>
+</div>
+
+<!-- MATERIAL -->
+<div id="tab-mat" class="section active">
+  <div id="mat-form-view">
+    <div class="card">
+      <div class="card-title">Cadastro de Material</div>
+      <div class="form-row col3">
+        <div class="field"><label>Tipo de Pedra</label>
+          <select id="mn-tipo"><option value="">Selecione...</option><option>Mármore</option><option>Granito</option><option>Quartzito</option><option>Quartzo</option><option>Lâmina</option></select>
+        </div>
+        <div class="field"><label>Nome do Material</label><input id="mn-nome" type="text" placeholder="Ex: Calacatta Gold"></div>
+        <div class="field"><label>Quantidade de Chapas</label><input id="mn-qtd" type="number" min="1" value="1"></div>
+      </div>
+      <div class="form-row col4">
+        <div class="field"><label>Comprimento (m)</label><input id="mn-comp" type="text" placeholder="Ex: 3,00"></div>
+        <div class="field"><label>Largura (m)</label><input id="mn-larg" type="text" placeholder="Ex: 1,80"></div>
+        <div class="field"><label>Textura / Acabamento</label>
+          <select id="mn-tex">
+            <option value="">Selecione...</option>
+            <option>Polido</option>
+            <option>Escovado</option>
+            <option>Levigado</option>
+            <option>Flameado</option>
+            <option>Acetinado</option>
+          </select>
+        </div>
+        <div class="field"><label>Observações</label><input id="mn-obs" type="text" placeholder="Opcional"></div>
+      </div>
+      <div class="btn-row"><button class="btn-primary" onclick="addMatItem()">+ Incluir Material</button></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Relação de Materiais — Romaneio Atual</div>
+      <div style="overflow-x:auto">
+        <table><thead><tr><th>#</th><th>Tipo</th><th>Material</th><th>Textura</th><th>Comp (m)</th><th>Larg (m)</th><th>Qtd</th><th>Obs</th><th></th></tr></thead>
+        <tbody id="mat-tb"><tr><td colspan="9"><div class="empty-state">— Nenhum material incluído —</div></td></tr></tbody></table>
+      </div>
+      <div class="btn-row"><button class="btn-green" onclick="processarRomaneioMat()">✓ Processar e Emitir Romaneio</button></div>
+    </div>
+      <div class="card">
+        <div class="hist-toggle" onclick="toggleHist('mat')">
+          <div class="card-title" style="margin-bottom:0;border-bottom:none;">Histórico de Romaneios de Material <span id="hist-mat-count" style="font-family:Arial;font-size:11px;color:var(--gray);font-weight:400"></span></div>
+          <span class="hist-arrow" id="hist-arrow-mat">▼</span>
+        </div>
+        <div class="hist-body" id="hist-body-mat">
+          <div style="padding-top:.8rem;" id="rom-mat-list"><div class="empty-state">— Nenhum romaneio emitido —</div></div>
+        </div>
+      </div>
+  </div>
+  <div id="mat-detail-view" style="display:none">
+    <span class="detail-back" onclick="voltarMat()">← Voltar ao Histórico</span>
+    <div id="mat-detail-content"></div>
+  </div>
+</div>
+
+<!-- ACESSÓRIOS -->
+<div id="tab-ac" class="section">
+  <div id="ac-form-view">
+    <div class="card" id="ac-step1">
+      <div class="card-title">Passo 1 — Identificação do Cliente</div>
+      <div class="form-row col2">
+        <div class="field"><label>Nº do Pedido</label><input id="ac-ped" type="text" placeholder="Ex: Ped-045"></div>
+        <div class="field"><label>Nome do Cliente</label><input id="ac-cli" type="text" placeholder="Ex: João Silva"></div>
+      </div>
+      <div class="btn-row"><button class="btn-primary" onclick="iniciarCliente()">Avançar →</button></div>
+    </div>
+    <div class="card" id="ac-step2" style="display:none">
+      <div class="card-title">Passo 2 — Acessórios de <span id="ac-step2-label" style="font-style:italic;color:#555;"></span></div>
+      <div class="form-row col3">
+        <div class="field"><label>Modelo do Acessório</label>
+          <select id="acm"><option value="">Selecione...</option><option>Cuba</option><option>Torneira</option><option>Calha úmida</option><option>Lixeira</option><option>Válvula</option><option>Outro</option></select>
+        </div>
+        <div class="field"><label>Descrição / Acabamento</label><input id="acd" type="text" placeholder="Ex: Inox escovado"></div>
+        <div class="field"><label>Quantidade</label><input id="acq" type="number" min="1" value="1"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="addAcItemCliente()">+ Adicionar Acessório</button>
+        <button class="btn-orange" onclick="finalizarCliente()">✓ Finalizar Cliente e Avançar</button>
+      </div>
+      <div id="ac-preview" style="margin-top:.8rem;"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Clientes no Romaneio Atual</div>
+      <div id="ac-grupos"><div class="empty-state">— Nenhum cliente incluído —</div></div>
+      <div class="btn-row"><button class="btn-green" onclick="processarRomaneioAc()">✓ Processar e Emitir Romaneio de Acessórios</button></div>
+    </div>
+    <div class="card">
+      <div class="hist-toggle" onclick="toggleHist('ac')">
+        <div class="card-title" style="margin-bottom:0;border-bottom:none;">Histórico de Romaneios de Acessórios <span id="hist-ac-count" style="font-family:Arial;font-size:11px;color:var(--gray);font-weight:400"></span></div>
+        <span class="hist-arrow" id="hist-arrow-ac">▼</span>
+      </div>
+      <div class="hist-body" id="hist-body-ac">
+        <div style="padding-top:.8rem;" id="rom-ac-list"><div class="empty-state">— Nenhum romaneio emitido —</div></div>
+      </div>
+    </div>
+  </div>
+  <div id="ac-detail-view" style="display:none">
+    <span class="detail-back" onclick="voltarAc()">← Voltar ao Histórico</span>
+    <div id="ac-detail-content"></div>
+  </div>
+</div>
+
+<!-- KANBAN -->
+<div id="tab-kb" class="section">
+  <div class="card">
+    <div class="card-title">Liberar Projeto para Terceiro</div>
+    <div class="form-row col2">
+      <div class="field"><label>Nome do Cliente</label><input id="kbc" type="text" placeholder="Ex: Maria Oliveira"></div>
+      <div class="field"><label>Pedido / Referência</label><input id="kbp" type="text" placeholder="Ex: Ped-045"></div>
+    </div>
+    <div class="form-row col2">
+      <div class="field"><label>Empresa Terceirizada</label><input id="kb-empresa" type="text" placeholder="Ex: Marmoraria Silva"></div>
+      <div class="field"><label>Adicionar Ambiente</label>
+        <div style="display:flex;gap:6px;">
+          <input id="kb-amb-input" type="text" placeholder="Ex: Cozinha, Suíte master, Lavabo..." style="flex:1" onkeydown="if(event.key==='Enter'){event.preventDefault();addAmbiente();}">
+          <button class="btn-primary" type="button" onclick="addAmbiente()" style="white-space:nowrap;padding:8px 14px;">+ Add</button>
+        </div>
+      </div>
+    </div>
+    <div id="kb-amb-wrap" style="display:none;margin-bottom:8px;">
+      <div style="font-size:10px;color:var(--mid);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Ambientes incluídos:</div>
+      <div id="kb-amb-tags" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
+    <div class="btn-row"><button class="btn-primary" onclick="liberarProjeto()">→ Liberar para Produção</button></div>
+  </div>
+  <div class="kanban-wrap">
+    <div class="kanban-col">
+      <div class="kanban-header liberado">⏱ Liberado — Em Produção pelo Terceiro <span class="count-badge" id="cnt-lib">0</span></div>
+      <div class="kanban-body" id="col-lib" ondragover="onDragOver(event,'lib')" ondragleave="onDragLeave('lib')" ondrop="onDrop(event,'lib')">
+        <div class="empty-state">Nenhum projeto liberado.</div>
+      </div>
+    </div>
+    <div class="kanban-col">
+      <div class="kanban-header entregue">✓ Entregue — Recebido pela Arantes <span class="count-badge" id="cnt-ent">0</span></div>
+      <div class="kanban-body" id="col-ent" ondragover="onDragOver(event,'ent')" ondragleave="onDragLeave('ent')" ondrop="onDrop(event,'ent')">
+        <div class="empty-state">Nenhum projeto entregue.</div>
+      </div>
+    </div>
+    <div class="kanban-col">
+      <div class="kanban-header instalado">🏠 Obra Instalada <span class="count-badge" id="cnt-inst">0</span></div>
+      <div class="kanban-body" id="col-inst" ondragover="onDragOver(event,'inst')" ondragleave="onDragLeave('inst')" ondrop="onDrop(event,'inst')">
+        <div class="empty-state">Nenhuma obra instalada.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- MODAL EDITAR CARD -->
+<div id="modal-editar" class="modal-bg" style="display:none">
+  <div class="modal-box" style="max-width:440px;width:95%">
+    <div class="modal-title">✏ Editar Projeto</div>
+    <div class="form-row col2" style="margin-bottom:8px">
+      <div class="field"><label>Nome do Cliente</label><input id="edit-cl" type="text"></div>
+      <div class="field"><label>Pedido / Referência</label><input id="edit-ped" type="text"></div>
+    </div>
+    <div class="field" style="margin-bottom:10px"><label>Empresa Terceirizada</label><input id="edit-empresa" type="text"></div>
+    <div class="field" style="margin-bottom:6px">
+      <label>Adicionar Ambiente</label>
+      <div style="display:flex;gap:6px">
+        <input id="edit-amb-input" type="text" placeholder="Nome do ambiente..." style="flex:1" onkeydown="if(event.key==='Enter'){event.preventDefault();addAmbienteEdit();}">
+        <button class="btn-primary" type="button" onclick="addAmbienteEdit()" style="padding:8px 12px;white-space:nowrap">+ Add</button>
+      </div>
+    </div>
+    <div id="edit-amb-tags" style="display:flex;flex-wrap:wrap;gap:6px;min-height:24px;margin-bottom:12px;"></div>
+    <div class="modal-actions">
+      <button class="btn-sm" onclick="fecharEdicao()">Cancelar</button>
+      <button class="btn-primary" onclick="salvarEdicaoCard()">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+<div id="modal-senha" class="modal-bg" style="display:none">
+  <div class="modal-box">
+    <div class="modal-title">🔒 Autorização Necessária</div>
+    <p style="font-size:13px;color:var(--gray);margin-bottom:.9rem;line-height:1.6">Para reverter o status de um projeto, insira a senha de supervisor:</p>
+    <div class="field"><input id="senha-input" type="password" placeholder="Senha de autorização"></div>
+    <div id="senha-erro" style="color:var(--red);font-size:12px;margin-top:5px;display:none;">Senha incorreta. Acesso negado.</div>
+    <div class="modal-actions">
+      <button class="btn-sm" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-primary" onclick="confirmarSenha()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var matItems=[],acGrupos=[],romsMat=[],romsAc=[],projetos=[];
+var ROM_MAT_START=108,ROM_AC_START=200;
+var dragProjId=null,pendingRevertId=null,acClienteAtual=null;
+var LOGO_URL='https://arantesmarmoraria.com.br/wp-content/uploads/2025/09/logo-1-1024x285.webp';
+
+function showTab(id){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  var ids=['tab-mat','tab-ac','tab-kb'];
+  document.querySelectorAll('.tab-btn')[ids.indexOf(id)].classList.add('active');
+}
+function v(id){return document.getElementById(id).value.trim();}
+function sv(id,val){document.getElementById(id).value=val;}
+function tipoBadge(t){
+  var m={Mármore:'bm',Granito:'bg',Quartzito:'bq',Quartzo:'bqz','Lâmina':'bl'};
+  return '<span class="badge '+(m[t]||'bl')+'">'+t+'</span>';
+}
+
+/* ===== DOWNLOAD HTML ===== */
+function downloadHtml(conteudo, nomeArquivo){
+  // Encode to base64 to avoid CSP/sandbox restrictions
+  var encoded = btoa(unescape(encodeURIComponent(conteudo)));
+  var a = document.createElement('a');
+  a.href = 'data:text/html;charset=utf-8;base64,' + encoded;
+  a.download = nomeArquivo;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function(){ document.body.removeChild(a); }, 300);
+}
+
+/* ===== MATERIAL ===== */
+function addMatItem(){
+  var tipo=v('mn-tipo'),nome=v('mn-nome'),comp=v('mn-comp'),larg=v('mn-larg'),
+      tex=v('mn-tex'),qtd=parseInt(document.getElementById('mn-qtd').value)||1,obs=v('mn-obs');
+  if(!tipo||!nome||!comp||!larg){alert('Preencha o tipo, nome, comprimento e largura da chapa.');return;}
+  matItems.push({tipo:tipo,nome:nome,comp:comp,larg:larg,tex:tex,qtd:qtd,obs:obs});
+  renderMatItems();
+  sv('mn-tipo','');sv('mn-nome','');sv('mn-comp','');sv('mn-larg','');sv('mn-tex','');sv('mn-qtd','1');sv('mn-obs','');
+}
+function remMatItem(i){matItems.splice(i,1);renderMatItems();}
+function renderMatItems(){
+  var tb=document.getElementById('mat-tb');
+  if(!matItems.length){tb.innerHTML='<tr><td colspan="9"><div class="empty-state">— Nenhum material incluído —</div></td></tr>';return;}
+  tb.innerHTML=matItems.map(function(m,i){
+    return '<tr><td style="color:#ccc;font-size:11px">'+(i+1)+'</td><td>'+tipoBadge(m.tipo)+'</td>'
+      +'<td style="font-weight:700">'+m.nome+'</td>'
+      +'<td>'+(m.tex||'—')+'</td>'
+      +'<td>'+m.comp+' m</td><td>'+m.larg+' m</td>'
+      +'<td>'+m.qtd+'</td><td style="color:#888">'+(m.obs||'—')+'</td>'
+      +'<td><button class="btn-danger" onclick="remMatItem('+i+')">✕</button></td></tr>';
+  }).join('');
+}
+function processarRomaneioMat(){
+  if(!matItems.length){alert('Inclua pelo menos um material antes de processar o romaneio.');return;}
+  var num=ROM_MAT_START+romsMat.length;
+  romsMat.push({num:num,data:new Date(),itens:JSON.parse(JSON.stringify(matItems))});
+  matItems=[];renderMatItems();renderRomsMat();
+}
+function renderRomsMat(){
+  var el=document.getElementById('rom-mat-list');
+  var countEl=document.getElementById('hist-mat-count');
+  if(countEl) countEl.textContent=romsMat.length?'('+romsMat.length+')':'';
+  if(!romsMat.length){el.innerHTML='<div class="empty-state">— Nenhum romaneio emitido —</div>';return;}
+  el.innerHTML=romsMat.map(function(r,i){
+    return '<div class="rom-item" onclick="verRomMat('+i+')">'
+      +'<span class="rom-num">Nº '+r.num+'</span>'
+      +'<span class="rom-info">'+r.itens.length+' chapa(s) — '+r.data.toLocaleDateString('pt-BR')+'</span>'
+      +'<div style="display:flex;gap:6px;margin-left:auto;flex-shrink:0">'
+      +'<button class="btn-html" onclick="event.stopPropagation();baixarHtmlMat('+i+')">↓ HTML</button>'
+      +'<button class="btn-pdf" onclick="event.stopPropagation();gerarPdfMat('+i+')">↓ PDF</button>'
+      +'</div></div>';
+  }).join('');
+}
+function verRomMat(i){
+  var r=romsMat[i];
+  document.getElementById('mat-form-view').style.display='none';
+  document.getElementById('mat-detail-view').style.display='block';
+  var rows=r.itens.map(function(m,j){
+    return '<tr><td>'+(j+1)+'</td><td>'+m.tipo+'</td><td>'+m.nome+'</td>'
+      +'<td>'+(m.tex||'—')+'</td>'
+      +'<td>'+m.comp+' m</td><td>'+m.larg+' m</td><td>'+m.qtd+'</td><td>'+(m.obs||'—')+'</td></tr>';
+  }).join('');
+  document.getElementById('mat-detail-content').innerHTML=
+    '<div class="card"><div class="card-title">Romaneio de Material — Nº '+r.num+' &nbsp;·&nbsp; '+r.data.toLocaleDateString('pt-BR')+'</div>'
+    +'<div style="overflow-x:auto"><table><thead><tr><th>#</th><th>Tipo</th><th>Material</th><th>Textura</th><th>Comp (m)</th><th>Larg (m)</th><th>Qtd</th><th>Obs</th></tr></thead><tbody>'+rows+'</tbody></table></div>'
+    +'<div class="btn-row" style="margin-top:.9rem">'
+    +'<button class="btn-html" onclick="baixarHtmlMat('+i+')">↓ Baixar HTML</button>'
+    +'<button class="btn-pdf" onclick="gerarPdfMat('+i+')">↓ Gerar PDF</button>'
+    +'</div></div>';
+}
+function voltarMat(){document.getElementById('mat-form-view').style.display='';document.getElementById('mat-detail-view').style.display='none';}
+
+function htmlConteudoMat(r){
+  var rows=r.itens.map(function(m,j){
+    return '<tr><td>'+(j+1)+'</td><td>'+m.tipo+'</td><td>'+m.nome+'</td>'
+      +'<td>'+(m.tex||'—')+'</td>'
+      +'<td>'+m.comp+' m</td><td>'+m.larg+' m</td><td>'+m.qtd+'</td><td>'+(m.obs||'—')+'</td></tr>';
+  }).join('');
+  return '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Romaneio Material Nº '+r.num+'</title>'
+    +'<style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;color:#1C1C1C;padding:0 28px}'
+    +'.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;padding-bottom:16px;border-bottom:2px solid #2E2E2E}'
+    +'.header img{height:44px;filter:brightness(0)}'
+    +'.header-right{text-align:right}'
+    +'.header-right h1{font-family:Georgia,serif;font-size:18px;font-weight:normal;color:#1C1C1C;letter-spacing:.06em}'
+    +'.header-right p{font-size:10px;color:#888;letter-spacing:.1em;text-transform:uppercase;margin-top:3px}'
+    +'.doc-meta{display:flex;justify-content:space-between;margin-bottom:22px;font-size:12px;color:#555;padding:10px 14px;background:#F2F2F2;border-radius:3px}'
+    +'table{width:100%;border-collapse:collapse;margin-bottom:26px}'
+    +'th{background:#1C1C1C;color:#F2F2F2;padding:9px 11px;text-align:left;font-size:11px;letter-spacing:.07em;text-transform:uppercase}'
+    +'td{padding:9px 11px;font-size:12px;border-bottom:1px solid #EBEBEB}'
+    +'tr:nth-child(even) td{background:#F8F8F8}'
+    +'.declaracao{border:1.5px solid #555;border-radius:3px;padding:14px 18px;font-size:13px;margin-bottom:22px;background:#F8F8F8;line-height:1.7;color:#2E2E2E}'
+    +'.ressalva-label{font-size:10px;color:#888;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}'
+    +'.ressalva-box{border:1px solid #CCCCCC;border-radius:3px;min-height:100px;padding:10px;font-size:12px;color:#ccc;margin-bottom:28px}'
+    +'.assinatura{display:flex;justify-content:space-between;align-items:flex-end;padding-top:16px;border-top:1px solid #EBEBEB}'
+    +'.ass-linha{text-align:center}'
+    +'.ass-linha hr{border:none;border-top:1.5px solid #1C1C1C;width:240px;margin-bottom:6px}'
+    +'.ass-linha p{font-size:11px;color:#666;letter-spacing:.04em}'
+    +'.footer{text-align:center;margin-top:32px;font-size:10px;color:#bbb;letter-spacing:.1em;text-transform:uppercase;border-top:1px solid #EBEBEB;padding-top:14px}'
+    +'.btn-print{display:block;margin:28px auto 0;padding:10px 28px;background:#1C1C1C;color:#fff;border:none;border-radius:3px;font-size:12px;cursor:pointer;font-weight:700;letter-spacing:.08em;text-transform:uppercase}'
+    +'@media print{.btn-print{display:none}}</style></head><body>'
+    +'<div class="header"><img src="'+LOGO_URL+'" alt="Arantes Marmoraria">'
+    +'<div class="header-right"><h1>Romaneio de Material</h1><p>Controle de Entrega ao Terceiro</p></div></div>'
+    +'<div class="doc-meta"><span><strong>Nº do Romaneio:</strong> '+r.num+'</span><span><strong>Data de Emissão:</strong> '+r.data.toLocaleDateString('pt-BR')+'</span></div>'
+    +'<table><thead><tr><th>#</th><th>Tipo</th><th>Material</th><th>Textura</th><th>Comprimento</th><th>Largura</th><th>Qtd</th><th>Observações</th></tr></thead><tbody>'+rows+'</tbody></table>'
+    +'<div class="declaracao">Os itens relacionados neste romaneio foram devidamente conferidos e aprovados quanto a quantidade, estado e acabamento.</div>'
+    +'<p class="ressalva-label">Ressalvas (se houver):</p><div class="ressalva-box"></div>'
+    +'<div class="assinatura">'
+    +'<div class="ass-linha"><hr><p>Assinatura do Entregador</p><p style="margin-top:4px;font-size:10px">Data: ___/___/______</p></div>'
+    +'<div class="ass-linha"><hr><p>Assinatura do Recebedor do Material</p><p style="margin-top:4px;font-size:10px">Data: ___/___/______</p></div>'
+    +'</div>'
+    +'<div class="footer">Arantes Marmoraria &nbsp;·&nbsp; Tecnologia &amp; Arte &nbsp;·&nbsp; Desde 1998 &nbsp;·&nbsp; São José dos Campos — SP</div>'
+    +'<button class="btn-print" onclick="window.print()">🖨 Imprimir / Salvar como PDF</button>'
+    +'</body></html>';
+}
+function baixarHtmlMat(i){downloadHtml(htmlConteudoMat(romsMat[i]),'romaneio-material-'+romsMat[i].num+'.html');}
+
+function gerarPdfMat(i){
+  var r=romsMat[i];
+  var doc=new window.jspdf.jsPDF();
+  var pw=doc.internal.pageSize.getWidth();
+  // Header — texto simples, sem fundo colorido
+  doc.setFontSize(13);doc.setFont('helvetica','bold');doc.setTextColor(30,30,30);
+  doc.text('Arantes Marmoraria',14,15);
+  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(150,150,150);
+  doc.text('Tecnologia & Arte · Desde 1998 · São José dos Campos',14,21);
+  doc.setFontSize(10);doc.setFont('helvetica','bold');doc.setTextColor(30,30,30);
+  doc.text('Romaneio de Material',pw-14,15,{align:'right'});
+  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(120,120,120);
+  doc.text('Nº '+r.num+'   ·   '+r.data.toLocaleDateString('pt-BR'),pw-14,21,{align:'right'});
+  // Linha fina separadora
+  doc.setDrawColor(210,210,210);doc.setLineWidth(0.3);doc.line(14,25,pw-14,25);
+  // Tabela com cabeçalho cinza claro
+  doc.autoTable({startY:30,
+    head:[['#','Tipo','Material','Textura','Comp (m)','Larg (m)','Qtd','Obs']],
+    body:r.itens.map(function(m,j){return[j+1,m.tipo,m.nome,m.tex||'—',m.comp+' m',m.larg+' m',m.qtd,m.obs||'—'];}),
+    styles:{fontSize:9,cellPadding:4,textColor:[40,40,40],valign:'middle'},
+    headStyles:{fillColor:[230,230,230],textColor:[40,40,40],fontStyle:'bold',fontSize:8},
+    alternateRowStyles:{fillColor:[248,248,248]},
+    columnStyles:{
+      0:{cellWidth:10,halign:'center'},
+      1:{cellWidth:24},
+      2:{cellWidth:42},
+      3:{cellWidth:22},
+      4:{cellWidth:20,halign:'center'},
+      5:{cellWidth:20,halign:'center'},
+      6:{cellWidth:12,halign:'center'},
+      7:{cellWidth:'auto'}
+    },
+    margin:{left:14,right:14}
+  });
+  var y=doc.lastAutoTable.finalY+12;
+  doc.setDrawColor(210,210,210);doc.setLineWidth(0.3);doc.line(14,y-4,pw-14,y-4);
+  var msg='Os itens relacionados neste romaneio foram devidamente conferidos e aprovados quanto a quantidade, estado e acabamento.';
+  doc.setFontSize(10);doc.setFont('helvetica','italic');doc.setTextColor(40,40,40);
+  var lines=doc.splitTextToSize(msg,pw-28);
+  doc.text(lines,14,y);y+=lines.length*7+10;
+  doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(130,130,130);
+  doc.text('RESSALVAS (SE HOUVER):',14,y);y+=5;
+  doc.setDrawColor(210,210,210);doc.setLineWidth(0.3);doc.rect(14,y,pw-28,45);y+=51;
+  // Duas assinaturas lado a lado
+  var colW=(pw-28)/2-6;
+  doc.setDrawColor(100,100,100);doc.setLineWidth(0.4);
+  doc.line(14,y+16,14+colW,y+16);
+  doc.line(pw-14-colW,y+16,pw-14,y+16);
+  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(100,100,100);
+  doc.text('Assinatura do Entregador',14,y+21);
+  doc.text('Data: ___/___/______',14,y+27);
+  doc.text('Assinatura do Recebedor do Material',pw-14-colW,y+21);
+  doc.text('Data: ___/___/______',pw-14-colW,y+27);
+  y+=34;
+  doc.setFontSize(7);doc.setTextColor(190,190,190);
+  doc.text('Arantes Marmoraria · Tecnologia & Arte · Desde 1998 · São José dos Campos - SP',pw/2,doc.internal.pageSize.getHeight()-8,{align:'center'});
+  doc.save('romaneio-material-'+r.num+'.pdf');
+}
+
+/* ===== ACESSÓRIOS ===== */
+function iniciarCliente(){
+  var ped=v('ac-ped'),cli=v('ac-cli');
+  if(!ped||!cli){alert('Preencha o número do pedido e o nome do cliente.');return;}
+  acClienteAtual={ped:ped,cli:cli,itens:[]};
+  document.getElementById('ac-step2-label').textContent=cli+' ('+ped+')';
+  document.getElementById('ac-step1').style.display='none';
+  document.getElementById('ac-step2').style.display='block';
+  renderAcPreview();
+}
+function addAcItemCliente(){
+  var mo=v('acm'),desc=v('acd'),qtd=parseInt(document.getElementById('acq').value)||1;
+  if(!mo){alert('Selecione o modelo do acessório.');return;}
+  acClienteAtual.itens.push({mo:mo,desc:desc,qtd:qtd});
+  renderAcPreview();sv('acm','');sv('acd','');sv('acq','1');
+}
+function remAcPreviewItem(i){acClienteAtual.itens.splice(i,1);renderAcPreview();}
+function renderAcPreview(){
+  var el=document.getElementById('ac-preview');
+  if(!acClienteAtual||!acClienteAtual.itens.length){el.innerHTML='<div class="empty-state" style="padding:.6rem">— Nenhum acessório incluído ainda —</div>';return;}
+  el.innerHTML='<div style="margin-top:.6rem;font-size:10px;color:#888;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Acessórios incluídos:</div>'
+    +acClienteAtual.itens.map(function(it,i){
+      return '<div class="ac-item-row"><span class="ac-item-mod">'+it.mo+'</span>'
+        +'<span class="ac-item-desc">'+(it.desc||'—')+'</span>'
+        +'<span class="ac-item-qtd">x'+it.qtd+'</span>'
+        +'<button class="btn-danger" onclick="remAcPreviewItem('+i+')">✕</button></div>';
+    }).join('');
+}
+function finalizarCliente(){
+  if(!acClienteAtual.itens.length){alert('Inclua pelo menos um acessório para este cliente.');return;}
+  acGrupos.push(JSON.parse(JSON.stringify(acClienteAtual)));acClienteAtual=null;
+  renderAcGrupos();
+  document.getElementById('ac-step2').style.display='none';
+  document.getElementById('ac-step1').style.display='block';
+  sv('ac-ped','');sv('ac-cli','');
+}
+function renderAcGrupos(){
+  var el=document.getElementById('ac-grupos');
+  if(!acGrupos.length){el.innerHTML='<div class="empty-state">— Nenhum cliente incluído —</div>';return;}
+  el.innerHTML=acGrupos.map(function(g,gi){
+    var itens=g.itens.map(function(it){
+      return '<div class="ac-item-row"><span class="ac-item-mod">'+it.mo+'</span>'
+        +'<span class="ac-item-desc">'+(it.desc||'—')+'</span>'
+        +'<span class="ac-item-qtd">x'+it.qtd+'</span></div>';
+    }).join('');
+    return '<div class="ac-cliente-box"><div class="ac-cliente-header"><div>'
+      +'<span class="ac-cliente-nome">'+g.cli+'</span>'
+      +'<span class="ac-cliente-pedido">— Ped: '+g.ped+'</span></div>'
+      +'<button class="btn-danger" onclick="remAcGrupo('+gi+')">✕ Remover</button></div>'+itens+'</div>';
+  }).join('');
+}
+function remAcGrupo(i){acGrupos.splice(i,1);renderAcGrupos();}
+function processarRomaneioAc(){
+  if(!acGrupos.length){alert('Inclua pelo menos um cliente com acessórios antes de processar.');return;}
+  var num=ROM_AC_START+romsAc.length;
+  romsAc.push({num:num,data:new Date(),grupos:JSON.parse(JSON.stringify(acGrupos))});
+  acGrupos=[];renderAcGrupos();renderRomsAc();
+}
+function renderRomsAc(){
+  var el=document.getElementById('rom-ac-list');
+  var countEl=document.getElementById('hist-ac-count');
+  if(countEl) countEl.textContent=romsAc.length?'('+romsAc.length+')':'';
+  if(!romsAc.length){el.innerHTML='<div class="empty-state">— Nenhum romaneio emitido —</div>';return;}
+  el.innerHTML=romsAc.map(function(r,i){
+    var total=r.grupos.reduce(function(s,g){return s+g.itens.length;},0);
+    return '<div class="rom-item" onclick="verRomAc('+i+')">'
+      +'<span class="rom-num">Nº '+r.num+'</span>'
+      +'<span class="rom-info">'+r.grupos.length+' cliente(s) · '+total+' item(ns) — '+r.data.toLocaleDateString('pt-BR')+'</span>'
+      +'<div style="display:flex;gap:6px;margin-left:auto;flex-shrink:0">'
+      +'<button class="btn-html" onclick="event.stopPropagation();baixarHtmlAc('+i+')">↓ HTML</button>'
+      +'<button class="btn-pdf" onclick="event.stopPropagation();gerarPdfAc('+i+')">↓ PDF</button>'
+      +'</div></div>';
+  }).join('');
+}
+function verRomAc(i){
+  var r=romsAc[i];
+  document.getElementById('ac-form-view').style.display='none';
+  document.getElementById('ac-detail-view').style.display='block';
+  var content='<div class="card"><div class="card-title">Romaneio de Acessórios — Nº '+r.num+' · '+r.data.toLocaleDateString('pt-BR')+'</div>';
+  r.grupos.forEach(function(g){
+    var rows=g.itens.map(function(it,j){return '<tr><td>'+(j+1)+'</td><td>'+it.mo+'</td><td>'+(it.desc||'—')+'</td><td>'+it.qtd+'</td></tr>';}).join('');
+    content+='<div style="margin-bottom:1rem"><div style="font-family:Georgia,serif;font-size:13px;color:var(--dark);background:var(--pale);padding:7px 12px;border-left:3px solid var(--mid);">'
+      +g.cli+' <span style="font-family:Arial;font-weight:normal;color:var(--gray);font-size:11px">— Ped: '+g.ped+'</span></div>'
+      +'<table><thead><tr><th>#</th><th>Modelo</th><th>Descrição</th><th>Qtd</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+  });
+  content+='<div class="btn-row"><button class="btn-html" onclick="baixarHtmlAc('+i+')">↓ Baixar HTML</button>'
+    +'<button class="btn-pdf" onclick="gerarPdfAc('+i+')">↓ Gerar PDF</button></div></div>';
+  document.getElementById('ac-detail-content').innerHTML=content;
+}
+function voltarAc(){document.getElementById('ac-form-view').style.display='';document.getElementById('ac-detail-view').style.display='none';}
+
+function htmlConteudoAc(r){
+  var blocos=r.grupos.map(function(g){
+    var rows=g.itens.map(function(it,j){
+      return '<tr><td>'+(j+1)+'</td><td>'+it.mo+'</td><td>'+(it.desc||'—')+'</td><td>'+it.qtd+'</td></tr>';
+    }).join('');
+    return '<div class="cliente-bloco"><div class="cliente-header">'+g.cli
+      +'<span class="pedido-num"> &nbsp;—&nbsp; Pedido: '+g.ped+'</span></div>'
+      +'<table><thead><tr><th>#</th><th>Modelo</th><th>Descrição / Acabamento</th><th>Qtd</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+  }).join('');
+  return '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Romaneio Acessórios Nº '+r.num+'</title>'
+    +'<style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;color:#1C1C1C;padding:0 28px}'
+    +'.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;padding-bottom:16px;border-bottom:2px solid #2E2E2E}'
+    +'.header img{height:44px;filter:brightness(0)}'
+    +'.header-right{text-align:right}.header-right h1{font-family:Georgia,serif;font-size:18px;font-weight:normal;color:#1C1C1C;letter-spacing:.06em}'
+    +'.header-right p{font-size:10px;color:#888;letter-spacing:.1em;text-transform:uppercase;margin-top:3px}'
+    +'.doc-meta{display:flex;justify-content:space-between;margin-bottom:22px;font-size:12px;color:#555;padding:10px 14px;background:#F2F2F2;border-radius:3px}'
+    +'.cliente-bloco{margin-bottom:24px}'
+    +'.cliente-header{font-family:Georgia,serif;font-size:14px;color:#1C1C1C;background:#EBEBEB;padding:8px 14px;border-left:3px solid #555;}'
+    +'.pedido-num{font-family:Arial;font-weight:normal;color:#888;font-size:12px}'
+    +'table{width:100%;border-collapse:collapse}'
+    +'th{background:#1C1C1C;color:#F2F2F2;padding:8px 11px;text-align:left;font-size:11px;letter-spacing:.07em;text-transform:uppercase}'
+    +'td{padding:8px 11px;font-size:12px;border-bottom:1px solid #EBEBEB}'
+    +'tr:nth-child(even) td{background:#F8F8F8}'
+    +'.declaracao{border:1.5px solid #555;border-radius:3px;padding:14px 18px;font-size:13px;margin-bottom:22px;background:#F8F8F8;line-height:1.7}'
+    +'.ressalva-label{font-size:10px;color:#888;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}'
+    +'.ressalva-box{border:1px solid #CCCCCC;border-radius:3px;min-height:100px;padding:10px;font-size:12px;color:#ccc;margin-bottom:28px}'
+    +'.assinatura{display:flex;justify-content:space-between;align-items:flex-end;padding-top:16px;border-top:1px solid #EBEBEB}'
+    +'.ass-linha{text-align:center}.ass-linha hr{border:none;border-top:1.5px solid #1C1C1C;width:240px;margin-bottom:6px}'
+    +'.ass-linha p{font-size:11px;color:#666;letter-spacing:.04em}'
+    +'.footer{text-align:center;margin-top:32px;font-size:10px;color:#bbb;letter-spacing:.1em;text-transform:uppercase;border-top:1px solid #EBEBEB;padding-top:14px}'
+    +'.btn-print{display:block;margin:28px auto 0;padding:10px 28px;background:#1C1C1C;color:#fff;border:none;border-radius:3px;font-size:12px;cursor:pointer;font-weight:700;letter-spacing:.08em;text-transform:uppercase}'
+    +'@media print{.btn-print{display:none}}</style></head><body>'
+    +'<div class="header"><img src="'+LOGO_URL+'" alt="Arantes Marmoraria">'
+    +'<div class="header-right"><h1>Romaneio de Acessórios</h1><p>Controle de Entrega ao Terceiro</p></div></div>'
+    +'<div class="doc-meta"><span><strong>Nº do Romaneio:</strong> '+r.num+'</span><span><strong>Data de Emissão:</strong> '+r.data.toLocaleDateString('pt-BR')+'</span></div>'
+    +blocos
+    +'<div class="declaracao">Os itens relacionados neste romaneio foram devidamente conferidos e aprovados.</div>'
+    +'<p class="ressalva-label">Ressalvas (se houver):</p><div class="ressalva-box"></div>'
+    +'<div class="assinatura">'
+    +'<div class="ass-linha"><hr><p>Assinatura do Entregador</p><p style="margin-top:4px;font-size:10px">Data: ___/___/______</p></div>'
+    +'<div class="ass-linha"><hr><p>Assinatura do Cliente</p><p style="margin-top:4px;font-size:10px">Data: ___/___/______</p></div>'
+    +'</div>'
+    +'<div class="footer">Arantes Marmoraria &nbsp;·&nbsp; Tecnologia &amp; Arte &nbsp;·&nbsp; Desde 1998 &nbsp;·&nbsp; São José dos Campos — SP</div>'
+    +'<button class="btn-print" onclick="window.print()">🖨 Imprimir / Salvar como PDF</button>'
+    +'</body></html>';
+}
+function baixarHtmlAc(i){downloadHtml(htmlConteudoAc(romsAc[i]),'romaneio-acessorios-'+romsAc[i].num+'.html');}
+
+function gerarPdfAc(i){
+  var r=romsAc[i];
+  var doc=new window.jspdf.jsPDF();
+  var pw=doc.internal.pageSize.getWidth();
+  // Header minimalista — sem fundo escuro
+  doc.setFontSize(13);doc.setFont('helvetica','bold');doc.setTextColor(30,30,30);
+  doc.text('Arantes Marmoraria',14,15);
+  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(150,150,150);
+  doc.text('Tecnologia & Arte · Desde 1998 · São José dos Campos',14,21);
+  doc.setFontSize(10);doc.setFont('helvetica','bold');doc.setTextColor(30,30,30);
+  doc.text('Romaneio de Acessórios',pw-14,15,{align:'right'});
+  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(120,120,120);
+  doc.text('Nº '+r.num+'   ·   '+r.data.toLocaleDateString('pt-BR'),pw-14,21,{align:'right'});
+  doc.setDrawColor(210,210,210);doc.setLineWidth(0.3);doc.line(14,25,pw-14,25);
+  var y=32;
+  r.grupos.forEach(function(g){
+    doc.setFontSize(10);doc.setFont('helvetica','bold');doc.setTextColor(46,46,46);
+    doc.text(g.cli+' — Ped: '+g.ped,14,y);y+=2;doc.setTextColor(0);
+    doc.autoTable({startY:y,
+      head:[['#','Modelo','Descrição','Qtd']],
+      body:g.itens.map(function(it,j){return[j+1,it.mo,it.desc||'—',it.qtd];}),
+      styles:{fontSize:9,cellPadding:4,textColor:[40,40,40],valign:'middle'},
+      headStyles:{fillColor:[230,230,230],textColor:[40,40,40],fontStyle:'bold',fontSize:8},
+      alternateRowStyles:{fillColor:[248,248,248]},
+      columnStyles:{
+        0:{cellWidth:12,halign:'center'},
+        1:{cellWidth:42},
+        2:{cellWidth:'auto'},
+        3:{cellWidth:16,halign:'center'}
+      },
+      margin:{left:14,right:14}
+    });
+    y=doc.lastAutoTable.finalY+8;
+  });
+  doc.setDrawColor(210,210,210);doc.setLineWidth(0.3);doc.line(14,y,pw-14,y);y+=8;
+  var msg='Os itens relacionados neste romaneio foram devidamente conferidos e aprovados.';
+  doc.setFontSize(10);doc.setFont('helvetica','italic');doc.setTextColor(40,40,40);
+  var lines=doc.splitTextToSize(msg,pw-28);
+  doc.text(lines,14,y);y+=lines.length*7+10;
+  doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(130,130,130);
+  doc.text('RESSALVAS (SE HOUVER):',14,y);y+=5;
+  doc.setDrawColor(210,210,210);doc.setLineWidth(0.3);doc.rect(14,y,pw-28,45);y+=51;
+  // Duas assinaturas lado a lado
+  var colW=(pw-28)/2-6;
+  doc.setDrawColor(100,100,100);doc.setLineWidth(0.4);
+  doc.line(14,y+16,14+colW,y+16);
+  doc.line(pw-14-colW,y+16,pw-14,y+16);
+  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(100,100,100);
+  doc.text('Assinatura do Entregador',14,y+21);
+  doc.text('Data: ___/___/______',14,y+27);
+  doc.text('Assinatura do Cliente',pw-14-colW,y+21);
+  doc.text('Data: ___/___/______',pw-14-colW,y+27);
+  y+=34;
+  doc.setFontSize(7);doc.setTextColor(190,190,190);
+  doc.text('Arantes Marmoraria · Tecnologia & Arte · Desde 1998 · São José dos Campos - SP',pw/2,doc.internal.pageSize.getHeight()-8,{align:'center'});
+  doc.save('romaneio-acessorios-'+r.num+'.pdf');
+}
+
+/* ===== KANBAN ===== */
+var kbAmbientes = [];
+
+function addAmbiente(){
+  var inp=document.getElementById('kb-amb-input');
+  var val=inp.value.trim();
+  if(!val) return;
+  kbAmbientes.push(val);
+  inp.value='';
+  inp.focus();
+  renderAmbTags();
+}
+function remAmbiente(i){kbAmbientes.splice(i,1);renderAmbTags();}
+function renderAmbTags(){
+  var wrap=document.getElementById('kb-amb-wrap');
+  var el=document.getElementById('kb-amb-tags');
+  if(!kbAmbientes.length){wrap.style.display='none';el.innerHTML='';return;}
+  wrap.style.display='block';
+  el.innerHTML=kbAmbientes.map(function(a,i){
+    return '<span class="amb-tag">'+a
+      +'<button onclick="remAmbiente('+i+')" title="Remover">✕</button></span>';
+  }).join('');
+}
+function addBizDays(date,days){var d=new Date(date),added=0;while(added<days){d.setDate(d.getDate()+1);if(d.getDay()!==0&&d.getDay()!==6)added++;}return d;}
+function bizDaysPassed(start){var d=new Date(start),today=new Date();today.setHours(0,0,0,0);d.setHours(0,0,0,0);var count=0,cur=new Date(d);while(cur<today){cur.setDate(cur.getDate()+1);if(cur.getDay()!==0&&cur.getDay()!==6)count++;}return count;}
+function liberarProjeto(){
+  var cl=v('kbc'),ped=v('kbp'),empresa=v('kb-empresa');
+  if(!cl||!ped){alert('Preencha o cliente e o pedido.');return;}
+  if(!empresa){alert('Informe a empresa terceirizada.');return;}
+  var hoje=new Date();hoje.setHours(0,0,0,0);
+  // capture ambientes: also check if input has uncommitted text
+  var ambInput=document.getElementById('kb-amb-input').value.trim();
+  if(ambInput) kbAmbientes.push(ambInput);
+  projetos.push({id:Date.now(),cl:cl,ped:ped,empresa:empresa,ambientes:kbAmbientes.slice(),lib:hoje,prazo:addBizDays(hoje,15),status:'lib'});
+  kbAmbientes=[];
+  renderAmbTags();
+  document.getElementById('kb-amb-wrap').style.display='none';
+  renderKanban();sv('kbc','');sv('kbp','');sv('kb-empresa','');sv('kb-amb-input','');
+}
+function renderKanban(){
+  var libs=projetos.filter(function(p){return p.status==='lib';});
+  var ents=projetos.filter(function(p){return p.status==='ent';});
+  var insts=projetos.filter(function(p){return p.status==='inst';});
+  document.getElementById('cnt-lib').textContent=libs.length;
+  document.getElementById('cnt-ent').textContent=ents.length;
+  document.getElementById('cnt-inst').textContent=insts.length;
+  document.getElementById('col-lib').innerHTML=libs.length?libs.map(cardHtml).join(''):'<div class="empty-state">Nenhum projeto liberado.</div>';
+  document.getElementById('col-ent').innerHTML=ents.length?ents.map(cardHtml).join(''):'<div class="empty-state">Nenhum projeto entregue.</div>';
+  document.getElementById('col-inst').innerHTML=insts.length?insts.map(cardHtml).join(''):'<div class="empty-state">Nenhuma obra instalada.</div>';
+}
+function cardHtml(p){
+  var passed=bizDaysPassed(p.lib),pct=Math.min(100,Math.round(passed/15*100)),rest=Math.max(0,15-passed);
+  var cls=pct>=100?'dl-late':pct>=70?'dl-warn':'dl-ok';
+  var libStr=p.lib.toLocaleDateString('pt-BR'),prazoStr=p.prazo.toLocaleDateString('pt-BR');
+  var moveBtn='';
+  if(p.status==='lib'){
+    moveBtn='<button class="btn-sm green" onclick="event.stopPropagation();moverStatus('+p.id+',\'ent\')">✓ Recebido</button>';
+  } else if(p.status==='ent'){
+    moveBtn='<button class="btn-sm" style="border-color:#2E4A6E;background:#EAF0FA;color:#2E4A6E" onclick="event.stopPropagation();moverStatus('+p.id+',\'inst\')">🏠 Instalado</button>'
+      +'<button class="btn-sm revert" onclick="event.stopPropagation();solicitarRevert('+p.id+')">↩ Reverter</button>';
+  } else if(p.status==='inst'){
+    moveBtn='<button class="btn-sm revert" onclick="event.stopPropagation();solicitarRevert('+p.id+')">↩ Reverter</button>';
+  }
+  var ambHtml='';
+  if(p.ambientes&&p.ambientes.length){
+    ambHtml='<div class="k-ambientes">'+p.ambientes.map(function(a){return '<span class="k-amb-pill">'+a+'</span>';}).join('')+'</div>';
+  }
+  return '<div class="k-card" draggable="true" id="card-'+p.id
+    +'" ondragstart="onDragStart(event,'+p.id+')" ondragend="onDragEnd()" onclick="abrirEdicaoCard('+p.id+')" style="cursor:pointer" title="Clique para editar">'
+    +'<div style="display:flex;justify-content:space-between;align-items:flex-start">'
+    +'<div class="k-client">'+p.cl+'</div>'
+    +'<span style="font-size:10px;color:var(--gray)">✏</span>'
+    +'</div>'
+    +'<div class="k-order">'+p.ped+'</div>'
+    +'<div class="k-empresa">🏭 '+p.empresa+'</div>'
+    +ambHtml
+    +'<div class="k-order" style="margin-top:5px">Liberado: '+libStr+'</div>'
+    +(p.status==='lib'
+      ?'<div class="dl-track"><div class="dl-fill '+cls+'" style="width:'+pct+'%"></div></div>'
+        +'<div class="dl-label"><span>'+(pct>=100?'<span style="color:#7A1C1C;font-weight:700">Prazo vencido</span>':rest+' dias úteis restantes')+'</span><span>Limite: '+prazoStr+'</span></div>'
+      :'')
+    +'<div class="k-actions" onclick="event.stopPropagation()">'+moveBtn
+    +'<button class="btn-sm" onclick="event.stopPropagation();remProj('+p.id+')">✕ Remover</button></div></div>';
+}
+function moverStatus(id, novoStatus){
+  var p=projetos.find(function(x){return x.id===id;});
+  if(!p)return;
+  p.status=novoStatus;
+  renderKanban();
+}
+function remProj(id){if(!confirm('Remover este projeto?'))return;projetos=projetos.filter(function(p){return p.id!==id;});renderKanban();}
+function onDragStart(e,id){dragProjId=id;setTimeout(function(){var el=document.getElementById('card-'+id);if(el)el.classList.add('dragging');},0);}
+function onDragEnd(){if(dragProjId){var el=document.getElementById('card-'+dragProjId);if(el)el.classList.remove('dragging');}dragProjId=null;}
+function onDragOver(e,col){e.preventDefault();document.getElementById('col-'+col).classList.add('drag-over');}
+function onDragLeave(col){document.getElementById('col-'+col).classList.remove('drag-over');}
+function onDrop(e,col){
+  e.preventDefault();document.getElementById('col-'+col).classList.remove('drag-over');
+  if(!dragProjId)return;
+  var p=projetos.find(function(x){return x.id===dragProjId;});
+  if(!p){dragProjId=null;return;}
+  var order=['lib','ent','inst'];
+  var fromIdx=order.indexOf(p.status);
+  var toIdx=order.indexOf(col);
+  if(toIdx>fromIdx){ moverStatus(dragProjId,col); }
+  else if(toIdx<fromIdx){ solicitarRevert(dragProjId); }
+  dragProjId=null;
+}
+
+/* ===== EDITAR CARD ===== */
+var editandoId=null;
+var editAmbientes=[];
+
+function abrirEdicaoCard(id){
+  var p=projetos.find(function(x){return x.id===id;});
+  if(!p)return;
+  editandoId=id;
+  editAmbientes=p.ambientes?p.ambientes.slice():[];
+  document.getElementById('edit-cl').value=p.cl;
+  document.getElementById('edit-ped').value=p.ped;
+  document.getElementById('edit-empresa').value=p.empresa||'';
+  document.getElementById('edit-amb-input').value='';
+  renderEditAmbTags();
+  document.getElementById('modal-editar').style.display='flex';
+}
+function fecharEdicao(){
+  document.getElementById('modal-editar').style.display='none';
+  editandoId=null;editAmbientes=[];
+}
+function addAmbienteEdit(){
+  var inp=document.getElementById('edit-amb-input');
+  var val=inp.value.trim();if(!val)return;
+  editAmbientes.push(val);inp.value='';inp.focus();
+  renderEditAmbTags();
+}
+function remAmbienteEdit(i){editAmbientes.splice(i,1);renderEditAmbTags();}
+function renderEditAmbTags(){
+  var el=document.getElementById('edit-amb-tags');
+  if(!editAmbientes.length){el.innerHTML='<span style="font-size:11px;color:#bbb;font-style:italic">Nenhum ambiente adicionado</span>';return;}
+  el.innerHTML=editAmbientes.map(function(a,i){
+    return '<span class="amb-tag">'+a+'<button onclick="remAmbienteEdit('+i+')" title="Remover">✕</button></span>';
+  }).join('');
+}
+function salvarEdicaoCard(){
+  var p=projetos.find(function(x){return x.id===editandoId;});
+  if(!p){fecharEdicao();return;}
+  var cl=document.getElementById('edit-cl').value.trim();
+  var ped=document.getElementById('edit-ped').value.trim();
+  var empresa=document.getElementById('edit-empresa').value.trim();
+  var ambExtra=document.getElementById('edit-amb-input').value.trim();
+  if(ambExtra)editAmbientes.push(ambExtra);
+  if(!cl||!ped){alert('Cliente e pedido são obrigatórios.');return;}
+  p.cl=cl;p.ped=ped;p.empresa=empresa;p.ambientes=editAmbientes.slice();
+  fecharEdicao();renderKanban();
+}
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
+    if(document.getElementById('modal-editar').style.display==='flex')fecharEdicao();
+    if(document.getElementById('modal-senha').style.display==='flex')fecharModal();
+  }
+});
+
+/* ===== SENHA REVERTER ===== */
+function solicitarRevert(id){
+  pendingRevertId=id;
+  document.getElementById('senha-input').value='';
+  document.getElementById('senha-erro').style.display='none';
+  document.getElementById('modal-senha').style.display='flex';
+}
+function fecharModal(){document.getElementById('modal-senha').style.display='none';pendingRevertId=null;dragProjId=null;}
+function confirmarSenha(){
+  if(document.getElementById('senha-input').value==='2026'){
+    var p=projetos.find(function(x){return x.id===pendingRevertId;});
+    if(p){
+      var order=['lib','ent','inst'];
+      var idx=order.indexOf(p.status);
+      if(idx>0) p.status=order[idx-1];
+    }
+    fecharModal();renderKanban();
+  }else{document.getElementById('senha-erro').style.display='block';}
+}
+document.getElementById('senha-input').addEventListener('keydown',function(e){if(e.key==='Enter')confirmarSenha();});
+
+/* ===== SUPABASE — PERSISTÊNCIA NA NUVEM ===== */
+var SB_URL = 'https://xhqrkxbpdiatqkdupdjs.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhocXJreGJwZGlhdHFrZHVwZGpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MzY2MjcsImV4cCI6MjA5NDQxMjYyN30.3vq_oTvEpf68VIJHy4oCeHB515DmSl750UGLR_6Iq9I';
+
+function sbHeaders(){
+  return {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
+}
+
+function sbGet(tabela, extra){
+  return fetch(SB_URL+'/rest/v1/'+tabela+'?order=criado_em.asc'+(extra||''), {headers:sbHeaders()}).then(function(r){return r.json();});
+}
+function sbPost(tabela, body){
+  return fetch(SB_URL+'/rest/v1/'+tabela, {method:'POST', headers:Object.assign({'Prefer':'return=representation'},sbHeaders()), body:JSON.stringify(body)}).then(function(r){return r.json();});
+}
+function sbPatch(tabela, id, body){
+  return fetch(SB_URL+'/rest/v1/'+tabela+'?id=eq.'+id, {method:'PATCH', headers:Object.assign({'Prefer':'return=representation'},sbHeaders()), body:JSON.stringify(body)}).then(function(r){return r.json();});
+}
+function sbDelete(tabela, id){
+  return fetch(SB_URL+'/rest/v1/'+tabela+'?id=eq.'+id, {method:'DELETE', headers:sbHeaders()});
+}
+
+/* ---- indicador de status ---- */
+function setStatus(msg, erro){
+  var el=document.getElementById('sb-status');
+  if(!el)return;
+  el.textContent=msg;
+  el.style.color=erro?'#c0392b':'#888';
+}
+
+/* ---- CARREGAR TUDO AO INICIAR ---- */
+function carregarTudo(){
+  setStatus('Carregando dados...');
+  Promise.all([
+    sbGet('romaneios_material'),
+    sbGet('romaneios_acessorios'),
+    sbGet('projetos_kanban')
+  ]).then(function(res){
+    var rMat=res[0], rAc=res[1], rProj=res[2];
+
+    if(!Array.isArray(rMat)||!Array.isArray(rAc)||!Array.isArray(rProj)){
+      setStatus('Erro ao carregar — verifique as tabelas no Supabase.', true);
+      return;
+    }
+
+    romsMat = rMat.map(function(r){return {_id:r.id, num:r.num, data:new Date(r.data), itens:r.itens};});
+    romsAc  = rAc.map(function(r){return {_id:r.id, num:r.num, data:new Date(r.data), grupos:r.grupos};});
+    projetos= rProj.map(function(p){
+      return {_id:p.id, id:p.id, cl:p.cl, ped:p.ped, empresa:p.empresa||'',
+        ambientes:p.ambientes||[], lib:new Date(p.lib), prazo:new Date(p.prazo), status:p.status};
+    });
+
+    renderRomsMat();
+    renderRomsAc();
+    renderKanban();
+    setStatus('Sincronizado ✓');
+  }).catch(function(e){setStatus('Sem conexão com o banco.', true);});
+}
+
+/* ---- SALVAR ROMANEIO MATERIAL ---- */
+var _origProcessarRomaneioMat = processarRomaneioMat;
+processarRomaneioMat = function(){
+  if(!matItems.length){alert('Inclua pelo menos um material antes de processar o romaneio.');return;}
+  var num = ROM_MAT_START + romsMat.length;
+  var payload = {num:num, data:new Date().toISOString(), itens:JSON.parse(JSON.stringify(matItems))};
+  setStatus('Salvando romaneio...');
+  sbPost('romaneios_material', payload).then(function(res){
+    var saved = Array.isArray(res) ? res[0] : res;
+    romsMat.push({_id:saved.id, num:saved.num, data:new Date(saved.data), itens:saved.itens});
+    matItems = [];
+    renderMatItems();
+    renderRomsMat();
+    setStatus('Romaneio Nº '+num+' salvo ✓');
+  }).catch(function(){setStatus('Erro ao salvar romaneio de material.', true);});
+};
+
+/* ---- SALVAR ROMANEIO ACESSÓRIOS ---- */
+var _origProcessarRomaneioAc = processarRomaneioAc;
+processarRomaneioAc = function(){
+  if(!acGrupos.length){alert('Inclua pelo menos um cliente com acessórios antes de processar.');return;}
+  var num = ROM_AC_START + romsAc.length;
+  var payload = {num:num, data:new Date().toISOString(), grupos:JSON.parse(JSON.stringify(acGrupos))};
+  setStatus('Salvando romaneio...');
+  sbPost('romaneios_acessorios', payload).then(function(res){
+    var saved = Array.isArray(res) ? res[0] : res;
+    romsAc.push({_id:saved.id, num:saved.num, data:new Date(saved.data), grupos:saved.grupos});
+    acGrupos = [];
+    renderAcGrupos();
+    renderRomsAc();
+    setStatus('Romaneio Nº '+num+' salvo ✓');
+  }).catch(function(){setStatus('Erro ao salvar romaneio de acessórios.', true);});
+};
+
+/* ---- SALVAR PROJETO KANBAN ---- */
+var _origLiberarProjeto = liberarProjeto;
+liberarProjeto = function(){
+  var cl=v('kbc'), ped=v('kbp'), empresa=v('kb-empresa');
+  if(!cl||!ped){alert('Preencha o cliente e o pedido.');return;}
+  if(!empresa){alert('Informe a empresa terceirizada.');return;}
+  var hoje=new Date(); hoje.setHours(0,0,0,0);
+  var ambInput=document.getElementById('kb-amb-input').value.trim();
+  if(ambInput) kbAmbientes.push(ambInput);
+  var payload={
+    id:Date.now(), cl:cl, ped:ped, empresa:empresa,
+    ambientes:kbAmbientes.slice(),
+    lib:hoje.toISOString(), prazo:addBizDays(hoje,15).toISOString(), status:'lib'
+  };
+  setStatus('Salvando projeto...');
+  sbPost('projetos_kanban', payload).then(function(res){
+    var saved = Array.isArray(res) ? res[0] : res;
+    projetos.push({_id:saved.id, id:saved.id, cl:saved.cl, ped:saved.ped, empresa:saved.empresa,
+      ambientes:saved.ambientes||[], lib:new Date(saved.lib), prazo:new Date(saved.prazo), status:saved.status});
+    kbAmbientes=[];
+    renderAmbTags();
+    document.getElementById('kb-amb-wrap').style.display='none';
+    renderKanban();
+    sv('kbc','');sv('kbp','');sv('kb-empresa','');sv('kb-amb-input','');
+    setStatus('Projeto salvo ✓');
+  }).catch(function(){setStatus('Erro ao salvar projeto.', true);});
+};
+
+/* ---- TOGGLE HISTÓRICO ---- */
+function toggleHist(tipo){
+  var body=document.getElementById('hist-body-'+tipo);
+  var arrow=document.getElementById('hist-arrow-'+tipo);
+  var open=body.classList.toggle('open');
+  arrow.classList.toggle('open',open);
+}
+
+/* ---- MOVER STATUS (Supabase) ---- */
+var _origMoverStatus = moverStatus;
+moverStatus = function(id, novoStatus){
+  var p=projetos.find(function(x){return x.id===id;});
+  if(!p)return;
+  setStatus('Atualizando...');
+  sbPatch('projetos_kanban', p._id||p.id, {status:novoStatus}).then(function(){
+    p.status=novoStatus; renderKanban(); setStatus('Atualizado ✓');
+  }).catch(function(){setStatus('Erro ao atualizar.', true);});
+};
+
+/* ---- REMOVER PROJETO ---- */
+var _origRemProj = remProj;
+remProj = function(id){
+  if(!confirm('Remover este projeto?'))return;
+  var p=projetos.find(function(x){return x.id===id;});
+  if(!p)return;
+  setStatus('Removendo...');
+  sbDelete('projetos_kanban', p._id||p.id).then(function(){
+    projetos=projetos.filter(function(x){return x.id!==id;});
+    renderKanban(); setStatus('Removido ✓');
+  }).catch(function(){setStatus('Erro ao remover.', true);});
+};
+
+/* ---- SALVAR EDIÇÃO DO CARD ---- */
+var _origSalvarEdicaoCard = salvarEdicaoCard;
+salvarEdicaoCard = function(){
+  var p=projetos.find(function(x){return x.id===editandoId;});
+  if(!p){fecharEdicao();return;}
+  var cl=document.getElementById('edit-cl').value.trim();
+  var ped=document.getElementById('edit-ped').value.trim();
+  var empresa=document.getElementById('edit-empresa').value.trim();
+  var ambExtra=document.getElementById('edit-amb-input').value.trim();
+  if(ambExtra) editAmbientes.push(ambExtra);
+  if(!cl||!ped){alert('Cliente e pedido são obrigatórios.');return;}
+  setStatus('Salvando edição...');
+  sbPatch('projetos_kanban', p._id||p.id, {cl:cl, ped:ped, empresa:empresa, ambientes:editAmbientes.slice()})
+  .then(function(){
+    p.cl=cl; p.ped=ped; p.empresa=empresa; p.ambientes=editAmbientes.slice();
+    fecharEdicao(); renderKanban(); setStatus('Editado ✓');
+  }).catch(function(){setStatus('Erro ao salvar edição.', true);});
+};
+
+/* ---- REVERTER UM ESTÁGIO ---- */
+var _origConfirmarSenha = confirmarSenha;
+confirmarSenha = function(){
+  if(document.getElementById('senha-input').value==='2026'){
+    var p=projetos.find(function(x){return x.id===pendingRevertId;});
+    if(!p){fecharModal();return;}
+    var order=['lib','ent','inst'];
+    var idx=order.indexOf(p.status);
+    var novoStatus=idx>0?order[idx-1]:'lib';
+    setStatus('Revertendo...');
+    sbPatch('projetos_kanban', p._id||p.id, {status:novoStatus}).then(function(){
+      p.status=novoStatus; fecharModal(); renderKanban(); setStatus('Revertido ✓');
+    }).catch(function(){setStatus('Erro ao reverter.', true);});
+  } else {
+    document.getElementById('senha-erro').style.display='block';
+  }
+};
+
+/* ---- DRAG: mover via drop ---- */
+var _origOnDrop = onDrop;
+onDrop = function(e, col){
+  e.preventDefault();
+  document.getElementById('col-'+col).classList.remove('drag-over');
+  if(!dragProjId)return;
+  var p=projetos.find(function(x){return x.id===dragProjId;});
+  if(!p){dragProjId=null;return;}
+  var order=['lib','ent','inst'];
+  var fromIdx=order.indexOf(p.status);
+  var toIdx=order.indexOf(col);
+  if(toIdx>fromIdx){ moverStatus(dragProjId,col); }
+  else if(toIdx<fromIdx){ solicitarRevert(dragProjId); }
+  dragProjId=null;
+};
+
+/* ---- INICIA ---- */
+carregarTudo();
+</script>
+</body>
+</html>
