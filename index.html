@@ -314,6 +314,8 @@ select.status-usado { background: var(--bg); color: var(--text-3); }
 #pane-terc .main { max-width: 1400px; }
 .tc-status-chip { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-3); background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 3px 12px; }
 .tc-status-chip.err { color: var(--red); border-color: var(--red-border); background: var(--red-bg); }
+.est-status-chip { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-3); background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 3px 12px; }
+.est-status-chip.err { color: var(--red); border-color: var(--red-border); background: var(--red-bg); }
 
 .tc-kanban-wrap { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 1rem; }
 @media(max-width: 900px) { .tc-kanban-wrap { grid-template-columns: 1fr; } }
@@ -1540,28 +1542,94 @@ const OPCOES_TIPO_PEDRA = ['Mármore', 'Granito', 'Quartzito', 'Quartzo', 'Lâmi
 const OPCOES_TEXTURA = ['Polido', 'Escovado', 'Levigado', 'Flameado', 'Acetinado'];
 const LIMIAR_RISCO_CORTE_DIAS = 5;
 
+/* ===== ESTOQUE — PERSISTÊNCIA NA NUVEM (mesmo projeto Supabase da Terceirização) ===== */
+const EST_SB_URL = 'https://xhqrkxbpdiatqkdupdjs.supabase.co';
+const EST_SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhocXJreGJwZGlhdHFrZHVwZGpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MzY2MjcsImV4cCI6MjA5NDQxMjYyN30.3vq_oTvEpf68VIJHy4oCeHB515DmSl750UGLR_6Iq9I';
+let estSalvandoTimer = null;
+
+function estSbHeaders() { return {'Content-Type':'application/json','apikey':EST_SB_KEY,'Authorization':'Bearer '+EST_SB_KEY}; }
+
+function estSetStatus(msg, erro) {
+  document.querySelectorAll('.est-status-chip').forEach(el => {
+    el.textContent = msg;
+    el.classList.toggle('err', !!erro);
+  });
+}
+
+function montarEstoquePayload() {
+  return {
+    solicitacoesCompra, solicitacaoSeq, estoqueCompleto, estoqueCompletoSeq,
+    FORNECEDORES, SOLICITANTES, filtroStatusEstoque, filtroPedidoCompra
+  };
+}
+
 function salvarEstoqueDados() {
+  // cache local imediato (funciona offline / fallback)
   try {
-    localStorage.setItem(EST_STORAGE_KEY, JSON.stringify({
-      solicitacoesCompra, solicitacaoSeq, estoqueCompleto, estoqueCompletoSeq,
-      FORNECEDORES, SOLICITANTES, filtroStatusEstoque, filtroPedidoCompra
-    }));
+    localStorage.setItem(EST_STORAGE_KEY, JSON.stringify(montarEstoquePayload()));
   } catch(e) {}
+
+  // sincroniza com a nuvem (debounce pra não disparar em excesso)
+  estSetStatus('Salvando...');
+  clearTimeout(estSalvandoTimer);
+  estSalvandoTimer = setTimeout(estSalvarNaNuvem, 400);
+}
+
+function estSalvarNaNuvem() {
+  const payload = { id: 1, dados: montarEstoquePayload(), atualizado_em: new Date().toISOString() };
+  fetch(EST_SB_URL+'/rest/v1/estoque_dados?id=eq.1', {
+    method: 'PATCH',
+    headers: Object.assign({'Prefer':'return=representation'}, estSbHeaders()),
+    body: JSON.stringify(payload)
+  }).then(r => r.json()).then(res => {
+    if (Array.isArray(res) && res.length > 0) {
+      estSetStatus('Sincronizado ✓');
+    } else {
+      // linha ainda não existe — cria
+      fetch(EST_SB_URL+'/rest/v1/estoque_dados', {
+        method: 'POST',
+        headers: Object.assign({'Prefer':'return=representation'}, estSbHeaders()),
+        body: JSON.stringify(payload)
+      }).then(r => r.json()).then(() => estSetStatus('Sincronizado ✓'))
+        .catch(() => estSetStatus('Sem conexão — salvo só neste navegador.', true));
+    }
+  }).catch(() => estSetStatus('Sem conexão — salvo só neste navegador.', true));
+}
+
+function aplicarEstoquePayload(d) {
+  if (!d) return;
+  solicitacoesCompra = d.solicitacoesCompra || [];
+  solicitacaoSeq = d.solicitacaoSeq || 1;
+  estoqueCompleto = d.estoqueCompleto || [];
+  estoqueCompletoSeq = d.estoqueCompletoSeq || 1;
+  FORNECEDORES = (d.FORNECEDORES && d.FORNECEDORES.length) ? d.FORNECEDORES : FORNECEDORES;
+  SOLICITANTES = (d.SOLICITANTES && d.SOLICITANTES.length) ? d.SOLICITANTES : SOLICITANTES;
+  filtroStatusEstoque = d.filtroStatusEstoque || 'todos';
+  filtroPedidoCompra = d.filtroPedidoCompra || 'todos';
 }
 
 function carregarEstoqueDados() {
+  // carrega cache local primeiro (aparece na hora, sem esperar rede)
   try {
-    const d = JSON.parse(localStorage.getItem(EST_STORAGE_KEY) || 'null');
-    if (!d) return;
-    solicitacoesCompra = d.solicitacoesCompra || [];
-    solicitacaoSeq = d.solicitacaoSeq || 1;
-    estoqueCompleto = d.estoqueCompleto || [];
-    estoqueCompletoSeq = d.estoqueCompletoSeq || 1;
-    FORNECEDORES = d.FORNECEDORES || [];
-    SOLICITANTES = (d.SOLICITANTES && d.SOLICITANTES.length) ? d.SOLICITANTES : SOLICITANTES;
-    filtroStatusEstoque = d.filtroStatusEstoque || 'todos';
-    filtroPedidoCompra = d.filtroPedidoCompra || 'todos';
+    const local = JSON.parse(localStorage.getItem(EST_STORAGE_KEY) || 'null');
+    if (local) aplicarEstoquePayload(local);
   } catch(e) {}
+
+  estSetStatus('Carregando dados...');
+  fetch(EST_SB_URL+'/rest/v1/estoque_dados?id=eq.1&select=dados', { headers: estSbHeaders() })
+    .then(r => r.json())
+    .then(res => {
+      if (Array.isArray(res) && res.length > 0 && res[0].dados) {
+        aplicarEstoquePayload(res[0].dados);
+        estSetStatus('Sincronizado ✓');
+      } else {
+        estSetStatus('Sincronizado ✓ (novo)');
+      }
+      if (document.getElementById('estoqueApp')) renderEstoque();
+    })
+    .catch(() => {
+      estSetStatus('Sem conexão — usando dados salvos neste navegador.', true);
+    });
 }
 
 // ---------- Helpers genéricos (fornecedores/solicitantes com opção "adicionar novo") ----------
@@ -1615,6 +1683,7 @@ function renderEstoque() {
       <button class="${estoqueSubView==='pedidos'?'active':''}" onclick="switchEstoqueSubView('pedidos')">Pedido × Compra</button>
       <button class="${estoqueSubView==='completo'?'active':''}" onclick="switchEstoqueSubView('completo')">Estoque Completo</button>
       <button class="${estoqueSubView==='fornecedores'?'active':''}" onclick="switchEstoqueSubView('fornecedores')">Fornecedores</button>
+      <span class="est-status-chip" style="margin-left:auto;">Conectando...</span>
     </div>
     <div id="estConteudo"></div>
   `;
