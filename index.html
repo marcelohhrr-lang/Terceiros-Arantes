@@ -1547,6 +1547,10 @@ const EST_SB_URL = 'https://xhqrkxbpdiatqkdupdjs.supabase.co';
 const EST_SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhocXJreGJwZGlhdHFrZHVwZGpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MzY2MjcsImV4cCI6MjA5NDQxMjYyN30.3vq_oTvEpf68VIJHy4oCeHB515DmSl750UGLR_6Iq9I';
 let estSalvandoTimer = null;
 
+// Guarda ids/nomes removidos nesta sessão — usado pra não "ressuscitar" itens excluídos
+// quando mesclamos nosso estado local com o que está na nuvem antes de salvar.
+let estIdsRemovidos = { solicitacoes: new Set(), itens: new Set(), fornecedores: new Set(), solicitantes: new Set() };
+
 function estSbHeaders() { return {'Content-Type':'application/json','apikey':EST_SB_KEY,'Authorization':'Bearer '+EST_SB_KEY}; }
 
 function estSetStatus(msg, erro) {
@@ -1575,25 +1579,77 @@ function salvarEstoqueDados() {
   estSalvandoTimer = setTimeout(estSalvarNaNuvem, 400);
 }
 
+// Mescla um array com id numérico único: a nuvem entra primeiro, o que temos localmente
+// sobrescreve por cima (é a edição feita agora); ids marcados como removidos nesta sessão
+// nunca voltam, mesmo que ainda estejam na versão da nuvem.
+function estMesclarPorId(nuvemArr, localArr, idsRemovidos) {
+  nuvemArr = nuvemArr || []; localArr = localArr || [];
+  const mapa = new Map();
+  nuvemArr.forEach(item => { if (!idsRemovidos.has(item.id)) mapa.set(item.id, item); });
+  localArr.forEach(item => { if (!idsRemovidos.has(item.id)) mapa.set(item.id, item); });
+  return Array.from(mapa.values());
+}
+
+// Mesma ideia, mas para listas simples (fornecedores/solicitantes) identificadas pelo nome.
+function estMesclarListaSimples(nuvemArr, localArr, nomesRemovidos) {
+  nuvemArr = nuvemArr || []; localArr = localArr || [];
+  const mapa = new Map();
+  nuvemArr.forEach(item => { const k = itemValor(item); if (!nomesRemovidos.has(k)) mapa.set(k, item); });
+  localArr.forEach(item => { const k = itemValor(item); if (!nomesRemovidos.has(k)) mapa.set(k, item); });
+  return Array.from(mapa.values());
+}
+
+function estMesclarPayload(nuvem, local) {
+  if (!nuvem) return local;
+  return {
+    solicitacoesCompra: estMesclarPorId(nuvem.solicitacoesCompra, local.solicitacoesCompra, estIdsRemovidos.solicitacoes),
+    solicitacaoSeq: Math.max(nuvem.solicitacaoSeq || 1, local.solicitacaoSeq || 1),
+    estoqueCompleto: estMesclarPorId(nuvem.estoqueCompleto, local.estoqueCompleto, estIdsRemovidos.itens),
+    estoqueCompletoSeq: Math.max(nuvem.estoqueCompletoSeq || 1, local.estoqueCompletoSeq || 1),
+    FORNECEDORES: estMesclarListaSimples(nuvem.FORNECEDORES, local.FORNECEDORES, estIdsRemovidos.fornecedores),
+    SOLICITANTES: estMesclarListaSimples(nuvem.SOLICITANTES, local.SOLICITANTES, estIdsRemovidos.solicitantes),
+    filtroStatusEstoque: local.filtroStatusEstoque,
+    filtroPedidoCompra: local.filtroPedidoCompra,
+  };
+}
+
 function estSalvarNaNuvem() {
-  const payload = { id: 1, dados: montarEstoquePayload(), atualizado_em: new Date().toISOString() };
-  fetch(EST_SB_URL+'/rest/v1/estoque_dados?id=eq.1', {
-    method: 'PATCH',
-    headers: Object.assign({'Prefer':'return=representation'}, estSbHeaders()),
-    body: JSON.stringify(payload)
-  }).then(r => r.json()).then(res => {
-    if (Array.isArray(res) && res.length > 0) {
-      estSetStatus('Sincronizado ✓');
-    } else {
-      // linha ainda não existe — cria
-      fetch(EST_SB_URL+'/rest/v1/estoque_dados', {
-        method: 'POST',
+  const meuEstadoLocal = montarEstoquePayload();
+
+  // Antes de gravar, busca o que está na nuvem AGORA e mescla com o que temos aqui.
+  // Isso evita que uma aba com dados desatualizados apague lançamentos feitos
+  // por outra pessoa/aba enquanto esta ficou aberta.
+  fetch(EST_SB_URL+'/rest/v1/estoque_dados?id=eq.1&select=dados', { headers: estSbHeaders() })
+    .then(r => r.json())
+    .then(res => {
+      const nuvem = (Array.isArray(res) && res.length > 0) ? res[0].dados : null;
+      const mesclado = estMesclarPayload(nuvem, meuEstadoLocal);
+
+      // Aplica o resultado mesclado localmente também, pra esta aba já refletir
+      // qualquer coisa que outra sessão tenha salvado nesse intervalo.
+      aplicarEstoquePayload(mesclado);
+      try { localStorage.setItem(EST_STORAGE_KEY, JSON.stringify(mesclado)); } catch(e) {}
+      if (document.getElementById('estoqueApp')) renderEstoque();
+
+      const payload = { id: 1, dados: mesclado, atualizado_em: new Date().toISOString() };
+      return fetch(EST_SB_URL+'/rest/v1/estoque_dados?id=eq.1', {
+        method: 'PATCH',
         headers: Object.assign({'Prefer':'return=representation'}, estSbHeaders()),
         body: JSON.stringify(payload)
-      }).then(r => r.json()).then(() => estSetStatus('Sincronizado ✓'))
-        .catch(() => estSetStatus('Sem conexão — salvo só neste navegador.', true));
-    }
-  }).catch(() => estSetStatus('Sem conexão — salvo só neste navegador.', true));
+      }).then(r => r.json()).then(res2 => {
+        if (Array.isArray(res2) && res2.length > 0) {
+          estSetStatus('Sincronizado ✓');
+        } else {
+          // linha ainda não existe — cria
+          return fetch(EST_SB_URL+'/rest/v1/estoque_dados', {
+            method: 'POST',
+            headers: Object.assign({'Prefer':'return=representation'}, estSbHeaders()),
+            body: JSON.stringify(payload)
+          }).then(r => r.json()).then(() => estSetStatus('Sincronizado ✓'));
+        }
+      });
+    })
+    .catch(() => estSetStatus('Sem conexão — salvo só neste navegador.', true));
 }
 
 function aplicarEstoquePayload(d) {
@@ -1722,6 +1778,7 @@ function sincronizarEstoqueDaSolicitacao(s) {
     const removerIds = [];
     for (const d of disponiveis) { if (paraRemover<=0) break; removerIds.push(d.id); paraRemover--; }
     for (const r of reservados) { if (paraRemover<=0) break; removerIds.push(r.id); paraRemover--; }
+    removerIds.forEach(id => estIdsRemovidos.itens.add(id));
     estoqueCompleto = estoqueCompleto.filter(e => !removerIds.includes(e.id));
   }
 
@@ -1735,6 +1792,7 @@ function sincronizarEstoqueDaSolicitacao(s) {
 }
 
 function removerEstoqueDaSolicitacao(solicitacaoId) {
+  estoqueCompleto.filter(e => e.solicitacaoId === solicitacaoId).forEach(e => estIdsRemovidos.itens.add(e.id));
   estoqueCompleto = estoqueCompleto.filter(e => e.solicitacaoId !== solicitacaoId);
 }
 
@@ -1958,6 +2016,7 @@ function removerSolicitacaoCompra(id) {
   if (!confirm('Remover essa solicitação? Isso também remove as chapas dela do Estoque Completo.')) return;
   removerEstoqueDaSolicitacao(id);
   solicitacoesCompra = solicitacoesCompra.filter(s => s.id !== id);
+  estIdsRemovidos.solicitacoes.add(id);
   salvarEstoqueDados();
   renderPedidoXCompra();
 }
@@ -2266,6 +2325,7 @@ function removerEstoqueCompleto(id) {
     if (!confirm('Remover essa chapa do estoque?')) return;
   }
   estoqueCompleto = estoqueCompleto.filter(e => e.id !== id);
+  estIdsRemovidos.itens.add(id);
   salvarEstoqueDados();
   renderEstoqueCompleto();
 }
@@ -2526,6 +2586,7 @@ function adicionarFornecedorEstoque() {
 function removerFornecedorEstoque(nome) {
   if (!confirm(`Remover "${nome}" da lista de fornecedores?`)) return;
   FORNECEDORES = FORNECEDORES.filter(f => itemValor(f)!==nome);
+  estIdsRemovidos.fornecedores.add(nome);
   salvarEstoqueDados();
   renderFornecedoresEstoque();
 }
