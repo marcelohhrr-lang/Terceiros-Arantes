@@ -1509,6 +1509,7 @@ let estoqueSubView = 'pedidos';
 let solicitacoesCompra = [];
 let solicitacaoSeq = 1;
 let filtroPedidoCompra = 'todos';
+let filtroTextoPedidoCompra = '';
 
 // Estoque por unidade — cada chapa é uma linha própria
 let estoqueCompleto = [];
@@ -1823,6 +1824,8 @@ function chegadaAtrasadaSolicitacao(s) {
 
 function renderPedidoXCompra() {
   const conteudo = document.getElementById('estConteudo');
+  const buscaTinhaFoco = document.activeElement && document.activeElement.id === 'filtroTextoPedidoInput';
+  const buscaCursorPos = buscaTinhaFoco ? document.activeElement.selectionStart : null;
 
   let listaFiltrada = solicitacoesCompra.slice();
   if (filtroPedidoCompra === 'pendentes') {
@@ -1831,6 +1834,18 @@ function renderPedidoXCompra() {
     listaFiltrada = listaFiltrada.filter(riscoCorteSolicitacao);
   } else if (filtroPedidoCompra === 'atrasado') {
     listaFiltrada = listaFiltrada.filter(chegadaAtrasadaSolicitacao);
+  }
+  if (filtroTextoPedidoCompra.trim()) {
+    const termo = filtroTextoPedidoCompra.trim().toLowerCase();
+    listaFiltrada = listaFiltrada.filter(s =>
+      (s.cliente||'').toLowerCase().includes(termo) ||
+      (s.pedido||'').toLowerCase().includes(termo) ||
+      (s.fornecedor||'').toLowerCase().includes(termo) ||
+      (s.material||'').toLowerCase().includes(termo) ||
+      (s.tipo||'').toLowerCase().includes(termo) ||
+      (s.textura||'').toLowerCase().includes(termo) ||
+      (s.solicitante||'').toLowerCase().includes(termo)
+    );
   }
 
   const totalSolicitado = solicitacoesCompra.reduce((s,x) => s+x.qtd, 0);
@@ -1870,7 +1885,7 @@ function renderPedidoXCompra() {
         </td>
         <td class="num">${comprado ? `<input type="number" min="0" step="1" value="${s.qtdComprada}" onchange="atualizarSolicitacao(${s.id},'qtdComprada',Number(this.value))">` : '<span style="color:var(--text-3);">—</span>'}</td>
         <td>${difHtml}</td>
-        <td>${comprado ? `<select onchange="atualizarFornecedorSolicitacao(${s.id},this)">${opcoesFornecedorSelect(s.fornecedor)}</select>` : '<span style="color:var(--text-3);">—</span>'}</td>
+        <td><select onchange="atualizarFornecedorSolicitacao(${s.id},this)">${opcoesFornecedorSelect(s.fornecedor)}</select></td>
         <td><input type="date" value="${s.previsaoChegada||''}" onchange="atualizarSolicitacao(${s.id},'previsaoChegada',this.value)"></td>
         <td>${comprado ? chegadaHtml : '<span style="color:var(--text-3);">—</span>'}</td>
         <td>${comprado ? `
@@ -1942,6 +1957,8 @@ function renderPedidoXCompra() {
           <option value="atrasado" ${filtroPedidoCompra==='atrasado'?'selected':''}>Somente chegada atrasada</option>
           <option value="risco" ${filtroPedidoCompra==='risco'?'selected':''}>Somente em risco de corte</option>
         </select>
+        <input type="text" id="filtroTextoPedidoInput" value="${filtroTextoPedidoCompra.replace(/"/g,'&quot;')}" placeholder="🔍 Buscar por cliente, fornecedor ou material..." oninput="filtroTextoPedidoCompra=this.value;renderPedidoXCompra();" style="font-size:11px;padding:6px 9px;border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);background:var(--surface);font-family:'DM Sans',sans-serif;min-width:260px;">
+        ${filtroTextoPedidoCompra.trim() ? `<button onclick="filtroTextoPedidoCompra='';renderPedidoXCompra();" style="font-size:11px;padding:6px 10px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:transparent;color:var(--text-2);cursor:pointer;">Limpar busca</button>` : ''}
         <span class="risco-legenda"><span class="amostra"></span> corte próximo e material ainda não chegou</span>
         <span class="risco-legenda" style="color:var(--red);"><span class="amostra" style="background:var(--red-bg);border-color:var(--red-border);"></span> previsão de chegada já passou</span>
       </div>
@@ -1962,6 +1979,11 @@ function renderPedidoXCompra() {
   `;
 
   popularSelect(document.getElementById('fSolicitante'), SOLICITANTES, '');
+
+  if (buscaTinhaFoco) {
+    const inp = document.getElementById('filtroTextoPedidoInput');
+    if (inp) { inp.focus(); const p = buscaCursorPos!=null ? buscaCursorPos : inp.value.length; inp.setSelectionRange(p, p); }
+  }
 }
 
 function onChangeSolicitante(selectEl) {
