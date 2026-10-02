@@ -406,6 +406,82 @@ select.status-usado { background: var(--bg); color: var(--text-3); }
 .tc-modal-actions { display: flex; gap: 8px; margin-top: 1rem; justify-content: flex-end; }
 .tc-modal-box p { font-size: 13px; color: var(--text-3); margin-bottom: .9rem; line-height: 1.6; }
 .tc-modal-erro { color: var(--red); font-size: 12px; margin-top: 5px; }
+/* ── KANBAN TERCEIRIZAÇÃO — quadro minimalista (os cards mantêm o estilo acima) ── */
+.tcx-flow { display:flex; flex-wrap:wrap; align-items:center; gap:6px 0; font-size:11px; color:var(--text-3); margin:2px 0 16px; }
+.tcx-flow b { color:var(--text-2); font-weight:600; margin-right:5px; }
+.tcx-flow i { display:inline-block; width:22px; height:1px; background:var(--border-strong); opacity:.6; margin:0 10px; }
+#pane-terc .tcx-novo { border-color:transparent; box-shadow:0 1px 2px rgba(26,25,22,.04); }
+.tcx-busca { width:100%; font-size:12.5px; padding:9px 14px; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--surface); color:var(--text); font-family:'DM Sans',sans-serif; margin-top:6px; }
+#pane-terc .tcx-board { grid-template-columns:repeat(4, minmax(0,1fr)) 150px; gap:18px; margin-top:1.5rem; align-items:start; }
+#pane-terc .tcx-board.inst-open { grid-template-columns:repeat(5, minmax(0,1fr)); }
+@media(max-width:1150px){ #pane-terc .tcx-board, #pane-terc .tcx-board.inst-open { grid-template-columns:1fr 1fr; } }
+@media(max-width:640px){ #pane-terc .tcx-board, #pane-terc .tcx-board.inst-open { grid-template-columns:1fr; } }
+#pane-terc .tcx-board .tc-kanban-col { border:none; background:none; overflow:visible; }
+#pane-terc .tcx-board .tc-kanban-header { background:none; color:var(--text-2); padding:0 2px 10px; font-size:10.5px; font-weight:600; letter-spacing:.07em; border-bottom:1px solid var(--border); }
+#pane-terc .tcx-board .tc-count-badge { background:none; border:none; padding:0; font-size:11px; font-weight:500; color:var(--text-3); }
+.tcx-dot { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--border-strong); margin-right:8px; vertical-align:middle; position:relative; top:-1px; }
+.st-lib .tcx-dot { background:#314D1C; }
+.st-ent .tcx-dot, .st-inst .tcx-dot { background:var(--green-border); }
+#pane-terc .tcx-board .tc-kanban-body { background:none; padding:10px 0 0; gap:10px; min-height:120px; max-height:none; overflow:visible; }
+#pane-terc .tcx-board .tc-kanban-body.drag-over { background:rgba(200,155,60,.06); outline:1px dashed var(--gold-border); outline-offset:2px; border-radius:var(--radius); }
+#pane-terc .tcx-board .tc-empty { font-size:11px; padding:18px 6px; border:1px dashed var(--border); border-radius:var(--radius); color:var(--text-3); text-align:center; }
+.tcx-inst-btn { width:100%; display:flex; justify-content:space-between; padding:0 2px 10px; border:none; border-bottom:1px solid var(--border); background:none; font-family:'DM Sans',sans-serif; font-size:10.5px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:var(--text-3); cursor:pointer; }
+.tcx-inst-btn:hover { color:var(--text-2); border-color:var(--border-strong); }
+
+/* elementos do card */
+.tc-k-card.tcx-st-pre { border-left-color:var(--gold); }
+.tc-k-card.tcx-st-apr { border-left-color:#5B3B9C; }
+.tcx-amb-mini { display:flex; flex-direction:column; gap:3px; }
+.tcx-amb-row { display:flex; align-items:center; justify-content:space-between; font-size:11px; gap:6px; }
+.tcx-amb-row .nm { color:var(--text-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.tcx-amb-row .ic { display:flex; gap:4px; flex-shrink:0; }
+.tcx-chip { font-size:9.5px; border-radius:10px; padding:1px 6px; border:1px solid var(--border); background:var(--bg); filter:grayscale(1); opacity:.55; }
+.tcx-chip.ok { border-color:var(--green-border); background:var(--green-bg); filter:none; opacity:1; }
+.tcx-prog { height:4px; background:var(--bg); border-radius:2px; overflow:hidden; margin-top:8px; }
+.tcx-prog > div { height:100%; background:var(--gold); }
+.tcx-prog > div.full { background:var(--green); }
+.tc-k-info-row.tcx-pend span:last-child { color:var(--amber); font-weight:600; }
+.tc-btn-sm.tcx-purple { border-color:#CBB8EE; background:#F1ECFA; color:#5B3B9C; }
+.tc-btn-sm.tcx-amber { border-color:var(--amber-border); background:var(--amber-bg); color:var(--amber); }
+.tcx-parte { display:inline-block; font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; border-radius:10px; padding:2px 7px; margin-left:6px; vertical-align:middle; background:var(--blue-bg); color:var(--blue); border:1px solid var(--blue-border); }
+.tcx-parte.saldo { background:var(--amber-bg); color:var(--amber); border-color:var(--amber-border); }
+
+/* modal do card */
+#tc-modal-card .tc-modal-box { max-width:680px; max-height:90vh; overflow-y:auto; }
+#tc-modal-rel .tc-modal-box { max-width:900px; }
+#tc-modal-rel { z-index:1001; }
+#tc-modal-editar, #tc-modal-data { z-index:1002; }
+#tc-modal-senha { z-index:1003; }
+.tcx-m-head { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap; }
+.tcx-m-sub { font-size:12px; color:var(--text-3); margin-top:4px; }
+.tcx-sec { display:flex; justify-content:space-between; font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); margin:16px 0 8px; }
+.tcx-amb-table { width:100%; border-collapse:collapse; font-size:12.5px; }
+.tcx-amb-table th { text-align:left; font-size:9.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); padding:6px; border-bottom:1px solid var(--border); }
+.tcx-amb-table td { padding:6px; border-bottom:1px solid var(--border); vertical-align:middle; }
+.tcx-amb-table td.nm { font-weight:600; }
+.tcx-amb-table td.st { width:26px; text-align:center; font-weight:700; }
+.tcx-amb-table input[type=date] { padding:6px 8px; font-size:12px; }
+.tcx-amb-table .rm { background:none; border:none; color:var(--text-3); cursor:pointer; font-size:14px; }
+.tcx-amb-table .rm:hover { color:var(--red); }
+@media(max-width:560px){
+  .tcx-amb-table thead { display:none; }
+  .tcx-amb-table tr { display:grid; grid-template-columns:1fr 1fr; gap:6px; padding:8px 0; border-bottom:1px solid var(--border); }
+  .tcx-amb-table td { border:none; padding:0; }
+  .tcx-amb-table td.nm { grid-column:1 / -1; }
+  .tcx-amb-table td.st, .tcx-amb-table td.x { display:none; }
+}
+input.tcx-erro { border-color:var(--red) !important; background:var(--red-bg) !important; }
+.tcx-aviso { font-size:11.5px; border-radius:var(--radius-sm); padding:8px 10px; margin-top:10px; }
+.tcx-aviso.ok { background:var(--green-bg); color:var(--green); border:1px solid var(--green-border); }
+.tcx-aviso.pend { background:var(--amber-bg); color:var(--amber); border:1px solid var(--amber-border); }
+.tcx-aviso.err { background:var(--red-bg); color:var(--red); border:1px solid var(--red-border); }
+.tcx-split { border:1px dashed var(--amber-border); background:var(--amber-bg); border-radius:var(--radius-sm); padding:10px 12px; margin-top:10px; font-size:12px; color:var(--amber); line-height:1.5; }
+.tcx-split b { color:var(--text); }
+.rom-add-btn.tcx-sec-btn { background:var(--surface); color:var(--text); border:1px solid var(--border-strong); margin-top:8px; }
+.tcx-val { font-size:13px; font-weight:500; padding:7px 0; }
+.tcx-m-actions { justify-content:space-between; flex-wrap:wrap; }
+.tcx-m-actions .esq, .tcx-m-actions .dir { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+
 
 /* ── AT FORM ── */
 .at-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
@@ -902,30 +978,31 @@ select.status-usado { background: var(--bg); color: var(--text-3); }
 <!-- MODAIS TERCEIRIZAÇÃO -->
 <div id="tc-modal-editar" class="tc-modal-bg" style="display:none">
   <div class="tc-modal-box" style="max-width:440px;">
-    <div class="tc-modal-title">✏ Editar Projeto</div>
+    <div class="tc-modal-title">✏ Editar dados do projeto</div>
     <div class="fr2" style="margin-bottom:8px;">
       <div class="field"><label>Nome do Cliente</label><input type="text" id="tc-edit-cl"></div>
       <div class="field"><label>Pedido / Referência</label><input type="text" id="tc-edit-ped"></div>
     </div>
     <div class="field" style="margin-bottom:10px;"><label>Empresa Terceirizada</label><input type="text" id="tc-edit-empresa"></div>
-    <div class="field" style="margin-bottom:6px;">
-      <label>Adicionar Ambiente</label>
-      <div style="display:flex;gap:6px;">
-        <input type="text" id="tc-edit-amb-input" placeholder="Nome do ambiente..." style="flex:1;" onkeydown="if(event.key==='Enter'){event.preventDefault();tcAddAmbienteEdit();}">
-        <button class="rom-add-btn" type="button" onclick="tcAddAmbienteEdit()" style="white-space:nowrap;">+ Add</button>
-      </div>
-    </div>
-    <div id="tc-edit-amb-tags" style="display:flex;flex-wrap:wrap;gap:6px;min-height:24px;margin-bottom:12px;"></div>
     <div class="tc-modal-actions">
       <button class="tc-btn-sm" onclick="tcFecharEdicao()">Cancelar</button>
-      <button class="rom-add-btn" onclick="tcSalvarEdicaoCard()">💾 Salvar</button>
+      <button class="rom-add-btn" style="margin-top:0" onclick="tcSalvarEdicaoCard()">💾 Salvar</button>
     </div>
   </div>
+</div>
+<div id="tc-modal-card" class="tc-modal-bg" style="display:none" onclick="if(event.target===this)tcFecharCard()">
+  <div class="tc-modal-box" id="tc-modal-card-box"></div>
+</div>
+<div id="tc-modal-rel" class="tc-modal-bg" style="display:none" onclick="if(event.target===this)tcFecharRelatorio()">
+  <div class="tc-modal-box" id="tc-modal-rel-box"></div>
+</div>
+<div id="tc-modal-data" class="tc-modal-bg" style="display:none" onclick="if(event.target===this)tcFecharData()">
+  <div class="tc-modal-box" id="tc-modal-data-box" style="max-width:380px;"></div>
 </div>
 <div id="tc-modal-senha" class="tc-modal-bg" style="display:none">
   <div class="tc-modal-box">
     <div class="tc-modal-title">🔒 Autorização Necessária</div>
-    <p>Para reverter o status de um projeto, insira a senha de supervisor:</p>
+    <p>Para voltar o projeto à etapa anterior, insira a senha de supervisor:</p>
     <div class="field"><input type="password" id="tc-senha-input" placeholder="Senha de autorização"></div>
     <div id="tc-senha-erro" class="tc-modal-erro" style="display:none;">Senha incorreta. Acesso negado.</div>
     <div class="tc-modal-actions">
@@ -3194,314 +3271,601 @@ function tcGerarPdfAc(i) {
   doc.save('romaneio-acessorios-'+codigo+'.pdf');
 }
 
-/* ===== KANBAN DE PROJETOS ===== */
+/* ===== KANBAN DE PROJETOS =====
+   Fluxo: Pré-liberado → Aprovação → Produção (15 dias úteis) → Entregue → Instalada
+   Datas internas sempre como texto 'AAAA-MM-DD' (data local). */
+const TC_PRAZO = 15;
+const TC_COLS = [
+  {k:'pre',  t:'Pré-liberado', vazio:'Nenhum projeto pré-liberado.'},
+  {k:'apr',  t:'Aprovação',    vazio:'Nenhum projeto em aprovação.'},
+  {k:'lib',  t:'Produção',     vazio:'Nenhum projeto em produção.'},
+  {k:'ent',  t:'Entregue',     vazio:'Nenhum projeto entregue.'},
+  {k:'inst', t:'Instalada',    vazio:'Nenhuma obra instalada.'}
+];
+const TC_ORDER = TC_COLS.map(c => c.k);
+let tcAbertoId = null, tcTentouAvancar = false, tcCbData = null, tcRelAtual = '';
+
+/* ---- datas ---- */
+function tcIsoLocal(d) { return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function tcHoje() { return tcIsoLocal(new Date()); }
+function tcDataDe(v) { if (!v) return ''; const s = String(v); if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s; const d = new Date(s); return isNaN(d) ? '' : tcIsoLocal(d); }
+function tcD(s) { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); }
+function tcBr(s) { if (!s) return '—'; const [y,m,d] = s.split('-'); return d+'/'+m+'/'+y; }
+function tcSemana(s) { return s ? ['dom','seg','ter','qua','qui','sex','sáb'][tcD(s).getDay()] : ''; }
+function tcAddBiz(s, n) { let d = tcD(s), a = 0; while (a < n) { d.setDate(d.getDate()+1); if (d.getDay()%6) a++; } return tcIsoLocal(d); }
+function tcBizDiff(a, b) {
+  if (!a || !b) return null; if (a === b) return 0;
+  const sinal = b > a ? 1 : -1; let d = tcD(sinal > 0 ? a : b); const fim = tcD(sinal > 0 ? b : a); let c = 0;
+  while (d < fim) { d.setDate(d.getDate()+1); if (d.getDay()%6) c++; }
+  return c * sinal;
+}
+function tcCorridos(a, b) { if (!a || !b) return null; return Math.round((tcD(b) - tcD(a)) / 86400000); }
+function tcDiasUteis(n) { return n + (Math.abs(n) === 1 ? ' dia útil' : ' dias úteis'); }
+function tcEsc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+// Mantidas por compatibilidade com o restante do sistema
+function tcAddBizDays(date, days) { let d=new Date(date), added=0; while(added<days){ d.setDate(d.getDate()+1); if(d.getDay()!==0&&d.getDay()!==6) added++; } return d; }
+function tcBizDaysPassed(start) { let d=new Date(start), today=new Date(); today.setHours(0,0,0,0); d.setHours(0,0,0,0); let count=0, cur=new Date(d); while(cur<today){ cur.setDate(cur.getDate()+1); if(cur.getDay()!==0&&cur.getDay()!==6) count++; } return count; }
+
+/* ---- banco ---- */
+function tcAmb(nome, mat, ace) { return {nome: nome, material: mat || '', acessorios: ace || ''}; }
+function tcMapProjeto(r) {
+  let ambs;
+  if (Array.isArray(r.amb_datas) && r.amb_datas.length) {
+    ambs = r.amb_datas.map(a => tcAmb(a.nome, tcDataDe(a.material), tcDataDe(a.acessorios)));
+  } else {
+    // Projetos antigos: só nomes (às vezes vários num texto separado por vírgula)
+    ambs = (r.ambientes || []).flatMap(a => String(a).split(',')).map(a => a.trim()).filter(Boolean).map(n => tcAmb(n));
+  }
+  return {
+    _id: r.id, id: r.id, cl: r.cl || '', ped: r.ped || '', empresa: r.empresa || '',
+    status: r.status || 'pre', ambientes: ambs,
+    criado: tcDataDe(r.criado) || tcDataDe(r.criado_em),
+    envio: tcDataDe(r.envio), aprovacao: tcDataDe(r.aprovacao),
+    lib: tcDataDe(r.lib), prazo: tcDataDe(r.prazo), liberadoEm: tcDataDe(r.liberado_em),
+    recebido: tcDataDe(r.recebido), instalado: tcDataDe(r.instalado),
+    grupo: r.grupo || null, parte: r.parte || null, divididoEm: tcDataDe(r.dividido_em)
+  };
+}
+function tcAmbCampos(p) { return {ambientes: p.ambientes.map(a => a.nome), amb_datas: p.ambientes.map(a => ({nome:a.nome, material:a.material||null, acessorios:a.acessorios||null}))}; }
+function tcTs(s) { return s ? tcD(s).toISOString() : null; } // lib/prazo seguem o formato antigo (timestamp)
+function tcChecaResp(res) {
+  if (res && !Array.isArray(res) && (res.code || res.message)) throw new Error(res.message || res.code);
+  return res;
+}
+function tcErroBanco(e) {
+  console.error(e);
+  const m = String(e && e.message || '');
+  if (/column|coluna|schema cache|null value|violates/i.test(m))
+    tcSetStatus('Erro: o banco ainda não tem os campos novos do kanban — rode o SQL de atualização no Supabase.', true);
+  else tcSetStatus('Erro ao salvar no banco.', true);
+}
+function tcSalvar(p, campos, msg) {
+  tcSetStatus('Salvando...');
+  return tcSbPatch('projetos_kanban', p._id || p.id, campos).then(tcChecaResp).then(() => { tcSetStatus(msg || 'Salvo ✓'); return true; })
+    .catch(e => { tcErroBanco(e); return false; });
+}
+
+/* ---- regras ---- */
+function tcAmbOk(a) { return !!(a.material && a.acessorios); }
+function tcAmbsCompletos(p) { return p.ambientes.length > 0 && p.ambientes.every(tcAmbOk); }
+function tcPodeParcial(p) { const ok = p.ambientes.filter(tcAmbOk).length; return p.status === 'pre' && ok > 0 && ok < p.ambientes.length; }
+function tcErrosAprovacao(p) {
+  const e = [];
+  if (!p.envio) e.push('data de envio do projeto pela Astral');
+  if (!p.aprovacao) e.push('data da aprovação');
+  if (p.envio && p.aprovacao && p.aprovacao < p.envio) e.push('a aprovação não pode ser antes do envio');
+  return e;
+}
+function tcPendencias(p) {
+  if (p.status === 'pre') {
+    if (!p.ambientes.length) return ['pelo menos um ambiente'];
+    const f = p.ambientes.filter(a => !tcAmbOk(a)).length;
+    return f ? [f+' ambiente(s) sem data de material e/ou acessórios'] : [];
+  }
+  if (p.status === 'apr') return tcErrosAprovacao(p);
+  return [];
+}
+function tcProximaParte(g) { return tcProjetos.filter(x => x.grupo === g && x.parte).reduce((m, x) => Math.max(m, x.parte), 0) + 1; }
+function tcEtiquetaParte(p) {
+  if (!p.grupo) return '';
+  return p.parte ? '<span class="tcx-parte" title="Liberação parcial">Parte '+p.parte+'</span>'
+                 : '<span class="tcx-parte saldo" title="Ambientes aguardando material">Saldo</span>';
+}
+
+/* ---- formulário de novo projeto ---- */
 function tcAddAmbiente() {
-  const inp = document.getElementById('tc-kb-amb-input');
-  const val = inp.value.trim();
-  if (!val) return;
-  tcKbAmbientes.push(val);
-  inp.value = ''; inp.focus();
-  tcRenderAmbTags();
+  const inp = document.getElementById('tc-kb-amb-input'); const val = inp.value.trim(); if (!val) return;
+  tcKbAmbientes.push(val); inp.value = ''; inp.focus(); tcRenderAmbTags();
 }
 function tcRemAmbiente(i) { tcKbAmbientes.splice(i,1); tcRenderAmbTags(); }
 function tcRenderAmbTags() {
-  const wrap = document.getElementById('tc-kb-amb-wrap');
-  const el = document.getElementById('tc-kb-amb-tags');
-  if (!wrap || !el) return;
-  if (!tcKbAmbientes.length) { wrap.style.display='none'; el.innerHTML=''; return; }
-  wrap.style.display = 'block';
-  el.innerHTML = tcKbAmbientes.map((a,i) => '<span class="tc-amb-tag">'+a+'<button onclick="tcRemAmbiente('+i+')" title="Remover">×</button></span>').join('');
+  const el = document.getElementById('tc-kb-amb-tags'); if (!el) return;
+  el.innerHTML = tcKbAmbientes.map((a,i) => '<span class="tc-amb-tag">'+tcEsc(a)+'<button onclick="tcRemAmbiente('+i+')" title="Remover">×</button></span>').join('');
 }
-function tcAddBizDays(date, days) { let d=new Date(date), added=0; while(added<days){ d.setDate(d.getDate()+1); if(d.getDay()!==0&&d.getDay()!==6) added++; } return d; }
-function tcBizDaysPassed(start) { let d=new Date(start), today=new Date(); today.setHours(0,0,0,0); d.setHours(0,0,0,0); let count=0, cur=new Date(d); while(cur<today){ cur.setDate(cur.getDate()+1); if(cur.getDay()!==0&&cur.getDay()!==6) count++; } return count; }
 
 function tcRenderKanbanView() {
   const wrap = document.getElementById('tcConteudo');
   wrap.innerHTML = `
-    <div class="card">
-      <div class="card-title">Liberar Projeto para Terceiro</div>
+    <div class="tcx-flow">
+      <span><b>1</b>Pré-liberado</span><i></i><span><b>2</b>Aprovação</span><i></i><span><b>3</b>Produção · ${TC_PRAZO} dias úteis</span><i></i><span><b>4</b>Entregue</span><i></i><span><b>5</b>Instalada</span>
+    </div>
+    <div class="card tcx-novo">
+      <div class="card-title">Novo projeto para terceiro</div>
       <div class="fr2">
         <div class="field"><label>Nome do Cliente</label><input type="text" id="tc-kbc" placeholder="Ex: Maria Oliveira"></div>
         <div class="field"><label>Pedido / Referência</label><input type="text" id="tc-kbp" placeholder="Ex: Ped-045"></div>
       </div>
       <div class="fr2">
-        <div class="field"><label>Empresa Terceirizada</label><input type="text" id="tc-kb-empresa" placeholder="Ex: Marmoraria Silva"></div>
+        <div class="field"><label>Empresa Terceirizada</label><input type="text" id="tc-kb-empresa" value="Astral"></div>
         <div class="field"><label>Adicionar Ambiente</label>
           <div style="display:flex;gap:6px;">
             <input type="text" id="tc-kb-amb-input" placeholder="Ex: Cozinha, Suíte master, Lavabo..." style="flex:1;" onkeydown="if(event.key==='Enter'){event.preventDefault();tcAddAmbiente();}">
-            <button class="rom-add-btn" type="button" onclick="tcAddAmbiente()" style="white-space:nowrap;">+ Add</button>
+            <button class="rom-add-btn" type="button" onclick="tcAddAmbiente()" style="white-space:nowrap;margin-top:0;">+ Add</button>
           </div>
         </div>
       </div>
-      <div id="tc-kb-amb-wrap" style="display:none;margin-bottom:8px;">
-        <div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Ambientes incluídos:</div>
-        <div id="tc-kb-amb-tags" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
-      </div>
-      <button class="rom-add-btn" onclick="tcLiberarProjeto()">→ Liberar para Produção</button>
+      <div id="tc-kb-amb-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px;"></div>
+      <button class="rom-add-btn" onclick="tcCriarProjeto()">+ Inserir em Pré-liberado</button>
     </div>
-    <div style="margin-bottom:10px;">
-      <input type="text" id="tc-kanban-busca" value="${tcFiltroKanban.replace(/"/g,'&quot;')}" placeholder="🔍 Buscar cliente, pedido ou empresa — em qualquer etapa..." oninput="tcFiltrarKanban(this.value)" style="width:100%;font-size:12.5px;padding:9px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;">
-    </div>
-    <div class="tc-kanban-wrap">
-      <div class="tc-kanban-col">
-        <div class="tc-kanban-header lib">⏱ Liberado — Em Produção <span class="tc-count-badge" id="tc-cnt-lib">0</span></div>
-        <div class="tc-kanban-body" id="tc-col-lib" ondragover="tcOnDragOver(event,'lib')" ondragleave="tcOnDragLeave('lib')" ondrop="tcOnDrop(event,'lib')">
-          <div class="tc-empty">Nenhum projeto liberado.</div>
-        </div>
-      </div>
-      <div class="tc-kanban-col">
-        <div class="tc-kanban-header ent">✓ Entregue — Recebido pela Arantes <span class="tc-count-badge" id="tc-cnt-ent">0</span></div>
-        <div class="tc-kanban-body" id="tc-col-ent" ondragover="tcOnDragOver(event,'ent')" ondragleave="tcOnDragLeave('ent')" ondrop="tcOnDrop(event,'ent')">
-          <div class="tc-empty">Nenhum projeto entregue.</div>
-        </div>
-      </div>
-      <div class="tc-kanban-col">
-        <button class="tc-inst-toggle-btn" id="tc-inst-toggle-btn" onclick="tcToggleInstalados()" style="${tcInstaladoAberto?'display:none;':''}">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          <span>Obra Instalada</span>
-          <span class="tc-count-badge" id="tc-cnt-inst-mini">0</span>
-        </button>
-        <div id="tc-col-inst-full" style="${tcInstaladoAberto?'':'display:none;'}">
-          <div class="tc-kanban-header inst" onclick="tcToggleInstalados()" style="cursor:pointer;">
-            <span>🏠 Obra Instalada</span>
-            <span style="display:flex;align-items:center;gap:6px;">
-              <span class="tc-count-badge" id="tc-cnt-inst">0</span>
-              <span class="tc-hist-arrow open">▲</span>
-            </span>
-          </div>
-          <div class="tc-kanban-body" id="tc-col-inst" ondragover="tcOnDragOver(event,'inst')" ondragleave="tcOnDragLeave('inst')" ondrop="tcOnDrop(event,'inst')">
-            <div class="tc-empty">Nenhuma obra instalada.</div>
-          </div>
-        </div>
-      </div>
-    </div>`;
+    <input type="text" id="tc-kanban-busca" class="tcx-busca" value="${tcEsc(tcFiltroKanban)}" placeholder="Buscar cliente, pedido ou empresa — em qualquer etapa" oninput="tcFiltrarKanban(this.value)">
+    <div class="tc-kanban-wrap tcx-board" id="tc-kwrap"></div>`;
+  tcRenderAmbTags();
   tcAtualizarKanbanColunas();
 }
-function tcFiltrarKanban(v) {
-  tcFiltroKanban = v;
-  tcAtualizarKanbanColunas();
-}
-function tcAtualizarKanbanColunas() {
-  const termo = tcFiltroKanban.trim().toLowerCase();
-  const combina = p => !termo || (p.cl||'').toLowerCase().includes(termo) || (p.ped||'').toLowerCase().includes(termo) || (p.empresa||'').toLowerCase().includes(termo);
+function tcFiltrarKanban(v) { tcFiltroKanban = v; tcAtualizarKanbanColunas(); }
 
-  const todosLib = tcProjetos.filter(p => p.status==='lib');
-  const todosEnt = tcProjetos.filter(p => p.status==='ent');
-  const todosInst = tcProjetos.filter(p => p.status==='inst');
-  const libs = todosLib.filter(combina);
-  const ents = todosEnt.filter(combina);
-  const insts = todosInst.filter(combina);
-
-  const cntLib=document.getElementById('tc-cnt-lib'), cntEnt=document.getElementById('tc-cnt-ent'), cntInst=document.getElementById('tc-cnt-inst'), cntInstMini=document.getElementById('tc-cnt-inst-mini');
-  if (cntLib) cntLib.textContent = termo ? libs.length+'/'+todosLib.length : todosLib.length;
-  if (cntEnt) cntEnt.textContent = termo ? ents.length+'/'+todosEnt.length : todosEnt.length;
-  if (cntInst) cntInst.textContent = termo ? insts.length+'/'+todosInst.length : todosInst.length;
-  if (cntInstMini) cntInstMini.textContent = termo ? insts.length+'/'+todosInst.length : todosInst.length;
-
-  const colLib=document.getElementById('tc-col-lib'), colEnt=document.getElementById('tc-col-ent'), colInst=document.getElementById('tc-col-inst');
-  if (colLib) colLib.innerHTML = libs.length ? libs.map(tcCardHtml).join('') : '<div class="tc-empty">'+(termo?'Nenhum resultado nessa etapa.':'Nenhum projeto liberado.')+'</div>';
-  if (colEnt) colEnt.innerHTML = ents.length ? ents.map(tcCardHtml).join('') : '<div class="tc-empty">'+(termo?'Nenhum resultado nessa etapa.':'Nenhum projeto entregue.')+'</div>';
-  if (colInst) colInst.innerHTML = insts.length ? insts.map(tcCardHtml).join('') : '<div class="tc-empty">'+(termo?'Nenhum resultado nessa etapa.':'Nenhuma obra instalada.')+'</div>';
-
-  // Se a busca encontrou algo escondido dentro de "Obra Instalada" (que fica recolhida por padrão), abre sozinha
-  if (termo && insts.length && !tcInstaladoAberto) tcToggleInstalados();
-}
-function tcCardHtml(p) {
-  const passed = tcBizDaysPassed(p.lib), pct = Math.min(100, Math.round(passed/15*100)), rest = Math.max(0,15-passed);
-  // Verde do dia 1 ao 7, laranja do 7 ao 13, vermelho do 13 ao 15 (e permanece vermelho se vencer)
-  const cls = passed>=13 ? 'tc-dl-late' : passed>=7 ? 'tc-dl-warn' : 'tc-dl-ok';
-  const vencido = passed >= 15;
-  const libStr = p.lib.toLocaleDateString('pt-BR'), prazoStr = p.prazo.toLocaleDateString('pt-BR');
-  let moveBtn = '';
-  if (p.status==='lib') {
-    moveBtn = '<button class="tc-btn-sm green" onclick="event.stopPropagation();tcMoverStatus('+p.id+",'ent')\">✓ Recebido</button>";
-  } else if (p.status==='ent') {
-    moveBtn = '<button class="tc-btn-sm blue" onclick="event.stopPropagation();tcMoverStatus('+p.id+",'inst')\">🏠 Instalado</button>"
-      + '<button class="tc-btn-sm" onclick="event.stopPropagation();tcSolicitarRevert('+p.id+')">↩ Reverter</button>';
-  } else if (p.status==='inst') {
-    moveBtn = '<button class="tc-btn-sm" onclick="event.stopPropagation();tcSolicitarRevert('+p.id+')">↩ Reverter</button>';
-  }
-  let ambHtml = '';
-  if (p.ambientes && p.ambientes.length) {
-    // Alguns projetos antigos têm vários ambientes salvos num único texto separado por vírgula
-    // em vez de itens separados — aqui a gente quebra isso pra cada um virar sua própria tag.
-    const ambientesSeparados = p.ambientes
-      .flatMap(a => String(a).split(','))
-      .map(a => a.trim())
-      .filter(Boolean);
-    ambHtml = '<div class="tc-k-ambientes">'+ambientesSeparados.map(a=>'<span class="tc-k-amb-pill">'+a+'</span>').join('')+'</div>';
-  }
-  const alertaVencidoHtml = vencido
-    ? '<div class="tc-alerta-vencido">'
-      +'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
-      +'<span>Prazo vencido — '+(passed-15)+' dia(s) útil(eis) além do limite</span>'
-      +'</div>'
-    : '';
-  const situacaoRow = p.status==='lib'
-    ? '<div class="tc-dl-track"><div class="tc-dl-fill '+cls+'" style="width:'+pct+'%"></div></div>'
-      +'<div class="tc-dl-label"><span>'+(vencido ? '<span style="color:var(--red);font-weight:700;">Prazo vencido</span>' : rest+' dias úteis restantes')+'</span><span>Limite: '+prazoStr+'</span></div>'
-      +alertaVencidoHtml
-    : '<div class="tc-k-info-row done"><span>'+(p.status==='inst' ? 'Instalação concluída' : 'Recebido pela Arantes')+'</span><span>✓</span></div>';
-  return '<div class="tc-k-card" draggable="true" id="tc-card-'+p.id
-    +'" ondragstart="tcOnDragStart(event,'+p.id+')" ondragend="tcOnDragEnd()" onclick="tcAbrirEdicaoCard('+p.id+')" style="cursor:pointer;" title="Clique para editar">'
-    +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">'
-    +'<div><div class="tc-k-client">'+p.cl+'</div><div class="tc-k-order">Pedido '+p.ped+'</div></div>'
-    +'<span class="tc-badge-terceiro">⚙ Terceiro</span>'
-    +'</div>'
-    +'<div class="tc-k-empresa">'+p.empresa+'</div>'
-    +ambHtml
-    +'<div class="tc-k-divider"></div>'
-    +'<div class="tc-k-info">'
-    +'<div class="tc-k-info-row"><span>Liberado</span><span>'+libStr+'</span></div>'
-    +'<div class="tc-k-info-row"><span>Prazo (15 dias úteis)</span><span>'+prazoStr+'</span></div>'
-    +'</div>'
-    +'<div style="margin-top:8px;">'+situacaoRow+'</div>'
-    +'<div class="tc-k-actions" onclick="event.stopPropagation()">'+moveBtn
-    +'<button class="tc-btn-sm" onclick="event.stopPropagation();tcRemProj('+p.id+')">✕ Remover</button></div></div>';
-}
-function tcLiberarProjeto() {
-  const cl=tcV('tc-kbc'), ped=tcV('tc-kbp'), empresa=tcV('tc-kb-empresa');
-  if (!cl || !ped) { alert('Preencha o cliente e o pedido.'); return; }
-  if (!empresa) { alert('Informe a empresa terceirizada.'); return; }
-  const hoje = new Date(); hoje.setHours(0,0,0,0);
-  const ambInput = document.getElementById('tc-kb-amb-input').value.trim();
-  if (ambInput) tcKbAmbientes.push(ambInput);
-  const payload = {
-    id: Date.now(), cl, ped, empresa,
-    ambientes: tcKbAmbientes.slice(),
-    lib: hoje.toISOString(), prazo: tcAddBizDays(hoje,15).toISOString(), status: 'lib'
-  };
+function tcCriarProjeto() {
+  if (tcV('tc-kb-amb-input')) tcAddAmbiente();
+  const cl = tcV('tc-kbc'), ped = tcV('tc-kbp'), empresa = tcV('tc-kb-empresa');
+  const falta = []; if (!cl) falta.push('cliente'); if (!ped) falta.push('pedido'); if (!empresa) falta.push('empresa terceirizada'); if (!tcKbAmbientes.length) falta.push('pelo menos um ambiente');
+  if (falta.length) { alert('Preencha: '+falta.join(', ')+'.'); return; }
+  const p = {id: Date.now(), cl, ped, empresa, status:'pre', criado: tcHoje(), ambientes: tcKbAmbientes.map(n => tcAmb(n))};
+  const payload = Object.assign({id:p.id, cl, ped, empresa, status:'pre', criado:p.criado}, tcAmbCampos(p));
   tcSetStatus('Salvando projeto...');
-  tcSbPost('projetos_kanban', payload).then(res => {
+  tcSbPost('projetos_kanban', payload).then(tcChecaResp).then(res => {
     const saved = Array.isArray(res) ? res[0] : res;
-    tcProjetos.push({_id:saved.id, id:saved.id, cl:saved.cl, ped:saved.ped, empresa:saved.empresa,
-      ambientes:saved.ambientes||[], lib:new Date(saved.lib), prazo:new Date(saved.prazo), status:saved.status});
-    tcKbAmbientes = [];
-    tcRenderAmbTags();
-    const ambWrap = document.getElementById('tc-kb-amb-wrap'); if (ambWrap) ambWrap.style.display='none';
-    tcAtualizarKanbanColunas();
-    tcSV('tc-kbc',''); tcSV('tc-kbp',''); tcSV('tc-kb-empresa',''); tcSV('tc-kb-amb-input','');
-    tcSetStatus('Projeto salvo ✓');
-  }).catch(() => tcSetStatus('Erro ao salvar projeto.', true));
+    tcProjetos.push(saved ? tcMapProjeto(saved) : Object.assign({_id:p.id}, p));
+    tcKbAmbientes = []; tcRenderAmbTags();
+    tcSV('tc-kbc',''); tcSV('tc-kbp',''); tcSV('tc-kb-amb-input','');
+    tcAtualizarKanbanColunas(); tcSetStatus('Projeto salvo ✓');
+  }).catch(tcErroBanco);
 }
-function tcMoverStatus(id, novoStatus) {
-  const p = tcProjetos.find(x => x.id===id);
-  if (!p) return;
-  tcSetStatus('Atualizando...');
-  tcSbPatch('projetos_kanban', p._id||p.id, {status:novoStatus}).then(() => {
-    p.status = novoStatus; tcAtualizarKanbanColunas(); tcSetStatus('Atualizado ✓');
-  }).catch(() => tcSetStatus('Erro ao atualizar.', true));
+
+/* ---- quadro ---- */
+function tcAtualizarKanbanColunas() {
+  const w = document.getElementById('tc-kwrap'); if (!w) return;
+  const termo = tcFiltroKanban.trim().toLowerCase();
+  const combina = p => !termo || p.cl.toLowerCase().includes(termo) || p.ped.toLowerCase().includes(termo) || p.empresa.toLowerCase().includes(termo);
+  const instTodos = tcProjetos.filter(p => p.status === 'inst');
+  if (termo && instTodos.some(combina)) tcInstaladoAberto = true;
+  w.className = 'tc-kanban-wrap tcx-board' + (tcInstaladoAberto ? ' inst-open' : '');
+  w.innerHTML = TC_COLS.map(c => {
+    const todos = tcProjetos.filter(p => p.status === c.k), lista = todos.filter(combina);
+    const cnt = termo ? lista.length+'/'+todos.length : todos.length;
+    if (c.k === 'inst' && !tcInstaladoAberto)
+      return '<div><button class="tcx-inst-btn" title="Mostrar obras instaladas" onclick="tcToggleInstalados()"><span>Instalada · '+cnt+'</span><span>+</span></button></div>';
+    return '<div class="tc-kanban-col">'
+      + '<div class="tc-kanban-header st-'+c.k+'"'+(c.k==='inst'?' style="cursor:pointer" title="Recolher" onclick="tcToggleInstalados()"':'')+'>'
+      + '<span><i class="tcx-dot"></i>'+c.t+'</span><span class="tc-count-badge">'+cnt+'</span></div>'
+      + '<div class="tc-kanban-body" id="tc-col-'+c.k+'" ondragover="tcOnDragOver(event,\''+c.k+'\')" ondragleave="tcOnDragLeave(\''+c.k+'\')" ondrop="tcOnDrop(event,\''+c.k+'\')">'
+      + (lista.length ? lista.map(tcCardHtml).join('') : '<div class="tc-empty">'+(termo ? 'Nenhum resultado nessa etapa.' : c.vazio)+'</div>')
+      + '</div></div>';
+  }).join('');
 }
+function tcToggleInstalados() { tcInstaladoAberto = !tcInstaladoAberto; tcAtualizarKanbanColunas(); }
+
+function tcCardHtml(p) {
+  let corpo = '', acoes = '';
+  const listaAmb = '<div class="tcx-amb-mini">'+p.ambientes.map(a => '<div class="tcx-amb-row"><span class="nm">'+tcEsc(a.nome)+'</span></div>').join('')+'</div>';
+  if (p.status === 'pre') {
+    const ok = p.ambientes.filter(tcAmbOk).length, tot = p.ambientes.length, pct = tot ? Math.round(ok/tot*100) : 0;
+    corpo = '<div class="tcx-amb-mini">'+p.ambientes.map(a =>
+        '<div class="tcx-amb-row"><span class="nm">'+tcEsc(a.nome)+'</span><span class="ic">'
+        +'<span class="tcx-chip'+(a.material?' ok':'')+'" title="Entrega do material">📦</span>'
+        +'<span class="tcx-chip'+(a.acessorios?' ok':'')+'" title="Entrega dos acessórios">🔩</span></span></div>').join('')+'</div>'
+      +'<div class="tcx-prog"><div class="'+(pct===100?'full':'')+'" style="width:'+pct+'%"></div></div>'
+      +'<div class="tc-dl-label"><span>'+ok+'/'+tot+' ambientes completos</span></div>';
+    if (ok === tot && tot) acoes = '<button class="tc-btn-sm tcx-purple" onclick="event.stopPropagation();tcMover('+p.id+',\'apr\')">🔎 Aprovação do projeto</button>';
+    else if (tcPodeParcial(p)) acoes = '<button class="tc-btn-sm tcx-amber" onclick="event.stopPropagation();tcLiberarParcial('+p.id+')">✂ Liberar parcial ('+ok+')</button>';
+  } else if (p.status === 'apr') {
+    corpo = listaAmb + '<div class="tc-k-info" style="margin-top:8px">'
+      +'<div class="tc-k-info-row '+(p.envio?'':'tcx-pend')+'"><span>Envio projeto (Astral)</span><span>'+(p.envio?tcBr(p.envio):'pendente')+'</span></div>'
+      +'<div class="tc-k-info-row '+(p.aprovacao?'':'tcx-pend')+'"><span>Aprovado em</span><span>'+(p.aprovacao?tcBr(p.aprovacao):'pendente')+'</span></div></div>';
+    if (!tcErrosAprovacao(p).length) acoes = '<button class="tc-btn-sm green" onclick="event.stopPropagation();tcMover('+p.id+',\'lib\')">→ Liberar p/ Produção</button>';
+  } else {
+    const passed = tcBizDiff(p.lib, tcHoje()) || 0, pct = Math.min(100, Math.round(passed/TC_PRAZO*100)), rest = Math.max(0, TC_PRAZO-passed);
+    const cls = passed >= 13 ? 'tc-dl-late' : passed >= 7 ? 'tc-dl-warn' : 'tc-dl-ok';
+    corpo = listaAmb + '<div class="tc-k-info" style="margin-top:8px">'
+      +'<div class="tc-k-info-row"><span>Aprovado / Liberado</span><span>'+tcBr(p.lib)+'</span></div>'
+      +'<div class="tc-k-info-row"><span>Prazo ('+TC_PRAZO+' dias úteis)</span><span>'+tcBr(p.prazo)+'</span></div></div>';
+    if (p.status === 'lib') {
+      corpo += '<div class="tc-dl-track"><div class="tc-dl-fill '+cls+'" style="width:'+pct+'%"></div></div>'
+        +'<div class="tc-dl-label"><span>'+(passed >= TC_PRAZO ? '<b style="color:var(--red)">Prazo vencido — '+tcDiasUteis(passed-TC_PRAZO)+' além</b>' : tcDiasUteis(rest)+' restantes')+'</span></div>';
+      acoes = '<button class="tc-btn-sm green" onclick="event.stopPropagation();tcMover('+p.id+',\'ent\')">✓ Recebido</button>';
+    } else if (p.status === 'ent') {
+      corpo += '<div class="tc-k-info-row done" style="margin-top:6px"><span>Recebido em</span><span>'+(p.recebido?tcBr(p.recebido)+' ✓':'✓')+'</span></div>';
+      acoes = '<button class="tc-btn-sm blue" onclick="event.stopPropagation();tcMover('+p.id+',\'inst\')">🏠 Instalado</button>';
+    } else {
+      corpo += '<div class="tc-k-info-row done" style="margin-top:6px"><span>Instalado em</span><span>'+(p.instalado?tcBr(p.instalado)+' ✓':'✓')+'</span></div>';
+    }
+    acoes += '<button class="tc-btn-sm" onclick="event.stopPropagation();tcAbrirRelatorio('+p.id+')">📄 Relatório</button>';
+  }
+  return '<div class="tc-k-card tcx-st-'+p.status+'" draggable="true" id="tc-card-'+p.id+'" ondragstart="tcOnDragStart(event,'+p.id+')" ondragend="tcOnDragEnd()" onclick="tcAbrirCard('+p.id+')" style="cursor:pointer;" title="Clique para abrir">'
+    +'<div class="tc-k-client">'+tcEsc(p.cl)+'</div><div class="tc-k-order">Pedido '+tcEsc(p.ped)+tcEtiquetaParte(p)+'</div>'
+    +'<div class="tc-k-empresa">'+tcEsc(p.empresa)+'</div>'
+    +'<div class="tc-k-divider"></div>'+corpo
+    +(acoes ? '<div class="tc-k-actions" onclick="event.stopPropagation()">'+acoes+'</div>' : '')
+    +'</div>';
+}
+
+/* ---- mover entre etapas ---- */
+function tcMover(id, para) {
+  const p = tcProjetos.find(x => x.id === id); if (!p) return;
+  const pend = tcPendencias(p);
+  if (pend.length) { alert('Não dá para avançar ainda. Falta: '+pend.join('; ')+'.'); tcAbrirCard(id, true); return; }
+  if (para === 'apr') {
+    const campos = {status:'apr'};
+    if (p.grupo && !p.parte) campos.parte = tcProximaParte(p.grupo);
+    tcSalvar(p, campos, 'Enviado para aprovação ✓').then(ok => { if (ok) { Object.assign(p, campos); tcAtualizarKanbanColunas(); } });
+  } else if (para === 'lib') {
+    const prazo = tcAddBiz(p.aprovacao, TC_PRAZO), hoje = tcHoje();
+    tcSalvar(p, {status:'lib', lib:tcTs(p.aprovacao), prazo:tcTs(prazo), liberado_em:hoje}, 'Liberado para produção ✓')
+      .then(ok => { if (ok) { p.status='lib'; p.lib=p.aprovacao; p.prazo=prazo; p.liberadoEm=hoje; tcAtualizarKanbanColunas(); } });
+  } else if (para === 'ent') {
+    tcPedirData('✓ Recebido pela Arantes', 'Data em que o material voltou da Astral', p.lib, d =>
+      tcSalvar(p, {status:'ent', recebido:d}, 'Recebido ✓').then(ok => { if (ok) { p.status='ent'; p.recebido=d; tcAtualizarKanbanColunas(); } }));
+  } else if (para === 'inst') {
+    tcPedirData('🏠 Obra instalada', 'Data da instalação', p.recebido, d =>
+      tcSalvar(p, {status:'inst', instalado:d}, 'Instalado ✓').then(ok => { if (ok) { p.status='inst'; p.instalado=d; tcAtualizarKanbanColunas(); } }));
+  }
+}
+
+/* ---- liberação parcial: divide o card ---- */
+function tcLiberarParcial(id) {
+  const p = tcProjetos.find(x => x.id === id); if (!p || !tcPodeParcial(p)) return;
+  const prontos = p.ambientes.filter(tcAmbOk), faltam = p.ambientes.filter(a => !tcAmbOk(a));
+  if (!confirm('Liberar parcialmente o pedido '+p.ped+'?\n\nVai para Aprovação: '+prontos.map(a=>a.nome).join(', ')
+    +'\nFica como Saldo, aguardando material: '+faltam.map(a=>a.nome).join(', '))) return;
+  const grupo = p.grupo || p.id;
+  const novo = {id: Date.now(), cl:p.cl, ped:p.ped, empresa:p.empresa, status:'apr', grupo, parte: tcProximaParte(grupo),
+    criado: p.criado || tcHoje(), divididoEm: tcHoje(), ambientes: prontos.map(a => Object.assign({}, a))};
+  const payload = Object.assign({id:novo.id, cl:novo.cl, ped:novo.ped, empresa:novo.empresa, status:'apr', grupo, parte:novo.parte,
+    criado:novo.criado, dividido_em:novo.divididoEm}, tcAmbCampos(novo));
+  const restante = {ambientes: faltam};
+  tcSetStatus('Dividindo card...');
+  tcSbPost('projetos_kanban', payload).then(tcChecaResp)
+    .then(res => {
+      const saved = Array.isArray(res) ? res[0] : res;
+      return tcSbPatch('projetos_kanban', p._id || p.id, Object.assign({grupo}, tcAmbCampos(restante))).then(tcChecaResp).then(() => saved);
+    })
+    .then(saved => {
+      p.grupo = grupo; p.ambientes = faltam;
+      tcProjetos.splice(tcProjetos.indexOf(p), 0, saved ? tcMapProjeto(saved) : Object.assign({_id:novo.id}, novo));
+      if (tcAbertoId) tcFecharCard(); else tcAtualizarKanbanColunas();
+      tcSetStatus('Liberação parcial feita ✓');
+    }).catch(tcErroBanco);
+}
+
+/* ---- arrastar ---- */
+function tcOnDragStart(e, id) { tcDragProjId = id; setTimeout(() => { const el = document.getElementById('tc-card-'+id); if (el) el.classList.add('dragging'); }, 0); }
+function tcOnDragEnd() { if (tcDragProjId) { const el = document.getElementById('tc-card-'+tcDragProjId); if (el) el.classList.remove('dragging'); } tcDragProjId = null; }
+function tcOnDragOver(e, col) { e.preventDefault(); const el = document.getElementById('tc-col-'+col); if (el) el.classList.add('drag-over'); }
+function tcOnDragLeave(col) { const el = document.getElementById('tc-col-'+col); if (el) el.classList.remove('drag-over'); }
+function tcOnDrop(e, col) {
+  e.preventDefault(); tcOnDragLeave(col);
+  const p = tcProjetos.find(x => x.id === tcDragProjId); tcDragProjId = null; if (!p) return;
+  const de = TC_ORDER.indexOf(p.status), para = TC_ORDER.indexOf(col);
+  if (para === de + 1) tcMover(p.id, col);
+  else if (para > de + 1) alert('Avance uma etapa por vez — cada etapa tem suas datas obrigatórias.');
+  else if (para < de) tcSolicitarRevert(p.id);
+}
+
+/* ---- modal do card ---- */
+function tcAbrirCard(id, destacar) { tcAbertoId = id; tcTentouAvancar = !!destacar; tcRenderModalCard(); document.getElementById('tc-modal-card').style.display = 'flex'; }
+function tcFecharCard() { document.getElementById('tc-modal-card').style.display = 'none'; tcAbertoId = null; tcTentouAvancar = false; tcAtualizarKanbanColunas(); }
+function tcProjAberto() { return tcProjetos.find(x => x.id === tcAbertoId); }
+function tcSetAmb(i, campo, v) {
+  const p = tcProjAberto(); if (!p) return;
+  p.ambientes[i][campo] = v; tcRenderModalCard(); tcSalvar(p, tcAmbCampos(p));
+}
+function tcRemAmbModal(i) {
+  const p = tcProjAberto(); if (!p) return;
+  if (p.ambientes.length === 1) { alert('O card precisa de pelo menos um ambiente.'); return; }
+  if (!confirm('Remover o ambiente "'+p.ambientes[i].nome+'"?')) return;
+  p.ambientes.splice(i, 1); tcRenderModalCard(); tcSalvar(p, tcAmbCampos(p));
+}
+function tcAddAmbModal() {
+  const p = tcProjAberto(), i = document.getElementById('tc-m-amb'); const v = i.value.trim(); if (!p || !v) return;
+  p.ambientes.push(tcAmb(v)); tcRenderModalCard(); tcSalvar(p, tcAmbCampos(p));
+  setTimeout(() => { const el = document.getElementById('tc-m-amb'); if (el) el.focus(); }, 0);
+}
+function tcSetCampo(c, v) {
+  const p = tcProjAberto(); if (!p) return;
+  p[c] = v; tcRenderModalCard(); tcSalvar(p, {[c]: v || null});
+}
+function tcTentar(para) { const p = tcProjAberto(); if (tcPendencias(p).length) { tcTentouAvancar = true; tcRenderModalCard(); return; } const id = tcAbertoId; tcFecharCard(); tcMover(id, para); }
+
+function tcRenderModalCard() {
+  const p = tcProjAberto(); if (!p) return;
+  const editAmb = p.status === 'pre', editApr = p.status === 'apr';
+  const ok = p.ambientes.filter(tcAmbOk).length, tot = p.ambientes.length;
+  const etapa = TC_COLS.find(c => c.k === p.status);
+  const marca = v => (tcTentouAvancar && !v) ? ' class="tcx-erro"' : '';
+  let h = '<div class="tcx-m-head"><div><div class="tc-modal-title" style="margin:0">'+tcEsc(p.cl)+' — Pedido '+tcEsc(p.ped)+tcEtiquetaParte(p)+'</div>'
+    + '<div class="tcx-m-sub">'+tcEsc(p.empresa)+' · Etapa atual: <b>'+etapa.t+'</b>'+(p.criado ? ' · criado em '+tcBr(p.criado) : '')+'</div></div>'
+    + '<button class="tc-btn-sm" onclick="tcAbrirEdicaoCard('+p.id+')" title="Editar cliente, pedido e empresa">✏ Editar dados</button></div>';
+
+  h += '<div class="tcx-sec"><span>Ambientes</span><span>'+ok+'/'+tot+' completos</span></div>'
+    + '<table class="tcx-amb-table"><thead><tr><th></th><th>Ambiente</th><th>📦 Entrega do material</th><th>🔩 Entrega dos acessórios</th><th></th></tr></thead><tbody>'
+    + p.ambientes.map((a, i) => '<tr>'
+      + '<td class="st" style="color:'+(tcAmbOk(a)?'var(--green)':'var(--text-3)')+'">'+(tcAmbOk(a)?'✓':'○')+'</td>'
+      + '<td class="nm">'+tcEsc(a.nome)+'</td>'
+      + '<td>'+(editAmb ? '<input type="date"'+marca(a.material)+' value="'+a.material+'" onchange="tcSetAmb('+i+',\'material\',this.value)">' : tcBr(a.material))+'</td>'
+      + '<td>'+(editAmb ? '<input type="date"'+marca(a.acessorios)+' value="'+a.acessorios+'" onchange="tcSetAmb('+i+',\'acessorios\',this.value)">' : tcBr(a.acessorios))+'</td>'
+      + '<td class="x">'+(editAmb ? '<button class="rm" title="Remover ambiente" onclick="tcRemAmbModal('+i+')">×</button>' : '')+'</td>'
+      + '</tr>').join('')
+    + '</tbody></table>';
+  if (editAmb) {
+    h += '<div style="display:flex;gap:6px;margin-top:8px;"><input type="text" id="tc-m-amb" placeholder="Adicionar ambiente..." onkeydown="if(event.key===\'Enter\'){event.preventDefault();tcAddAmbModal();}"><button class="rom-add-btn" style="margin-top:0;white-space:nowrap" onclick="tcAddAmbModal()">+ Add</button></div>';
+    h += tcAmbsCompletos(p)
+      ? '<div class="tcx-aviso ok">Todos os ambientes preenchidos — o card já pode ir para Aprovação do Projeto.</div>'
+      : '<div class="tcx-aviso '+(tcTentouAvancar?'err':'pend')+'">Faltam '+(tot-ok)+' ambiente(s) com data de entrega do material e/ou dos acessórios.</div>';
+    if (tcPodeParcial(p)) {
+      const prontos = p.ambientes.filter(tcAmbOk).map(a => tcEsc(a.nome)).join(', ');
+      h += '<div class="tcx-split">✂ <b>Liberação parcial:</b> '+prontos+' já '+(ok>1?'estão prontos':'está pronto')+'. Dá para mandar só '+(ok>1?'eles':'ele')+' para aprovação agora — o card é dividido e o restante fica aqui como <b>Saldo</b>, aguardando material.'
+        + '<br><button class="rom-add-btn tcx-sec-btn" onclick="tcLiberarParcial('+p.id+')">✂ Liberar parcial ('+ok+' de '+tot+')</button></div>';
+    }
+  }
+
+  if (p.status !== 'pre') {
+    h += '<div class="tcx-sec"><span>Aprovação do projeto</span></div><div class="fr2">'
+      + '<div class="field"><label>Envio do projeto pela Astral</label>'+(editApr ? '<input type="date"'+marca(p.envio)+' value="'+(p.envio||'')+'" onchange="tcSetCampo(\'envio\',this.value)">' : '<div class="tcx-val">'+tcBr(p.envio)+'</div>')+'</div>'
+      + '<div class="field"><label>Data da aprovação</label>'+(editApr ? '<input type="date"'+marca(p.aprovacao)+' value="'+(p.aprovacao||'')+'"'+(p.envio?' min="'+p.envio+'"':'')+' onchange="tcSetCampo(\'aprovacao\',this.value)">' : '<div class="tcx-val">'+tcBr(p.aprovacao)+'</div>')+'</div></div>';
+    if (editApr) {
+      const e = tcErrosAprovacao(p);
+      h += !e.length
+        ? '<div class="tcx-aviso ok">Aprovado. Ao liberar, o prazo de '+TC_PRAZO+' dias úteis conta a partir de '+tcBr(p.aprovacao)+' (entrega até '+tcBr(tcAddBiz(p.aprovacao, TC_PRAZO))+').</div>'
+        : '<div class="tcx-aviso '+(tcTentouAvancar?'err':'pend')+'">Para liberar para produção falta: '+e.join('; ')+'.</div>';
+    }
+    if (TC_ORDER.indexOf(p.status) >= 2) {
+      h += '<div class="tcx-sec"><span>Produção e entrega</span></div><div class="fr2">'
+        + '<div class="field"><label>Liberado para produção</label><div class="tcx-val">'+tcBr(p.liberadoEm || p.lib)+'</div></div>'
+        + '<div class="field"><label>Entrega combinada</label><div class="tcx-val">'+tcBr(p.prazo)+'</div></div>'
+        + '<div class="field"><label>Recebido pela Arantes</label><div class="tcx-val">'+tcBr(p.recebido)+'</div></div>'
+        + '<div class="field"><label>Instalado</label><div class="tcx-val">'+tcBr(p.instalado)+'</div></div></div>';
+    }
+  }
+
+  h += '<div class="tc-modal-actions tcx-m-actions"><div class="esq">'
+    + '<button class="tc-btn-sm" onclick="tcRemProj('+p.id+')">✕ Remover</button>'
+    + (p.status !== 'pre' ? '<button class="tc-btn-sm" onclick="tcSolicitarRevert('+p.id+')">↩ Voltar etapa</button>' : '')
+    + '</div><div class="dir"><button class="tc-btn-sm" onclick="tcFecharCard()">Fechar</button>';
+  if (p.status === 'pre') h += '<button class="rom-add-btn" style="margin-top:0" onclick="tcTentar(\'apr\')">🔎 Enviar para Aprovação do Projeto</button>';
+  if (p.status === 'apr') h += '<button class="rom-add-btn" style="margin-top:0" onclick="tcTentar(\'lib\')">→ Liberar para Produção</button>';
+  if (TC_ORDER.indexOf(p.status) >= 2) h += '<button class="rom-add-btn" style="margin-top:0" onclick="tcAbrirRelatorio('+p.id+')">📄 Relatório PDF</button>';
+  h += '</div></div>';
+  document.getElementById('tc-modal-card-box').innerHTML = h;
+}
+
+/* ---- modal pequeno de data (Recebido / Instalado) ---- */
+function tcPedirData(titulo, label, minimo, cb) {
+  tcCbData = cb;
+  document.getElementById('tc-modal-data-box').innerHTML =
+    '<div class="tc-modal-title">'+titulo+'</div><p style="margin-bottom:10px">Obrigatório para avançar.</p>'
+    + '<div class="field"><label>'+label+'</label><input type="date" id="tc-d2" value="'+tcHoje()+'"'+(minimo?' min="'+minimo+'"':'')+'></div>'
+    + '<div id="tc-d2-err" class="tc-modal-erro" style="display:none"></div>'
+    + '<div class="tc-modal-actions"><button class="tc-btn-sm" onclick="tcFecharData()">Cancelar</button><button class="rom-add-btn" style="margin-top:0" onclick="tcConfirmarData(\''+(minimo||'')+'\')">Confirmar</button></div>';
+  document.getElementById('tc-modal-data').style.display = 'flex';
+}
+function tcConfirmarData(minimo) {
+  const v = document.getElementById('tc-d2').value, err = document.getElementById('tc-d2-err');
+  if (!v) { err.textContent = 'Informe a data.'; err.style.display = 'block'; return; }
+  if (minimo && v < minimo) { err.textContent = 'A data não pode ser antes de '+tcBr(minimo)+'.'; err.style.display = 'block'; return; }
+  const cb = tcCbData; tcFecharData(); if (tcAbertoId) tcFecharCard(); cb(v);
+}
+function tcFecharData() { document.getElementById('tc-modal-data').style.display = 'none'; tcCbData = null; }
+
+/* ---- remover / editar dados ---- */
 function tcRemProj(id) {
-  if (!confirm('Remover este projeto?')) return;
-  const p = tcProjetos.find(x => x.id===id);
-  if (!p) return;
+  const p = tcProjetos.find(x => x.id === id); if (!p) return;
+  if (!confirm('Remover o projeto '+p.cl+' — Pedido '+p.ped+'?')) return;
   tcSetStatus('Removendo...');
-  tcSbDelete('projetos_kanban', p._id||p.id).then(() => {
-    tcProjetos = tcProjetos.filter(x => x.id!==id);
-    tcAtualizarKanbanColunas(); tcSetStatus('Removido ✓');
+  tcSbDelete('projetos_kanban', p._id || p.id).then(() => {
+    tcProjetos = tcProjetos.filter(x => x.id !== id);
+    if (tcAbertoId === id) tcFecharCard(); else tcAtualizarKanbanColunas();
+    tcSetStatus('Removido ✓');
   }).catch(() => tcSetStatus('Erro ao remover.', true));
 }
-function tcOnDragStart(e,id) { tcDragProjId=id; setTimeout(() => { const el=document.getElementById('tc-card-'+id); if(el) el.classList.add('dragging'); },0); }
-function tcOnDragEnd() { if (tcDragProjId) { const el=document.getElementById('tc-card-'+tcDragProjId); if(el) el.classList.remove('dragging'); } tcDragProjId=null; }
-function tcOnDragOver(e,col) { e.preventDefault(); const el=document.getElementById('tc-col-'+col); if(el) el.classList.add('drag-over'); }
-function tcToggleInstalados() {
-  tcInstaladoAberto = !tcInstaladoAberto;
-  const btn = document.getElementById('tc-inst-toggle-btn');
-  const full = document.getElementById('tc-col-inst-full');
-  if (btn) btn.style.display = tcInstaladoAberto ? 'none' : '';
-  if (full) full.style.display = tcInstaladoAberto ? '' : 'none';
-}
-function tcOnDragLeave(col) { const el=document.getElementById('tc-col-'+col); if(el) el.classList.remove('drag-over'); }
-function tcOnDrop(e,col) {
-  e.preventDefault();
-  const el = document.getElementById('tc-col-'+col); if (el) el.classList.remove('drag-over');
-  if (!tcDragProjId) return;
-  const p = tcProjetos.find(x => x.id===tcDragProjId);
-  if (!p) { tcDragProjId=null; return; }
-  const order=['lib','ent','inst'];
-  const fromIdx=order.indexOf(p.status), toIdx=order.indexOf(col);
-  if (toIdx>fromIdx) { tcMoverStatus(tcDragProjId,col); }
-  else if (toIdx<fromIdx) { tcSolicitarRevert(tcDragProjId); }
-  tcDragProjId = null;
-}
-
-/* ===== EDITAR CARD (MODAL) ===== */
 function tcAbrirEdicaoCard(id) {
-  const p = tcProjetos.find(x => x.id===id);
-  if (!p) return;
+  const p = tcProjetos.find(x => x.id === id); if (!p) return;
   tcEditandoId = id;
-  tcEditAmbientes = p.ambientes ? p.ambientes.slice() : [];
   document.getElementById('tc-edit-cl').value = p.cl;
   document.getElementById('tc-edit-ped').value = p.ped;
-  document.getElementById('tc-edit-empresa').value = p.empresa||'';
-  document.getElementById('tc-edit-amb-input').value = '';
-  tcRenderEditAmbTags();
+  document.getElementById('tc-edit-empresa').value = p.empresa || '';
   document.getElementById('tc-modal-editar').style.display = 'flex';
 }
-function tcFecharEdicao() {
-  document.getElementById('tc-modal-editar').style.display = 'none';
-  tcEditandoId = null; tcEditAmbientes = [];
-}
-function tcAddAmbienteEdit() {
-  const inp = document.getElementById('tc-edit-amb-input');
-  const val = inp.value.trim(); if (!val) return;
-  tcEditAmbientes.push(val); inp.value=''; inp.focus();
-  tcRenderEditAmbTags();
-}
-function tcRemAmbienteEdit(i) { tcEditAmbientes.splice(i,1); tcRenderEditAmbTags(); }
-function tcRenderEditAmbTags() {
-  const el = document.getElementById('tc-edit-amb-tags');
-  if (!tcEditAmbientes.length) { el.innerHTML = '<span style="font-size:11px;color:var(--text-3);font-style:italic;">Nenhum ambiente adicionado</span>'; return; }
-  el.innerHTML = tcEditAmbientes.map((a,i) => '<span class="tc-amb-tag">'+a+'<button onclick="tcRemAmbienteEdit('+i+')" title="Remover">×</button></span>').join('');
-}
+function tcFecharEdicao() { document.getElementById('tc-modal-editar').style.display = 'none'; tcEditandoId = null; }
 function tcSalvarEdicaoCard() {
-  const p = tcProjetos.find(x => x.id===tcEditandoId);
-  if (!p) { tcFecharEdicao(); return; }
-  const cl = document.getElementById('tc-edit-cl').value.trim();
-  const ped = document.getElementById('tc-edit-ped').value.trim();
-  const empresa = document.getElementById('tc-edit-empresa').value.trim();
-  const ambExtra = document.getElementById('tc-edit-amb-input').value.trim();
-  if (ambExtra) tcEditAmbientes.push(ambExtra);
-  if (!cl || !ped) { alert('Cliente e pedido são obrigatórios.'); return; }
-  tcSetStatus('Salvando edição...');
-  tcSbPatch('projetos_kanban', p._id||p.id, {cl, ped, empresa, ambientes:tcEditAmbientes.slice()}).then(() => {
-    p.cl=cl; p.ped=ped; p.empresa=empresa; p.ambientes=tcEditAmbientes.slice();
-    tcFecharEdicao(); tcAtualizarKanbanColunas(); tcSetStatus('Editado ✓');
-  }).catch(() => tcSetStatus('Erro ao salvar edição.', true));
+  const p = tcProjetos.find(x => x.id === tcEditandoId); if (!p) { tcFecharEdicao(); return; }
+  const cl = tcV('tc-edit-cl'), ped = tcV('tc-edit-ped'), empresa = tcV('tc-edit-empresa');
+  if (!cl || !ped || !empresa) { alert('Cliente, pedido e empresa são obrigatórios.'); return; }
+  tcSalvar(p, {cl, ped, empresa}, 'Editado ✓').then(ok => {
+    if (!ok) return;
+    p.cl = cl; p.ped = ped; p.empresa = empresa; tcFecharEdicao();
+    if (tcAbertoId) tcRenderModalCard(); tcAtualizarKanbanColunas();
+  });
 }
 
-/* ===== SENHA PARA REVERTER (MODAL) ===== */
+/* ---- voltar etapa (senha de supervisor) ---- */
 function tcSolicitarRevert(id) {
   tcPendingRevertId = id;
   document.getElementById('tc-senha-input').value = '';
   document.getElementById('tc-senha-erro').style.display = 'none';
   document.getElementById('tc-modal-senha').style.display = 'flex';
+  setTimeout(() => document.getElementById('tc-senha-input').focus(), 0);
 }
-function tcFecharModalSenha() {
-  document.getElementById('tc-modal-senha').style.display = 'none';
-  tcPendingRevertId = null; tcDragProjId = null;
-}
+function tcFecharModalSenha() { document.getElementById('tc-modal-senha').style.display = 'none'; tcPendingRevertId = null; tcDragProjId = null; }
 function tcConfirmarSenha() {
-  if (document.getElementById('tc-senha-input').value === '2026') {
-    const p = tcProjetos.find(x => x.id===tcPendingRevertId);
-    if (!p) { tcFecharModalSenha(); return; }
-    const order = ['lib','ent','inst'];
-    const idx = order.indexOf(p.status);
-    const novoStatus = idx>0 ? order[idx-1] : 'lib';
-    tcSetStatus('Revertendo...');
-    tcSbPatch('projetos_kanban', p._id||p.id, {status:novoStatus}).then(() => {
-      p.status = novoStatus; tcFecharModalSenha(); tcAtualizarKanbanColunas(); tcSetStatus('Revertido ✓');
-    }).catch(() => tcSetStatus('Erro ao reverter.', true));
-  } else {
-    document.getElementById('tc-senha-erro').style.display = 'block';
-  }
+  if (document.getElementById('tc-senha-input').value !== '2026') { document.getElementById('tc-senha-erro').style.display = 'block'; return; }
+  const p = tcProjetos.find(x => x.id === tcPendingRevertId); if (!p) { tcFecharModalSenha(); return; }
+  const idx = TC_ORDER.indexOf(p.status); if (idx <= 0) { tcFecharModalSenha(); return; }
+  const novo = TC_ORDER[idx-1], campos = {status: novo};
+  // Limpa a data da etapa que está sendo desfeita
+  if (p.status === 'inst') campos.instalado = null;
+  if (p.status === 'ent') campos.recebido = null;
+  if (p.status === 'lib') campos.liberado_em = null;
+  tcSalvar(p, campos, 'Etapa revertida ✓').then(ok => {
+    if (!ok) return;
+    p.status = novo;
+    if ('instalado' in campos) p.instalado = ''; if ('recebido' in campos) p.recebido = ''; if ('liberado_em' in campos) p.liberadoEm = '';
+    tcFecharModalSenha(); if (tcAbertoId) tcRenderModalCard(); tcAtualizarKanbanColunas();
+  });
 }
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    if (document.getElementById('tc-modal-editar').style.display === 'flex') tcFecharEdicao();
-    if (document.getElementById('tc-modal-senha').style.display === 'flex') tcFecharModalSenha();
+
+/* ===== RELATÓRIO DO CLIENTE (PDF) ===== */
+function tcDataLonga(s) { return s ? tcBr(s)+' <span class="sem">('+tcSemana(s)+')</span>' : '<span class="pend">não informado</span>'; }
+function tcSituacaoEntrega(p) {
+  if (p.recebido) {
+    const d = tcBizDiff(p.prazo, p.recebido);
+    if (d > 0) return {cls:'atraso', titulo:'Entregue com atraso', txt:'Material entregue em '+tcBr(p.recebido)+', '+tcDiasUteis(d)+' após a data combinada ('+tcBr(p.prazo)+').'};
+    if (d < 0) return {cls:'ok', titulo:'Entregue antes do prazo', txt:'Material entregue em '+tcBr(p.recebido)+', '+tcDiasUteis(-d)+' antes da data combinada ('+tcBr(p.prazo)+').'};
+    return {cls:'ok', titulo:'Entregue na data combinada', txt:'Material entregue em '+tcBr(p.recebido)+', exatamente na data combinada.'};
   }
+  if (p.status === 'ent' || p.status === 'inst')
+    return {cls:'alerta', titulo:'Entregue — data de recebimento não registrada', txt:'Projeto anterior ao novo controle: não dá para calcular se houve atraso. Data combinada: '+tcBr(p.prazo)+'.'};
+  const d = tcBizDiff(tcHoje(), p.prazo);
+  if (d === null) return {cls:'alerta', titulo:'Em produção', txt:'Data combinada não informada.'};
+  if (d < 0) return {cls:'atraso', titulo:'Em produção — prazo vencido', txt:'A entrega deveria ter ocorrido em '+tcBr(p.prazo)+'. Atraso atual: '+tcDiasUteis(-d)+'.'};
+  if (d === 0) return {cls:'alerta', titulo:'Em produção — entrega prevista para hoje', txt:'Data combinada: '+tcBr(p.prazo)+'.'};
+  return {cls: d <= 3 ? 'alerta' : 'ok', titulo:'Em produção — dentro do prazo', txt:'Faltam '+tcDiasUteis(d)+' para a data combinada ('+tcBr(p.prazo)+').'};
+}
+function tcRelatorioHtml(p) {
+  const sit = tcSituacaoEntrega(p);
+  const parte = p.grupo ? (p.parte ? ' — Parte '+p.parte+' (liberação parcial)' : ' — Saldo') : '';
+  const datasAmb = p.ambientes.flatMap(a => [a.material, a.acessorios]).filter(Boolean).sort();
+  const ultima = datasAmb.length ? datasAmb[datasAmb.length-1] : '';
+  const linha = (n, t, c) => '<div class="et"><div class="num">'+n+'</div><div class="et-c"><div class="et-t">'+t+'</div>'+c+'</div></div>';
+  const kv = (k, v) => '<div class="kv"><span>'+k+'</span><span>'+v+'</span></div>';
+  const ambRows = p.ambientes.map(a => '<tr><td>'+tcEsc(a.nome)+'</td><td>'+tcBr(a.material)+'</td><td>'+tcBr(a.acessorios)+'</td></tr>').join('');
+  const envAprov = tcCorridos(p.envio, p.aprovacao);
+  const libData = p.liberadoEm || p.lib;
+  const difEnt = p.recebido ? tcBizDiff(p.prazo, p.recebido) : null;
+  const resultado = p.recebido
+    ? (difEnt > 0 ? '<span style="color:#B53030">Atraso de '+tcDiasUteis(difEnt)+'</span>'
+      : difEnt < 0 ? '<span style="color:#1A6B35">'+tcDiasUteis(-difEnt)+' antes do prazo</span>'
+      : '<span style="color:#1A6B35">Na data combinada</span>')
+    : (p.status === 'ent' || p.status === 'inst') ? '<span class="pend">sem data registrada</span>' : '<span class="pend">aguardando entrega</span>';
+  const ateLib = tcBizDiff(p.criado, libData), ciclo = p.recebido ? tcBizDiff(p.criado, p.recebido) : null;
+  return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+<title>Relatório ${tcEsc(p.cl)} — Pedido ${tcEsc(p.ped)}</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+@page { size:A4; margin:14mm 14mm 16mm; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'DM Sans',Arial,sans-serif; color:#1A1916; font-size:11.5px; background:#fff; }
+.pg { max-width:182mm; margin:0 auto; padding:10px 0; }
+.hd { display:flex; justify-content:space-between; align-items:flex-end; border-bottom:2.5px solid #314D1C; padding-bottom:10px; margin-bottom:14px; gap:12px; }
+.hd img { height:38px; display:block; }
+.hd .sub { font-size:10px; color:#5C5A54; margin-top:4px; }
+.hd .dir { text-align:right; }
+.hd .dir b { display:block; font-size:13px; }
+.hd .dir span { font-size:10px; color:#5C5A54; }
+.cli { display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:10px; background:#F5F5F3; border:1px solid #E2E0DB; border-radius:6px; padding:10px 12px; margin-bottom:12px; }
+.cli label { display:block; font-size:8.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#9B9890; margin-bottom:2px; }
+.cli div { font-size:12.5px; font-weight:600; }
+.sit { border-radius:6px; padding:11px 14px; margin-bottom:14px; border:1px solid; }
+.sit.ok { background:#EAF4EC; border-color:#A8D8B5; color:#1A6B35; }
+.sit.alerta { background:#FEF3E2; border-color:#F5C97A; color:#92580A; }
+.sit.atraso { background:#FDECEA; border-color:#F4ADAD; color:#B53030; }
+.sit b { display:block; font-size:13.5px; margin-bottom:2px; }
+.et { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid #E2E0DB; page-break-inside:avoid; }
+.et:last-of-type { border-bottom:none; }
+.num { flex-shrink:0; width:24px; height:24px; border-radius:50%; background:#314D1C; color:#fff; font-weight:700; font-size:12px; display:flex; align-items:center; justify-content:center; }
+.et-c { flex:1; }
+.et-t { font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#5C5A54; margin-bottom:6px; padding-top:4px; }
+.kv { display:flex; justify-content:space-between; padding:2px 0; font-size:12px; gap:12px; }
+.kv span:first-child { color:#5C5A54; }
+.kv span:last-child { font-weight:600; text-align:right; }
+.sem { color:#9B9890; font-weight:400; font-size:10.5px; }
+.pend { color:#92580A; font-style:italic; font-weight:500; }
+.nota { font-size:10.5px; color:#9B9890; margin-top:3px; }
+table { width:100%; border-collapse:collapse; margin-top:2px; }
+th { text-align:left; font-size:8.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#9B9890; border-bottom:1px solid #B8B5AC; padding:4px 6px; }
+td { padding:5px 6px; border-bottom:1px solid #E2E0DB; font-size:11.5px; }
+td:first-child { font-weight:600; }
+.destaque { font-size:15px; color:#314D1C; }
+.res { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:14px; }
+.res div { border:1px solid #E2E0DB; border-radius:6px; padding:8px 10px; }
+.res label { display:block; font-size:8.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#9B9890; }
+.res b { font-size:14px; }
+.ft { margin-top:18px; padding-top:8px; border-top:1px solid #E2E0DB; font-size:9px; color:#9B9890; display:flex; justify-content:space-between; }
+.bar { position:sticky; top:0; background:#fff; padding:10px 0; text-align:right; border-bottom:1px solid #E2E0DB; margin-bottom:10px; }
+.bar button { font-family:inherit; font-size:12px; font-weight:600; padding:8px 16px; border:none; border-radius:5px; background:#1A1916; color:#fff; cursor:pointer; }
+@media print { .bar { display:none; } .pg { padding:0; } body { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
+</style></head><body><div class="pg">
+<div class="bar"><button onclick="window.print()">🖨 Imprimir / Salvar como PDF</button></div>
+<div class="hd">
+  <div><img src="${TC_LOGO_URL}" alt="Arantes Marmoraria"><div class="sub">Relatório de Terceirização — Acompanhamento do Pedido</div></div>
+  <div class="dir"><b>Pedido ${tcEsc(p.ped)}${parte}</b><span>Emitido em ${tcBr(tcHoje())}</span></div>
+</div>
+<div class="cli">
+  <div><label>Cliente</label><div>${tcEsc(p.cl)}</div></div>
+  <div><label>Empresa terceirizada</label><div>${tcEsc(p.empresa)}</div></div>
+  <div><label>Ambientes</label><div>${p.ambientes.length}</div></div>
+</div>
+<div class="sit ${sit.cls}"><b>${sit.titulo}</b>${sit.txt}</div>
+${linha(1, 'Criação do card', kv('Card criado em', tcDataLonga(p.criado)) + (p.divididoEm ? '<div class="nota">Liberação parcial: esta parte foi separada do pedido em '+tcBr(p.divididoEm)+'.</div>' : ''))}
+${linha(2, 'Entrega do material e dos acessórios à '+tcEsc(p.empresa),
+  '<table><thead><tr><th>Ambiente</th><th>Material</th><th>Acessórios</th></tr></thead><tbody>'+ambRows+'</tbody></table>'
+  + (ultima ? '<div class="nota">Última entrega em '+tcBr(ultima)+'.</div>' : ''))}
+${linha(3, 'Projeto — envio e aprovação',
+  kv('Projeto enviado pela '+tcEsc(p.empresa), tcDataLonga(p.envio)) + kv('Projeto aprovado', tcDataLonga(p.aprovacao))
+  + (envAprov !== null ? '<div class="nota">Tempo de aprovação: '+envAprov+(envAprov === 1 ? ' dia corrido' : ' dias corridos')+'.</div>' : ''))}
+${linha(4, 'Liberação para produção',
+  kv('Liberado para produção', tcDataLonga(libData))
+  + ((p.liberadoEm && p.aprovacao && p.liberadoEm !== p.aprovacao) ? '<div class="nota">O prazo de produção conta a partir da aprovação ('+tcBr(p.aprovacao)+').</div>' : ''))}
+${linha(5, 'Entrega do material produzido',
+  kv('Data combinada de entrega ('+TC_PRAZO+' dias úteis)', '<span class="destaque">'+tcBr(p.prazo)+'</span> <span class="sem">('+tcSemana(p.prazo)+')</span>')
+  + kv('Entregue à Arantes', p.recebido ? tcDataLonga(p.recebido) : (p.status === 'ent' || p.status === 'inst') ? '<span class="pend">não registrado</span>' : '<span class="pend">ainda em produção</span>')
+  + kv('Resultado', resultado)
+  + (p.instalado ? kv('Obra instalada', tcDataLonga(p.instalado)) : ''))}
+<div class="res">
+  <div><label>Card → Liberação</label><b>${ateLib !== null ? tcDiasUteis(ateLib) : '—'}</b></div>
+  <div><label>Prazo de produção</label><b>${TC_PRAZO} dias úteis</b></div>
+  <div><label>Ciclo total (card → entrega)</label><b>${ciclo !== null ? tcDiasUteis(ciclo) : 'em andamento'}</b></div>
+</div>
+<div class="ft"><span>Pedras Decorativas Arantes Ltda · São José dos Campos/SP</span><span>Dias úteis = segunda a sexta (feriados não descontados)</span></div>
+</div></body></html>`;
+}
+function tcAbrirRelatorio(id) {
+  const p = tcProjetos.find(x => x.id === id); if (!p) return;
+  tcRelAtual = tcRelatorioHtml(p);
+  document.getElementById('tc-modal-rel-box').innerHTML =
+    '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;">'
+    + '<div class="tc-modal-title" style="margin:0">📄 Relatório — '+tcEsc(p.cl)+' · '+tcEsc(p.ped)+'</div>'
+    + '<div style="display:flex;gap:6px;"><button class="tc-btn-sm" onclick="tcFecharRelatorio()">Fechar</button>'
+    + '<button class="rom-add-btn" style="margin-top:0" onclick="tcImprimirRelatorio()">🖨 Gerar PDF</button></div></div>'
+    + '<iframe id="tc-rel-frame" style="width:100%;height:70vh;border:1px solid var(--border);border-radius:var(--radius-sm);background:#fff;"></iframe>';
+  document.getElementById('tc-rel-frame').srcdoc = tcRelAtual;
+  document.getElementById('tc-modal-rel').style.display = 'flex';
+}
+function tcFecharRelatorio() { document.getElementById('tc-modal-rel').style.display = 'none'; }
+function tcImprimirRelatorio() {
+  // Mesmo padrão dos romaneios: abre em nova aba e chama a impressão (Salvar como PDF)
+  const j = window.open('', '_blank');
+  if (j) { j.document.write(tcRelAtual.replace('</body>', '<scr'+'ipt>window.onload=function(){window.print();};</scr'+'ipt></body>')); j.document.close(); return; }
+  try { document.getElementById('tc-rel-frame').contentWindow.print(); }
+  catch (e) { alert('O navegador bloqueou a impressão. Libere pop-ups para esta página e tente de novo.'); }
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Escape') return;
+  const aberto = id => document.getElementById(id) && document.getElementById(id).style.display === 'flex';
+  if (aberto('tc-modal-senha')) tcFecharModalSenha();
+  else if (aberto('tc-modal-data')) tcFecharData();
+  else if (aberto('tc-modal-editar')) tcFecharEdicao();
+  else if (aberto('tc-modal-rel')) tcFecharRelatorio();
+  else if (aberto('tc-modal-card')) tcFecharCard();
 });
 document.getElementById('tc-senha-input').addEventListener('keydown', function(e) { if (e.key === 'Enter') tcConfirmarSenha(); });
 
@@ -3534,8 +3898,7 @@ function tcCarregarTudo() {
     }
     tcRomsMat = rMat.map(r => ({_id:r.id, num:r.num, data:new Date(r.data), itens:r.itens}));
     tcRomsAc  = rAc.map(r => ({_id:r.id, num:r.num, data:new Date(r.data), grupos:r.grupos}));
-    tcProjetos = rProj.map(p => ({_id:p.id, id:p.id, cl:p.cl, ped:p.ped, empresa:p.empresa||'',
-      ambientes:p.ambientes||[], lib:new Date(p.lib), prazo:new Date(p.prazo), status:p.status}));
+    tcProjetos = rProj.map(tcMapProjeto);
     tcRenderConteudoAtual();
     if (document.getElementById('acConteudo')) tcRenderAcessorios();
     tcSetStatus('Sincronizado ✓');
