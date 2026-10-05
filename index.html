@@ -727,6 +727,224 @@ input.tcx-erro { border-color:var(--red) !important; background:var(--red-bg) !i
   .page-header { padding: 0 1rem; }
   .main { padding: 1rem 1rem 3rem; }
 }
+
+/* ===== AT — Kanban de Assistência Técnica (escopo #atk) ===== */
+#atk { --col-bg: #ECEBE7; padding: 1.25rem 2rem 3rem; font-size: 14px; }
+#atk .atk-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+#atk .atk-title { font-size: 19px; font-weight: 600; }
+#atk .atk-conn { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+#atk .atk-conn.err { color: var(--red); font-weight: 600; }
+#atk .tabs { border-bottom: 1px solid var(--border); margin-bottom: 14px; }
+#atk label { font-size: inherit; }
+#atk .ph-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+#atk .tabs { display: flex; gap: 4px; }
+#atk .tab { border: none; background: none; padding: 9px 14px; font-size: 13px; font-weight: 500; color: var(--text-3); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: inherit; }
+#atk .tab[aria-selected="true"] { color: var(--text); border-bottom-color: var(--gold); }
+#atk .tab:hover { color: var(--text); }
+@media (max-width: 560px) { #atk .ph-actions { width: 100%; } #atk .search { flex: 1; min-width: 0; } }
+@media (max-width: 900px) { #atk { padding: 1rem 16px 3rem; } }
+#atk .btn { font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: var(--surface); color: var(--text); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+#atk .btn:hover { background: var(--bg); }
+#atk .btn:focus-visible, #atk .kcard:focus-visible, #atk .tab:focus-visible, #atk .arq-row:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+#atk .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+#atk .btn-primary:hover { background: #33312c; }
+#atk .btn-ghost { border-color: transparent; background: transparent; color: var(--text-2); }
+#atk .btn-danger { color: var(--red); border-color: var(--red-border); }
+#atk .btn-danger:hover { background: var(--red-bg); }
+#atk .btn-sm { font-size: 12px; padding: 5px 10px; }
+#atk .search { padding: 8px 12px; font-size: 13px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); min-width: 240px; font-family: inherit; }
+#atk .wrap { padding: 1.5rem 2rem 3rem; }
+#atk .demo-note { font-size: 12px; color: var(--text-2); background: var(--gold-bg); border: 1px solid var(--gold-border); border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: 1rem; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+#atk .board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: start; }
+#atk .col { background: var(--col-bg); border-radius: var(--radius); padding: 10px; min-height: 360px; display: flex; flex-direction: column; gap: 8px; transition: background .15s, box-shadow .15s; }
+#atk .col.k-drag-over { background: var(--gold-bg); box-shadow: inset 0 0 0 2px var(--gold); }
+#atk .col-head { display: flex; align-items: center; gap: 8px; padding: 4px 4px 8px; border-bottom: 2px solid var(--col-c, var(--text)); }
+#atk .col-head h2 { font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+#atk .col-count { margin-left: auto; font-size: 11px; font-weight: 600; background: var(--surface); border: 1px solid var(--border); padding: 1px 8px; border-radius: 20px; font-variant-numeric: tabular-nums; }
+#atk .col-hint { font-size: 11px; color: var(--text-3); padding: 0 4px; display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+#atk .col-list { display: flex; flex-direction: column; gap: 8px; }
+#atk .col[data-status="solicitacao"] { --col-c: var(--amber); }
+#atk .col[data-status="agendado"] { --col-c: var(--blue); }
+#atk .col[data-status="concluido"] { --col-c: var(--green); }
+#atk .col-empty { font-size: 12px; color: var(--text-3); text-align: center; padding: 24px 8px; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); }
+#atk .arq-foot { font-size: 11px; color: var(--text-3); text-align: center; padding: 8px 4px 2px; border-top: 1px dashed var(--border-strong); margin-top: 2px; }
+#atk .arq-foot b { color: var(--text-2); }
+#atk .link { background: none; border: none; color: var(--text-2); text-decoration: underline; cursor: pointer; font-size: 11px; padding: 0; }
+#atk .kcard { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--col-c); border-radius: var(--radius-sm); padding: 10px 11px; cursor: grab; display: flex; flex-direction: column; gap: 6px; }
+#atk .kcard:hover { border-color: var(--border-strong); border-left-color: var(--col-c); }
+#atk .kcard.k-dragging { opacity: .45; }
+#atk .card-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+#atk .card-proto { font-size: 11px; font-weight: 500; color: var(--text-3); }
+#atk .pill { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 1px 7px; border-radius: 20px; border: 1px solid; white-space: nowrap; }
+#atk .pill-urg { color: var(--red); background: var(--red-bg); border-color: var(--red-border); }
+#atk .pill-gar { color: var(--green); background: var(--green-bg); border-color: var(--green-border); }
+#atk .pill-fora { color: var(--amber); background: var(--amber-bg); border-color: var(--amber-border); }
+#atk .pill-ex { color: var(--text-3); background: var(--bg); border-color: var(--border); }
+#atk .pill-cat { color: var(--text-2); background: var(--bg); border-color: var(--border); text-transform: none; letter-spacing: 0; font-weight: 600; }
+#atk .pill-ret { color: var(--blue); background: var(--blue-bg); border-color: var(--blue-border); }
+#atk .pill-arq { color: var(--text-2); background: var(--col-bg); border-color: var(--border-strong); }
+#atk .card-name { font-size: 14px; font-weight: 600; line-height: 1.3; }
+#atk .card-motivo { font-size: 12px; color: var(--text-2); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+#atk .card-meta { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11px; color: var(--text-3); }
+#atk .card-meta b { color: var(--text-2); font-weight: 500; }
+#atk .card-sched { font-size: 12px; background: var(--blue-bg); color: var(--blue); border-radius: 4px; padding: 5px 8px; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+#atk .card-sched.late { background: var(--red-bg); color: var(--red); }
+#atk .card-done { font-size: 12px; background: var(--green-bg); color: var(--green); border-radius: 4px; padding: 5px 8px; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+#atk .card-thumbs { display: flex; gap: 4px; align-items: center; }
+#atk .card-thumbs img { width: 34px; height: 34px; object-fit: cover; border-radius: 3px; border: 1px solid var(--border); }
+#atk .card-actions { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 2px; }
+#atk .arq-results { margin-top: 18px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+#atk .arq-results h3 { font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+#atk .arq-results p.ksub { font-size: 12px; color: var(--text-3); margin-bottom: 8px; }
+#atk .arq-table { overflow-x: auto; }
+#atk .arq-row { display: grid; grid-template-columns: 76px minmax(160px, 1.4fr) minmax(130px, 1fr) 96px 96px 120px; gap: 10px; align-items: center; padding: 8px 6px; border-bottom: 1px solid var(--border); font-size: 13px; cursor: pointer; min-width: 720px; }
+#atk .arq-row:hover { background: var(--bg); }
+#atk .arq-row.head { font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); cursor: default; background: var(--bg); border-radius: 4px; }
+#atk .arq-row .mono { font-size: 12px; color: var(--text-3); }
+#atk .arq-row span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#atk .dash-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+#atk .dash-bar label { font-size: 12px; color: var(--text-2); }
+#atk .dash-bar select { padding: 7px 10px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--surface); font-size: 13px; }
+#atk .dash-bar .range { font-size: 12px; color: var(--text-3); }
+#atk .kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+#atk .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; }
+#atk .kpi .lbl { font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--text-3); }
+#atk .kpi .kval { font-size: 28px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.15; }
+#atk .kpi .kval small { font-size: 14px; font-weight: 500; color: var(--text-2); margin-left: 2px; }
+#atk .kpi .note { font-size: 11px; color: var(--text-2); }
+#atk .kpi.alert .kval { color: var(--red); }
+#atk .panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+#atk .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; min-width: 0; }
+#atk .panel.wide { grid-column: 1 / -1; }
+#atk .panel h3 { font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; margin-bottom: 2px; }
+#atk .panel .ksub { font-size: 12px; color: var(--text-3); margin-bottom: 12px; }
+#atk .hbar { display: grid; grid-template-columns: minmax(110px, 170px) 1fr 70px; gap: 10px; align-items: center; font-size: 13px; margin-bottom: 8px; }
+#atk .hbar .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#atk .hbar .track { height: 14px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+#atk .hbar .fill { height: 100%; background: var(--text-2); border-radius: 3px; }
+#atk .hbar.top .fill { background: var(--gold); }
+#atk .hbar.top .name { font-weight: 600; }
+#atk .hbar .knum { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-2); font-size: 12px; }
+#atk .hbar .knum b { color: var(--text); font-size: 13px; }
+#atk .months-scroll { overflow-x: auto; }
+#atk .months { display: flex; align-items: flex-end; gap: 14px; height: 200px; padding: 18px 4px 0; border-bottom: 1px solid var(--border-strong); min-width: max-content; }
+#atk .mcol { display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; width: 46px; }
+#atk .mbars { display: flex; gap: 4px; align-items: flex-end; height: 100%; }
+#atk .mbar { width: 18px; border-radius: 3px 3px 0 0; position: relative; min-height: 2px; }
+#atk .mbar.a { background: var(--amber); }
+#atk .mbar.r { background: var(--green); }
+#atk .mbar span { position: absolute; top: -16px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+#atk .mlabels { display: flex; gap: 14px; padding: 6px 4px 0; min-width: max-content; }
+#atk .mlabels div { width: 46px; text-align: center; font-size: 11px; color: var(--text-3); }
+#atk .legend { display: flex; gap: 14px; font-size: 12px; color: var(--text-2); margin-bottom: 4px; }
+#atk .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+#atk .split { display: flex; height: 22px; border-radius: 4px; overflow: hidden; margin: 6px 0 8px; }
+#atk .split div { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: #fff; min-width: 0; }
+#atk .dash-empty { font-size: 13px; color: var(--text-3); padding: 10px 0; }
+#atk .overlay { position: fixed; inset: 0; background: rgba(26,25,22,.45); display: flex; align-items: flex-start; justify-content: center; padding: 4vh 16px; z-index: 50; overflow-y: auto; }
+#atk .modal { background: var(--surface); border-radius: var(--radius); width: 100%; max-width: 640px; box-shadow: 0 18px 50px rgba(0,0,0,.2); }
+#atk .modal-head { padding: 16px 20px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px; }
+#atk .modal-head h3 { font-size: 16px; font-weight: 600; }
+#atk .modal-head p { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+#atk .modal-head .kx { margin-left: auto; }
+#atk .modal-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 14px; }
+#atk .modal-foot { padding: 12px 20px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+#atk .sec-title { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); border-left: 3px solid var(--accent); padding-left: 8px; }
+#atk .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; }
+#atk .f { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+#atk .f label, #atk .f .lab { font-size: 12px; font-weight: 500; color: var(--text-2); }
+#atk .req { color: var(--red); }
+#atk .f input, #atk .f textarea, #atk .f select { width: 100%; padding: 8px 10px; font-size: 13px; font-family: inherit; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); }
+#atk .f input[type=date] { font-family: 'DM Mono', monospace; }
+#atk .f input:focus, #atk .f textarea:focus, #atk .f select:focus { outline: none; border-color: var(--accent); background: #fff; }
+#atk .f textarea { resize: vertical; line-height: 1.55; }
+#atk .f.invalid input, #atk .f.invalid textarea, #atk .f.invalid select { border-color: var(--red); background: var(--red-bg); }
+#atk .f.invalid .foto-add { border-color: var(--red); background: var(--red-bg); color: var(--red); }
+#atk .seg { display: flex; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+#atk .seg label { flex: 1; text-align: center; font-size: 13px; padding: 7px 8px; cursor: pointer; background: var(--bg); color: var(--text-2); border-right: 1px solid var(--border); }
+#atk .seg label:last-child { border-right: none; }
+#atk .seg input { position: absolute; opacity: 0; pointer-events: none; }
+#atk .seg input:checked + span { font-weight: 600; color: var(--text); }
+#atk .seg label:has(input:checked) { background: var(--surface); box-shadow: inset 0 -2px 0 var(--accent); }
+#atk .check { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--amber); background: var(--amber-bg); border: 1px solid var(--amber-border); border-radius: var(--radius-sm); padding: 8px 10px; cursor: pointer; }
+#atk .check input { accent-color: var(--amber); width: 15px; height: 15px; }
+#atk .fotos { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+#atk .foto { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: var(--bg); display: flex; flex-direction: column; }
+#atk .foto img { width: 100%; height: 90px; object-fit: cover; display: block; }
+#atk .foto input { border: none; border-top: 1px solid var(--border); padding: 5px 7px; font-size: 11px; font-family: inherit; background: var(--surface); width: 100%; }
+#atk .foto button { border: none; background: var(--surface); color: var(--red); font-size: 11px; padding: 4px; cursor: pointer; border-top: 1px solid var(--border); }
+#atk .foto-add { border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; min-height: 120px; font-size: 12px; color: var(--text-2); cursor: pointer; text-align: center; padding: 8px; }
+#atk .foto-add:hover { background: var(--bg); }
+#atk .foto-big img { height: 130px; }
+#atk .info { display: grid; grid-template-columns: 130px 1fr; gap: 6px 10px; font-size: 13px; }
+#atk .info dt { color: var(--text-3); font-size: 12px; }
+#atk .info dd { color: var(--text); white-space: pre-wrap; word-break: break-word; }
+#atk .timeline { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--text-2); }
+#atk .timeline div { display: flex; gap: 8px; }
+#atk .timeline .mono { color: var(--text-3); min-width: 120px; }
+#atk .confirm-bar { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 13px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+#atk .banner-arq { background: var(--col-bg); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 12px; color: var(--text-2); }
+#atk .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; font-size: 13px; padding: 9px 16px; border-radius: 20px; z-index: 80; box-shadow: 0 8px 24px rgba(0,0,0,.2); }
+@media (max-width: 1000px) {
+#atk .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+#atk .board { grid-template-columns: 1fr; }
+#atk .col { min-height: 0; }
+#atk .panels { grid-template-columns: 1fr; }
+#atk .page-header, #atk .wrap { padding-left: 16px; padding-right: 16px; }
+}
+@media (max-width: 560px) {
+#atk .grid2 { grid-template-columns: 1fr; }
+#atk .info { grid-template-columns: 1fr; }
+#atk .info dt { margin-top: 4px; }
+#atk .search { min-width: 0; flex: 1; }
+#atk .ph-actions { width: 100%; }
+#atk .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+#atk .hbar { grid-template-columns: minmax(90px, 120px) 1fr 58px; }
+}
+@media (prefers-reduced-motion: reduce) {
+#atk * { transition: none !important; }
+}
+
+/* AT — documento impresso (kanban) */
+#at-print-doc .at-print-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid #1A1916; }
+#at-print-doc .at-ph-left h1 { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+#at-print-doc .at-ph-left p { font-size: 10px; color: #5C5A54; line-height: 1.5; }
+#at-print-doc .at-ph-right { text-align: right; }
+#at-print-doc .at-ph-right .at-title { font-size: 13px; font-weight: 700; color: #C0283A; letter-spacing: .03em; text-transform: uppercase; margin-bottom: 4px; }
+#at-print-doc .at-ph-right p { font-size: 11px; color: #1A1916; }
+#at-print-doc .at-ph-right .at-protocolo { border-bottom: 1px solid #1A1916; display: inline-block; min-width: 100px; font-weight: 700; }
+#at-print-doc .at-section { margin-bottom: 12px; break-inside: avoid; }
+#at-print-doc .at-section-title { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #1A1916; background: #F5F5F3; border-left: 3px solid #1A1916; padding: 5px 10px; margin-bottom: 8px; }
+#at-print-doc .at-row { display: flex; gap: 6px; margin-bottom: 5px; font-size: 12px; }
+#at-print-doc .at-row-label { font-weight: 600; color: #5C5A54; min-width: 90px; flex-shrink: 0; }
+#at-print-doc .at-row-value { color: #1A1916; flex: 1; border-bottom: 1px solid #E2E0DB; padding-bottom: 2px; min-height: 18px; word-break: break-word; }
+#at-print-doc .at-row-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+#at-print-doc .at-desc-box { border: 1px solid #E2E0DB; border-radius: 4px; padding: 10px 12px; font-size: 12px; color: #1A1916; min-height: 60px; line-height: 1.6; white-space: pre-wrap; background: #fff; }
+#at-print-doc .at-ctrl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+#at-print-doc .at-ctrl-box { border: 1px solid #E2E0DB; border-radius: 4px; padding: 8px 10px; font-size: 11px; }
+#at-print-doc .at-ctrl-box-title { font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5C5A54; margin-bottom: 6px; }
+#at-print-doc .at-ctrl-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #1A1916; margin-bottom: 4px; }
+#at-print-doc .at-ctrl-line { border-bottom: 1px solid #E2E0DB; min-height: 22px; font-size: 12px; padding-bottom: 2px; }
+#at-print-doc .at-checkbox-print { width: 12px; height: 12px; border: 1.5px solid #5C5A54; border-radius: 2px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 9px; }
+#at-print-doc .at-checkbox-print.checked { background: #1A1916; color: #fff; border-color: #1A1916; }
+#at-print-doc .at-cortesia-print { background: #FEF3E2; border: 1px solid #F5C97A; border-radius: 4px; padding: 7px 10px; font-size: 11px; color: #92580A; font-weight: 600; margin-top: 4px; }
+#at-print-doc .at-obs { font-size: 11px; color: #1A1916; line-height: 1.65; border: 1px solid #E2E0DB; border-radius: 4px; padding: 10px 12px; background: #F9F8F5; }
+#at-print-doc .at-obs p + p { margin-top: 8px; }
+#at-print-doc .at-footer-print { margin-top: 14px; padding-top: 8px; border-top: 1px solid #E2E0DB; text-align: center; font-size: 9px; color: #9B9890; letter-spacing: .04em; }
+#at-print-doc .at-foto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+#at-print-doc .at-foto-grid img { width: 100%; max-height: 180px; object-fit: contain; border: 1px solid #E2E0DB; border-radius: 4px; display: block; margin: 0 auto; }
+#at-print-doc .at-foto-cap { font-size: 9px; color: #9B9890; font-style: italic; margin-top: 4px; text-align: center; }
+#at-print-doc .at-foto-tag { font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; background: #F5F5F3; border-left: 3px solid #1A1916; padding: 3px 7px; margin-bottom: 6px; }
+#at-print-doc .at-page-break { break-before: page; page-break-before: always; }
+#at-print-doc .at-page-break .at-foto-grid img { max-height: 360px; }
+#at-print-doc .at-page-break .at-foto-grid-4 img { max-height: 300px; }
+#at-print-doc .at-status-ok { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #1A6B35; border: 1px solid #A8D8B5; background: #EAF4EC; padding: 2px 8px; border-radius: 10px; margin-bottom: 4px; }
+#at-print-doc .at-status-ret { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #1A5FA8; border: 1px solid #A5C8F0; background: #EBF3FC; padding: 2px 8px; border-radius: 10px; margin-bottom: 4px; }
+#at-print-doc .at-visit { border: 1px solid #E2E0DB; border-radius: 4px; padding: 7px 10px; font-size: 11px; line-height: 1.5; margin-bottom: 6px; }
+#at-print-doc .at-visit-h { color: #5C5A54; margin-bottom: 2px; }
+#at-print-doc .at-visit-r { color: #1A5FA8; margin-top: 3px; }
 </style>
 </head>
 <body>
@@ -752,7 +970,7 @@ input.tcx-erro { border-color:var(--red) !important; background:var(--red-bg) !i
   </button>
   <button class="tab-btn" onclick="switchTab('at')" id="tab-at">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/><line x1="9" y1="9" x2="10" y2="9"/></svg>
-    AT — Formulário
+    Assistência Técnica
   </button>
   <button class="tab-btn" onclick="switchTab('estoque')" id="tab-estoque">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
@@ -856,100 +1074,65 @@ input.tcx-erro { border-color:var(--red) !important; background:var(--red-bg) !i
 </div><!-- end .main calc -->
 </div><!-- end pane-calc -->
 
-<!-- ABA AT — FORMULÁRIO -->
+<!-- ABA AT — KANBAN DE ASSISTÊNCIA TÉCNICA -->
 <div class="tab-pane" id="pane-at">
-<div class="main">
-
-  <div class="card">
-    <div class="card-title">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Dados do cliente
+<div id="atk">
+  <div class="atk-head">
+    <div>
+      <div class="atk-title">Assistência Técnica</div>
+      <div class="atk-conn" id="atk-conn">Conectando…</div>
     </div>
-    <div class="at-field"><label>Nome completo</label><input type="text" id="at-nome" placeholder="Nome do cliente"></div>
-    <div class="fr2">
-      <div class="at-field"><label>Telefone</label><input type="tel" id="at-tel" placeholder="(12) 99999-9999"></div>
-      <div class="at-field"><label>Data de abertura</label><input type="date" id="at-data"></div>
-    </div>
-    <div class="at-field"><label>Endereço completo</label><input type="text" id="at-end" placeholder="Rua, número, complemento, bairro, cidade/UF"></div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      Descrição do problema
-    </div>
-    <div class="at-field">
-      <label>Descreva o problema relatado pelo cliente</label>
-      <textarea id="at-desc" rows="5"></textarea>
-    </div>
-    <div class="at-field" style="margin-top:4px;">
-      <label>Fotos de referência (opcional — aparecem no PDF)</label>
-      <div id="at-fotos-lista"></div>
-      <button onclick="adicionarFoto()" style="margin-top:8px;font-size:12px;font-family:'DM Sans',sans-serif;font-weight:500;padding:6px 12px;cursor:pointer;border:1px dashed var(--border-strong);border-radius:var(--radius-sm);background:transparent;color:var(--text-2);transition:all .15s;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='';this.style.color=''">
-        + Adicionar foto
-      </button>
+    <div class="ph-actions" id="board-actions">
+      <input class="search" id="busca" type="search" placeholder="Buscar cliente, protocolo, vendedor…" aria-label="Buscar, inclusive arquivadas">
+      <button class="btn" id="btn-atualizar" title="Buscar alterações feitas por outras pessoas">↻ Atualizar</button>
+      <button class="btn btn-primary" id="btn-nova">+ Nova solicitação</button>
     </div>
   </div>
-
-  <div class="card">
-    <div class="card-title">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
-      Controle interno
-    </div>
-    <div class="at-control-grid">
-      <div class="at-control-box">
-        <label>Tipo</label>
-        <label class="at-check-row"><input type="checkbox" id="at-garantia"> Garantia</label>
-        <label class="at-check-row"><input type="checkbox" id="at-fora-garantia"> Fora de garantia</label>
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-quadro" aria-selected="true">Quadro</button>
+    <button class="tab" role="tab" id="tab-dash" aria-selected="false">Dashboard</button>
+  </nav>
+    <!-- QUADRO -->
+    <section id="view-quadro">
+      <div class="board" id="board">
+        <section class="col" data-status="solicitacao">
+          <div class="col-head"><h2>Solicitação de AT</h2><span class="col-count" data-count="solicitacao">0</span></div>
+          <div class="col-hint">Aberta pelo vendedor</div>
+          <div class="col-list" data-list="solicitacao"></div>
+        </section>
+        <section class="col" data-status="agendado">
+          <div class="col-head"><h2>Agendamento realizado</h2><span class="col-count" data-count="agendado">0</span></div>
+          <div class="col-hint">Imprimir a AT e entregar ao instalador</div>
+          <div class="col-list" data-list="agendado"></div>
+        </section>
+        <section class="col" data-status="concluido">
+          <div class="col-head"><h2>Solicitação concluída</h2><span class="col-count" data-count="concluido">0</span></div>
+          <div class="col-hint"><span>Com foto do reparo</span><button class="link" id="btn-arq-todas" hidden>Arquivar todas</button></div>
+          <div class="col-list" data-list="concluido"></div>
+          <div class="arq-foot" id="arq-foot"></div>
+        </section>
       </div>
-      <div class="at-control-box">
-        <label>Prioridade</label>
-        <label class="at-check-row"><input type="checkbox" id="at-normal"> Normal</label>
-        <label class="at-check-row"><input type="checkbox" id="at-urgente"> Urgente</label>
-      </div>
-      <div class="at-control-box">
-        <label>Responsável</label>
-        <input type="text" id="at-resp" style="width:100%;padding:6px 8px;font-size:13px;font-family:'DM Sans',sans-serif;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);" placeholder="Nome">
-      </div>
-      <div class="at-control-box">
-        <label>Data prevista</label>
-        <input type="date" id="at-dataprev" class="at-date-input">
-      </div>
-    </div>
-    <label class="at-cortesia-box">
-      <input type="checkbox" id="at-cortesia">
-      ⚑ Atendimento fora de garantia — realizado em caráter de cortesia.
-    </label>
-  </div>
+      <section class="arq-results" id="arq-results" hidden></section>
+    </section>
 
-  <div style="margin-top:.75rem;display:flex;justify-content:flex-end;gap:10px;">
-    <button onclick="salvarAT()" style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--bg);border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:8px 16px;cursor:pointer;transition:all .15s;" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='var(--bg)'">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-      Salvar no histórico
-    </button>
-    <button class="btn-pdf" onclick="imprimirAT()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-      Gerar PDF da AT
-    </button>
-  </div>
-
-  <!-- Histórico de ATs geradas -->
-  <div class="card" style="margin-top:1rem;" id="at-historico-card">
-    <div class="card-title">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
-      Histórico de ATs geradas
-      <span id="at-contador-badge" style="margin-left:auto;font-size:10px;font-weight:600;background:var(--accent);color:#fff;padding:2px 8px;border-radius:20px;letter-spacing:.04em;text-transform:none;">carregando…</span>
-    </div>
-    <div id="at-historico-lista" style="font-size:13px;color:var(--text-2);">
-      <div style="padding:12px 0;text-align:center;color:var(--text-3);">Nenhuma AT gerada ainda.</div>
-    </div>
-    <div style="margin-top:8px;display:flex;justify-content:flex-end;">
-      <button onclick="limparHistoricoAT()" style="font-size:11px;font-family:'DM Sans',sans-serif;padding:4px 10px;cursor:pointer;border:1px solid var(--border-strong);border-radius:4px;background:transparent;color:var(--text-3);">Limpar histórico</button>
-    </div>
-  </div>
-
+    <!-- DASHBOARD -->
+    <section id="view-dash" hidden>
+      <div class="dash-bar">
+        <label for="periodo">Período</label>
+        <select id="periodo">
+          <option value="30">Últimos 30 dias</option>
+          <option value="90">Últimos 90 dias</option>
+          <option value="180" selected>Últimos 6 meses</option>
+          <option value="ano">Este ano</option>
+          <option value="tudo">Tudo</option>
+        </select>
+        <span class="range" id="range"></span>
+      </div>
+      <div id="dash"></div>
+    </section>
+  <div id="modal-root"></div>
 </div>
-</div><!-- end pane-at -->
+</div>
 
 <!-- ABA CONTROLE DE ESTOQUE -->
 <div class="tab-pane" id="pane-estoque">
@@ -1013,68 +1196,7 @@ input.tcx-erro { border-color:var(--red) !important; background:var(--red-bg) !i
 </div>
 
 <!-- DOCUMENTO AT PARA IMPRESSÃO (oculto na tela) -->
-<div id="at-print-doc" style="display:none;">
-  <div class="at-print-header">
-    <div class="at-ph-left">
-      <h1>ARANTES MARMORARIA</h1>
-      <p>Pedras Decorativas Arantes Ltda &nbsp;|&nbsp; CNPJ 02.681.183/0001-83<br>Rua Dinamarca, 129 — São José dos Campos, SP</p>
-    </div>
-    <div class="at-ph-right">
-      <div class="at-title">Ordem de Assistência Técnica</div>
-      <p>Data de abertura: <strong id="at-print-data">—</strong></p>
-      <p>N° do protocolo: <span class="at-protocolo" id="at-print-protocolo">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
-    </div>
-  </div>
-  <div class="at-section">
-    <div class="at-section-title">Dados do Cliente</div>
-    <div class="at-row"><span class="at-row-label">Nome completo</span><span class="at-row-value" id="at-print-nome"></span></div>
-    <div class="at-row"><span class="at-row-label">Telefone</span><span class="at-row-value" id="at-print-tel"></span></div>
-    <div class="at-row"><span class="at-row-label">Endereço</span><span class="at-row-value" id="at-print-end"></span></div>
-  </div>
-  <div class="at-section">
-    <div class="at-section-title">Descrição do Problema</div>
-    <div class="at-desc-box" id="at-print-desc"></div>
-  </div>
-  <div class="at-section">
-    <div class="at-section-title">Controle Interno</div>
-    <div class="at-ctrl-grid">
-      <div class="at-ctrl-box">
-        <div class="at-ctrl-box-title">Tipo</div>
-        <div class="at-ctrl-item"><div class="at-checkbox-print" id="at-print-cb-garantia"></div> Garantia</div>
-        <div class="at-ctrl-item"><div class="at-checkbox-print" id="at-print-cb-fora"></div> Fora de garantia</div>
-      </div>
-      <div class="at-ctrl-box">
-        <div class="at-ctrl-box-title">Prioridade</div>
-        <div class="at-ctrl-item"><div class="at-checkbox-print" id="at-print-cb-normal"></div> Normal</div>
-        <div class="at-ctrl-item"><div class="at-checkbox-print" id="at-print-cb-urgente"></div> Urgente</div>
-      </div>
-      <div class="at-ctrl-box">
-        <div class="at-ctrl-box-title">Responsável</div>
-        <div style="border-bottom:1px solid #E2E0DB;min-height:22px;font-size:12px;padding-bottom:2px;" id="at-print-resp"></div>
-      </div>
-      <div class="at-ctrl-box">
-        <div class="at-ctrl-box-title">Data prevista</div>
-        <div style="border-bottom:1px solid #E2E0DB;min-height:22px;font-size:12px;padding-bottom:2px;" id="at-print-dataprev"></div>
-      </div>
-    </div>
-    <div class="at-cortesia-print" id="at-print-cortesia" style="display:none;">
-      ⚑ Atendimento fora de garantia — realizado em caráter de cortesia.
-    </div>
-  </div>
-  <div class="at-section">
-    <div class="at-section-title">Observações Complementares</div>
-    <div style="font-size:11px;color:#1A1916;line-height:1.65;border:1px solid #E2E0DB;border-radius:4px;padding:10px 12px;background:#F9F8F5;">
-      <p style="margin-bottom:8px;">Se a equipe comparecer ao local e não houver condições para execução — área não liberada, sem autorização de acesso ou situação similar — a visita será considerada <strong>improdutiva</strong> e será cobrada a <strong>taxa de retorno</strong>, com reagendamento conforme disponibilidade da agenda técnica.</p>
-      <p>A presente assistência técnica limita-se <strong>exclusivamente aos serviços descritos neste formulário</strong>, não abrangendo quaisquer outras solicitações que não estejam expressamente registradas.</p>
-    </div>
-  </div>
-  <!-- Fotos da página 1 (foto única) -->
-  <div id="at-print-fotos-wrap"></div>
-  <!-- Rodapé sempre por último na pág 1 -->
-  <div class="at-footer-print" id="at-footer-p1">
-    Arantes Marmoraria — Rua Dinamarca, 129, São José dos Campos/SP — CNPJ 02.681.183/0001-83
-  </div>
-</div>
+<div id="at-print-doc" style="display:none;"></div>
 
 <script>
 const freezes = [];
@@ -1577,6 +1699,7 @@ function switchTab(tab) {
   if (tab === 'estoque') { renderEstoque(); }
   if (tab === 'terc') { renderTerc(); }
   if (tab === 'acessorios') { renderAcessoriosTab(); }
+  if (tab === 'at' && window.atkAoAbrir) { window.atkAoAbrir(); }
 }
 
 // ==================== CONTROLE DE ESTOQUE (Pedido × Compra + Estoque Completo + Fornecedores) ====================
@@ -4067,5 +4190,808 @@ function imprimirAT() {
 }
 </script>
 
+<script>
+/* ===== AT — Kanban de Assistência Técnica (isolado) ===== */
+(function () {
+
+/* ================= Dados (Supabase) ================= */
+const SB_URL = 'https://xhqrkxbpdiatqkdupdjs.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhocXJreGJwZGlhdHFrZHVwZGpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MzY2MjcsImV4cCI6MjA5NDQxMjYyN30.3vq_oTvEpf68VIJHy4oCeHB515DmSl750UGLR_6Iq9I';
+const TABELA = 'at_solicitacoes';
+const BUCKET = 'at-fotos';
+const H = extra => Object.assign({ apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY }, extra || {});
+const STATUS = {
+  solicitacao: 'Solicitação de AT',
+  agendado: 'Agendamento realizado',
+  concluido: 'Solicitação concluída',
+  arquivado: 'Arquivada'
+};
+const CATEGORIAS = ['Rejunte / vedação', 'Trinca / quebra', 'Mancha', 'Desnível / assentamento', 'Infiltração', 'Acabamento / polimento', 'Cuba / furação', 'Corte de cooktop', 'Furação de torneira', 'Furação de torre tomada', 'Posicionamento de ferragem', 'Outro'];
+
+let state = { items: [] };
+let carregado = false, ocupado = 0;
+
+function setConn(msg, erro) {
+  const el = document.getElementById('atk-conn');
+  if (el) { el.textContent = msg; el.classList.toggle('err', !!erro); }
+}
+function fromRow(r) {
+  return Object.assign({ fotos: [], fotosReparo: [], visitas: [], reaberturas: [], historico: [] }, r.dados || {}, { id: r.id, num: r.num, status: r.status });
+}
+function toRow(it) {
+  const d = Object.assign({}, it); delete d.id; delete d.num; delete d.status;
+  return { status: it.status, dados: d, atualizado_em: new Date().toISOString() };
+}
+async function load(silencioso) {
+  if (!silencioso) setConn('Carregando…');
+  try {
+    const r = await fetch(`${SB_URL}/rest/v1/${TABELA}?select=id,num,status,dados&order=num.asc`, { headers: H() });
+    if (!r.ok) throw new Error(r.status + ' ' + (await r.text()));
+    const rows = await r.json();
+    state.items = rows.map(fromRow); carregado = true;
+    setConn('Sincronizado às ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }));
+    render();
+  } catch (e) {
+    console.error('AT: erro ao carregar', e);
+    setConn(String(e.message || e).includes('404') || String(e.message || e).includes('42P01')
+      ? 'Tabela at_solicitacoes não encontrada no Supabase. Rode o script SQL.' : 'Sem conexão com o banco. Tente “Atualizar”.', true);
+  }
+}
+async function uploadFotos(arr, it) {
+  for (const f of arr || []) {
+    if (!f.src || !f.src.startsWith('data:')) continue;
+    const blob = await (await fetch(f.src)).blob();
+    const path = `${it.num || 'nova'}/${Date.now()}-${uid()}.jpg`;
+    const r = await fetch(`${SB_URL}/storage/v1/object/${BUCKET}/${path}`, { method: 'POST', headers: H({ 'Content-Type': 'image/jpeg', 'x-upsert': 'true' }), body: blob });
+    if (!r.ok) throw new Error('Falha ao enviar foto: ' + r.status + ' ' + (await r.text()));
+    f.src = `${SB_URL}/storage/v1/object/public/${BUCKET}/${path}`;
+  }
+}
+async function uploadTodas(it) {
+  await uploadFotos(it.fotos, it);
+  await uploadFotos(it.fotosReparo, it);
+  for (const v of it.visitas || []) await uploadFotos(v.fotosReparo, it);
+}
+/* Grava a ficha (insere se for nova). Devolve true/false. */
+async function saveItem(it) {
+  ocupado++;
+  const temFoto = JSON.stringify([it.fotos, it.fotosReparo, it.visitas]).includes('data:image');
+  setConn(temFoto ? 'Enviando fotos…' : 'Salvando…');
+  try {
+    await uploadTodas(it);
+    if (!it.id) {
+      const r = await fetch(`${SB_URL}/rest/v1/${TABELA}`, { method: 'POST', headers: H({ 'Content-Type': 'application/json', Prefer: 'return=representation' }), body: JSON.stringify(toRow(it)) });
+      if (!r.ok) throw new Error(r.status + ' ' + (await r.text()));
+      const row = (await r.json())[0];
+      it.id = row.id; it.num = row.num;
+    } else {
+      const r = await fetch(`${SB_URL}/rest/v1/${TABELA}?id=eq.${it.id}`, { method: 'PATCH', headers: H({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }), body: JSON.stringify(toRow(it)) });
+      if (!r.ok) throw new Error(r.status + ' ' + (await r.text()));
+    }
+    const k = state.items.findIndex(x => x.id === it.id);
+    if (k >= 0) state.items[k] = it; else state.items.push(it);
+    setConn('Salvo às ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }));
+    return true;
+  } catch (e) {
+    console.error('AT: erro ao salvar', e);
+    setConn('Não foi possível salvar. Verifique a conexão e tente de novo.', true);
+    toast('Não foi possível salvar no banco. Tente de novo.');
+    load(true);
+    return false;
+  } finally { ocupado--; render(); }
+}
+async function removeItem(it) {
+  try {
+    const r = await fetch(`${SB_URL}/rest/v1/${TABELA}?id=eq.${it.id}`, { method: 'DELETE', headers: H() });
+    if (!r.ok) throw new Error(r.status);
+    state.items = state.items.filter(x => x.id !== it.id); render();
+    return true;
+  } catch (e) { toast('Não foi possível excluir. Tente de novo.'); return false; }
+}
+/* Botão de confirmar do modal: mostra "Salvando…" e só fecha se gravou */
+async function persist(it, btn) {
+  const txt = btn ? btn.textContent : '';
+  const btns = root.querySelectorAll('.modal-foot .btn');
+  btns.forEach(b => b.disabled = true);
+  if (btn) btn.textContent = 'Salvando…';
+  const ok = await saveItem(it);
+  btns.forEach(b => b.disabled = false);
+  if (btn) btn.textContent = txt;
+  return ok;
+}
+
+const uid = () => Math.random().toString(36).slice(2, 10);
+const iso = d => { const x = new Date(d); x.setMinutes(x.getMinutes() - x.getTimezoneOffset()); return x.toISOString().slice(0, 10); };
+const today = () => iso(new Date());
+const addDays = (n, base) => { const d = base ? new Date(base + 'T12:00:00') : new Date(); d.setDate(d.getDate() + n); return iso(d); };
+const daysBetween = (a, b) => Math.round((new Date(b + 'T12:00:00') - new Date(a + 'T12:00:00')) / 864e5);
+const nowStr = () => new Date().toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+const fmt = s => s ? s.split('-').reverse().join('/') : '—';
+const proto = n => n ? 'AT-' + String(n).padStart(3, '0') : 'AT-nova';
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+/* ================= Navegação ================= */
+let view = 'quadro';
+function setView(v) {
+  view = v;
+  document.getElementById('tab-quadro').setAttribute('aria-selected', v === 'quadro');
+  document.getElementById('tab-dash').setAttribute('aria-selected', v === 'dash');
+  document.getElementById('view-quadro').hidden = v !== 'quadro';
+  document.getElementById('view-dash').hidden = v !== 'dash';
+  document.getElementById('board-actions').style.visibility = v === 'quadro' ? '' : 'hidden';
+  if (v === 'dash') renderDash();
+}
+document.getElementById('tab-quadro').addEventListener('click', () => setView('quadro'));
+document.getElementById('tab-dash').addEventListener('click', () => setView('dash'));
+
+/* ================= Quadro ================= */
+const board = document.getElementById('board');
+let busca = '';
+const matches = (i, q) => !q || [i.nome, i.vendedor, proto(i.num), i.motivo, i.resp, i.categoria, i.tel, i.end].join(' ').toLowerCase().includes(q);
+
+function render() {
+  const q = busca.trim().toLowerCase();
+  ['solicitacao', 'agendado', 'concluido'].forEach(st => {
+    const list = board.querySelector(`[data-list="${st}"]`);
+    const all = state.items.filter(i => i.status === st);
+    const items = all.filter(i => matches(i, q));
+    if (st === 'agendado') items.sort((a, b) => (a.dataPrev || '').localeCompare(b.dataPrev || ''));
+    else items.sort((a, b) => b.num - a.num);
+    board.querySelector(`[data-count="${st}"]`).textContent = all.length;
+    list.innerHTML = items.length ? items.map(cardHTML).join('') :
+      `<div class="col-empty">${q ? 'Nenhum resultado' : st === 'solicitacao' ? 'Nenhuma solicitação aberta.<br>Use “+ Nova solicitação”.' : 'Arraste um card para cá'}</div>`;
+  });
+  const arq = state.items.filter(i => i.status === 'arquivado');
+  document.getElementById('btn-arq-todas').hidden = !state.items.some(i => i.status === 'concluido');
+  document.getElementById('arq-foot').innerHTML = arq.length
+    ? `<b>${arq.length}</b> arquivada${arq.length > 1 ? 's' : ''} · digite na busca para encontrar`
+    : 'Nenhuma arquivada ainda';
+  renderArqResults(q, arq);
+  if (view === 'dash') renderDash();
+}
+
+function renderArqResults(q, arq) {
+  const box = document.getElementById('arq-results');
+  if (!q) { box.hidden = true; return; }
+  const found = arq.filter(i => matches(i, q)).sort((a, b) => b.num - a.num);
+  box.hidden = false;
+  box.innerHTML = `<h3>Arquivadas <span class="col-count" style="margin-left:0">${found.length}</span></h3>
+    ${found.length ? `<div class="arq-table">
+      <div class="arq-row head"><span>Protocolo</span><span>Cliente</span><span>Motivo</span><span>Solicitada</span><span>Concluída</span><span>Vendedor</span></div>
+      ${found.map(i => `<div class="arq-row" tabindex="0" data-id="${i.id}"><span class="mono">${proto(i.num)}</span><span><b>${esc(i.nome)}</b></span><span>${esc(i.categoria)}</span><span class="mono">${fmt(i.dataSolic)}</span><span class="mono">${fmt(i.dataConcl)}</span><span>${esc(i.vendedor)}</span></div>`).join('')}
+    </div>` : `<p class="ksub">Nenhuma arquivada com “${esc(busca.trim())}”.</p>`}`;
+}
+document.getElementById('arq-results').addEventListener('click', e => { const r = e.target.closest('.arq-row[data-id]'); if (r) openDetalhe(byId(r.dataset.id)); });
+document.getElementById('arq-results').addEventListener('keydown', e => { const r = e.target.closest('.arq-row[data-id]'); if (r && e.key === 'Enter') openDetalhe(byId(r.dataset.id)); });
+
+function cardHTML(i) {
+  const pills = [];
+  if (i.exemplo) pills.push('<span class="pill pill-ex">Exemplo</span>');
+  if (i.categoria) pills.push(`<span class="pill pill-cat">${esc(i.categoria)}</span>`);
+  if (i.status !== 'solicitacao') pills.push(i.tipo === 'fora' ? '<span class="pill pill-fora">Fora de garantia</span>' : '<span class="pill pill-gar">Garantia</span>');
+  if (i.prioridade === 'urgente') pills.push('<span class="pill pill-urg">Urgente</span>');
+  if (i.reaberturas?.length) pills.push(`<span class="pill pill-ret">Retorno · ${i.reaberturas.length + 1}º atend.</span>`);
+  const thumbsSrc = i.status === 'concluido' && i.fotosReparo?.length ? i.fotosReparo : (i.fotos || []);
+  const thumbs = thumbsSrc.slice(0, 4).map(f => `<img src="${f.src}" alt="">`).join('');
+  let extra = '', actions = '';
+  if (i.status === 'solicitacao') {
+    actions = `<button class="btn btn-sm" data-act="agendar" data-id="${i.id}">Agendar →</button>`;
+  } else if (i.status === 'agendado') {
+    const late = i.dataPrev && i.dataPrev < today();
+    extra = `<div class="card-sched ${late ? 'late' : ''}"><span>📅 <b>${fmt(i.dataPrev)}</b>${late ? ' · vencido' : ''}</span><span>${esc(i.resp || 'Sem responsável')}</span></div>`;
+    actions = `<button class="btn btn-sm btn-primary" data-act="print" data-id="${i.id}">Imprimir AT</button>
+               <button class="btn btn-sm" data-act="concluir" data-id="${i.id}">Concluir →</button>`;
+  } else {
+    const nf = (i.fotosReparo || []).length;
+    extra = `<div class="card-done"><span>✓ Concluída em ${fmt(i.dataConcl)}</span><span>${nf ? `📷 ${nf} foto${nf > 1 ? 's' : ''} do reparo` : 'Sem foto do reparo'}</span></div>`;
+    actions = `<button class="btn btn-sm" data-act="arquivar" data-id="${i.id}">Arquivar</button>
+               <button class="btn btn-sm btn-ghost" data-act="print" data-id="${i.id}">Reimprimir AT</button>
+               <button class="btn btn-sm btn-ghost" data-act="reabrir" data-id="${i.id}" title="Cliente voltou a reclamar">Reabrir</button>`;
+  }
+  return `<article class="kcard" draggable="true" tabindex="0" data-id="${i.id}">
+    <div class="card-top"><span class="card-proto mono">${proto(i.num)}</span>${pills.join('')}</div>
+    <div class="card-name">${esc(i.nome)}</div>
+    <div class="card-motivo">${esc(i.motivo)}</div>
+    <div class="card-meta"><span>Solicitada <b>${fmt(i.dataSolic)}</b></span><span>Venda <b>${i.anoVenda || '—'}</b></span><span>Vendedor <b>${esc(i.vendedor || '—')}</b></span></div>
+    ${thumbs ? `<div class="card-thumbs">${thumbs}${thumbsSrc.length > 4 ? `<span class="card-proto">+${thumbsSrc.length - 4}</span>` : ''}</div>` : ''}
+    ${extra}
+    <div class="card-actions">${actions}</div>
+  </article>`;
+}
+
+board.addEventListener('click', e => {
+  if (e.target.id === 'btn-arq-todas') return openArquivarTodas();
+  const btn = e.target.closest('[data-act]');
+  if (btn) {
+    e.stopPropagation();
+    const it = byId(btn.dataset.id);
+    if (btn.dataset.act === 'agendar') openAgendar(it);
+    if (btn.dataset.act === 'concluir') openConcluir(it);
+    if (btn.dataset.act === 'print') printAT(it);
+    if (btn.dataset.act === 'arquivar') arquivar([it]);
+    if (btn.dataset.act === 'reabrir') openReabrir(it);
+    return;
+  }
+  const card = e.target.closest('.kcard');
+  if (card) openDetalhe(byId(card.dataset.id));
+});
+board.addEventListener('keydown', e => {
+  const card = e.target.closest('.kcard');
+  if (card && e.key === 'Enter' && e.target === card) openDetalhe(byId(card.dataset.id));
+});
+const byId = id => state.items.find(i => i.id === id);
+
+/* Arrastar e soltar */
+let dragId = null;
+board.addEventListener('dragstart', e => {
+  const card = e.target.closest('.kcard'); if (!card) return;
+  dragId = card.dataset.id; card.classList.add('k-dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', dragId);
+});
+board.addEventListener('dragend', e => {
+  const card = e.target.closest('.kcard'); if (card) card.classList.remove('k-dragging');
+  board.querySelectorAll('.col').forEach(c => c.classList.remove('k-drag-over'));
+});
+board.querySelectorAll('.col').forEach(col => {
+  col.addEventListener('dragover', e => { e.preventDefault(); col.classList.add('k-drag-over'); });
+  col.addEventListener('dragleave', e => { if (!col.contains(e.relatedTarget)) col.classList.remove('k-drag-over'); });
+  col.addEventListener('drop', e => {
+    e.preventDefault(); col.classList.remove('k-drag-over');
+    const it = byId(dragId || e.dataTransfer.getData('text/plain')); dragId = null;
+    if (it) moveTo(it, col.dataset.status);
+  });
+});
+
+function moveTo(it, dest) {
+  if (it.status === dest) return;
+  if (dest === 'agendado') {
+    if (it.status === 'concluido' || it.status === 'arquivado') return openReabrir(it);
+    return openAgendar(it);
+  }
+  if (dest === 'concluido') {
+    if (it.status === 'solicitacao') { toast('Agende a AT antes de concluir.'); return openAgendar(it, true); }
+    if (it.status === 'arquivado') { it.status = 'concluido'; it.historico.push({ t: nowStr(), s: 'Desarquivada' }); saveItem(it); render(); return toast(proto(it.num) + ' desarquivada'); }
+    return openConcluir(it);
+  }
+  if (dest === 'arquivado') return arquivar([it]);
+  if (dest === 'solicitacao') {
+    it.status = 'solicitacao';
+    it.historico.push({ t: nowStr(), s: 'Voltou para Solicitação' });
+    saveItem(it); render(); toast(proto(it.num) + ' voltou para Solicitação');
+  }
+}
+
+function arquivar(list) {
+  const d = today();
+  list.forEach(it => { it.status = 'arquivado'; it.dataArq = d; it.historico.push({ t: nowStr(), s: 'Arquivada' }); saveItem(it); });
+  render();
+  toast(list.length === 1 ? proto(list[0].num) + ' arquivada · use a busca para encontrar' : list.length + ' solicitações arquivadas');
+}
+
+/* ================= Modais ================= */
+const root = document.getElementById('modal-root');
+function modal(html, onMount) {
+  root.innerHTML = `<div class="overlay" id="ov"><div class="modal" role="dialog" aria-modal="true">${html}</div></div>`;
+  const ov = document.getElementById('ov');
+  ov.addEventListener('mousedown', e => { if (e.target === ov) close(); });
+  ov.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', close));
+  if (onMount) onMount(ov);
+  const first = ov.querySelector('input:not([type=radio]):not([type=checkbox]):not([type=file]):not([readonly]), textarea');
+  if (first) first.focus();
+}
+function close() { root.innerHTML = ''; }
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && root.innerHTML) close(); });
+
+const head = (t, p) => `<div class="modal-head"><div><h3>${t}</h3>${p ? `<p>${p}</p>` : ''}</div><button class="btn btn-ghost btn-sm kx" data-close aria-label="Fechar">✕</button></div>`;
+
+function anosVenda(sel) {
+  const atual = new Date().getFullYear();
+  let o = `<option value="">Não informado</option>`;
+  for (let a = atual; a >= atual - 20; a--) o += `<option ${String(sel) === String(a) ? 'selected' : ''}>${a}</option>`;
+  if (sel && +sel < atual - 20) o += `<option selected>${esc(sel)}</option>`;
+  return o;
+}
+function fieldsSolicitacao(i = {}) {
+  return `
+  <div class="sec-title">Dados da solicitação</div>
+  <div class="grid2">
+    <div class="f"><label for="s-vend">Vendedor <span class="req">*</span></label><input id="s-vend" value="${esc(i.vendedor)}" placeholder="Quem está abrindo"></div>
+    <div class="f"><label for="s-dsol">Data da solicitação <span class="req">*</span></label><input id="s-dsol" type="date" value="${i.dataSolic || today()}"></div>
+    <div class="f"><label for="s-dven">Ano da venda</label><select id="s-dven">${anosVenda(i.anoVenda)}</select></div>
+  </div>
+  <div class="sec-title">Dados do cliente</div>
+  <div class="f"><label for="s-nome">Nome completo <span class="req">*</span></label><input id="s-nome" value="${esc(i.nome)}" placeholder="Nome do cliente"></div>
+  <div class="grid2">
+    <div class="f"><label for="s-tel">Telefone</label><input id="s-tel" type="tel" value="${esc(i.tel)}" placeholder="(12) 99999-9999"></div>
+  </div>
+  <div class="f"><label for="s-end">Endereço completo</label><input id="s-end" value="${esc(i.end)}" placeholder="Rua, número, complemento, bairro, cidade/UF"></div>
+  <div class="sec-title">Motivo</div>
+  <div class="grid2">
+    <div class="f"><label for="s-cat">Categoria do motivo <span class="req">*</span></label>
+      <select id="s-cat"><option value="">Selecione…</option>${CATEGORIAS.map(c => `<option ${i.categoria === c ? 'selected' : ''}>${c}</option>`).join('')}</select></div>
+  </div>
+  <div class="f"><label for="s-mot">Descrição do problema <span class="req">*</span></label><textarea id="s-mot" rows="4" placeholder="Descreva o problema relatado pelo cliente">${esc(i.motivo)}</textarea></div>
+  <div class="sec-title">Fotos do problema (saem no PDF)</div>
+  <div class="f" id="s-fotos-f"><div class="fotos" id="s-fotos"></div></div>`;
+}
+
+/* Fotos: componente reutilizado (problema e reparo) */
+function mountFotos(ov, boxSel, arr, opts = {}) {
+  const box = ov.querySelector(boxSel);
+  const fid = 'file-' + uid();
+  const file = document.createElement('input');
+  file.type = 'file'; file.accept = 'image/*'; file.multiple = true; file.id = fid; file.hidden = true;
+  box.after(file);
+  const draw = () => {
+    box.innerHTML = arr.map((f, k) => `<div class="foto ${opts.big ? 'foto-big' : ''}"><img src="${f.src}" alt=""><input data-k="${k}" value="${esc(f.ambiente)}" placeholder="${opts.ph || 'Ambiente (ex.: Cozinha)'}"><button type="button" data-rm="${k}">Remover</button></div>`).join('')
+      + `<label class="foto-add" for="${fid}">${opts.label || '+ Adicionar foto<br>(câmera ou galeria)'}</label>`;
+    if (opts.onChange) opts.onChange();
+  };
+  box.addEventListener('input', e => { if (e.target.dataset.k != null) arr[e.target.dataset.k].ambiente = e.target.value; });
+  box.addEventListener('click', e => { if (e.target.dataset.rm != null) { arr.splice(+e.target.dataset.rm, 1); draw(); } });
+  file.addEventListener('change', async () => {
+    for (const f of file.files) { try { arr.push({ src: await compress(f), ambiente: '' }); } catch (e) { toast('Não consegui ler ' + f.name); } }
+    file.value = ''; draw();
+  });
+  draw();
+}
+function compress(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const max = 1280, s = Math.min(1, max / Math.max(img.width, img.height));
+        const c = document.createElement('canvas'); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        res(c.toDataURL('image/jpeg', .72));
+      };
+      img.onerror = rej; img.src = r.result;
+    };
+    r.onerror = rej; r.readAsDataURL(file);
+  });
+}
+
+let fotosTmp = [];
+function readSolicitacao(ov) {
+  const v = id => ov.querySelector('#' + id).value.trim();
+  const req = ['s-vend', 's-dsol', 's-nome', 's-cat', 's-mot'];
+  let ok = true;
+  req.forEach(id => { const bad = !v(id); ov.querySelector('#' + id).closest('.f').classList.toggle('invalid', bad); if (bad) ok = false; });
+  if (!ok) { toast('Preencha os campos marcados.'); return null; }
+  return { vendedor: v('s-vend'), dataSolic: v('s-dsol'), anoVenda: v('s-dven'), nome: v('s-nome'), tel: v('s-tel'), end: v('s-end'), categoria: v('s-cat'), motivo: v('s-mot'), fotos: fotosTmp.slice() };
+}
+
+function openNova() {
+  fotosTmp = [];
+  modal(head('Nova solicitação de AT', 'O card entra na coluna “Solicitação de AT”.') +
+    `<div class="modal-body">${fieldsSolicitacao()}</div>
+     <div class="modal-foot"><button class="btn" data-close>Cancelar</button><button class="btn btn-primary" id="ok">Abrir solicitação</button></div>`,
+    ov => {
+      mountFotos(ov, '#s-fotos', fotosTmp);
+      ov.querySelector('#ok').addEventListener('click', async e => {
+        const d = readSolicitacao(ov); if (!d) return;
+        const it = Object.assign({ status: 'solicitacao', tipo: 'garantia', prioridade: 'normal', resp: '', dataPrev: '', cortesia: false, fotosReparo: [], visitas: [], reaberturas: [],
+          historico: [{ t: nowStr(), s: 'Solicitação aberta por ' + d.vendedor }] }, d);
+        if (!(await persist(it, e.currentTarget))) return;
+        close(); toast(proto(it.num) + ' aberta');
+      });
+    });
+}
+
+function radios(name, opts, val) {
+  return `<div class="seg">${opts.map(([v, l]) => `<label><input type="radio" name="${name}" value="${v}" ${val === v ? 'checked' : ''}><span>${l}</span></label>`).join('')}</div>`;
+}
+
+function openAgendar(it, thenConclude) {
+  const editing = it.status === 'agendado';
+  modal(head(editing ? 'Editar agendamento' : 'Registrar agendamento', `${proto(it.num)} · ${esc(it.nome)}`) +
+    `<div class="modal-body">
+      <div class="sec-title">Controle interno (vai para a AT impressa)</div>
+      <div class="grid2">
+        <div class="f"><label for="a-data">Data agendada <span class="req">*</span></label><input id="a-data" type="date" value="${it.dataPrev || ''}"></div>
+        <div class="f"><label for="a-resp">Responsável / instalador <span class="req">*</span></label><input id="a-resp" value="${esc(it.resp)}" placeholder="Nome"></div>
+        <div class="f"><span class="lab">Tipo</span>${radios('a-tipo', [['garantia', 'Garantia'], ['fora', 'Fora de garantia']], it.tipo || 'garantia')}</div>
+        <div class="f"><span class="lab">Prioridade</span>${radios('a-prio', [['normal', 'Normal'], ['urgente', 'Urgente']], it.prioridade || 'normal')}</div>
+      </div>
+      <label class="check" id="a-cort-wrap" ${it.tipo === 'fora' ? '' : 'hidden'}><input type="checkbox" id="a-cort" ${it.cortesia ? 'checked' : ''}> Atendimento fora de garantia em caráter de cortesia</label>
+    </div>
+    <div class="modal-foot"><button class="btn" data-close>Cancelar</button>
+      <button class="btn" id="ok">Salvar</button>
+      <button class="btn btn-primary" id="ok-print">Salvar e imprimir AT</button></div>`,
+    ov => {
+      ov.querySelectorAll('[name=a-tipo]').forEach(r => r.addEventListener('change', () => { ov.querySelector('#a-cort-wrap').hidden = ov.querySelector('[name=a-tipo]:checked').value !== 'fora'; }));
+      const go = async (print, btn) => {
+        const d = ov.querySelector('#a-data'), r = ov.querySelector('#a-resp');
+        let ok = true;
+        [d, r].forEach(x => { const bad = !x.value.trim(); x.closest('.f').classList.toggle('invalid', bad); if (bad) ok = false; });
+        if (!ok) return toast('Informe data e responsável.');
+        it.dataPrev = d.value; it.resp = r.value.trim();
+        it.tipo = ov.querySelector('[name=a-tipo]:checked').value;
+        it.prioridade = ov.querySelector('[name=a-prio]:checked').value;
+        it.cortesia = it.tipo === 'fora' && ov.querySelector('#a-cort').checked;
+        it.historico.push({ t: nowStr(), s: `${editing ? 'Agendamento alterado' : 'Agendado'}: ${fmt(it.dataPrev)} · ${it.resp}` });
+        it.status = 'agendado';
+        if (!(await persist(it, btn))) return;
+        close();
+        if (print) printAT(it);
+        else if (thenConclude) openConcluir(it);
+        else toast(proto(it.num) + ' agendada');
+      };
+      ov.querySelector('#ok').addEventListener('click', e => go(false, e.currentTarget));
+      ov.querySelector('#ok-print').addEventListener('click', e => go(true, e.currentTarget));
+    });
+}
+
+function openConcluir(it) {
+  const fotosR = (it.fotosReparo || []).map(f => Object.assign({}, f));
+  modal(head('Dar baixa no atendimento', `${proto(it.num)} · ${esc(it.nome)}`) +
+    `<div class="modal-body">
+      <div class="sec-title">Foto do reparo feito</div>
+      <div class="f" id="c-fotos-f"><span class="lab">Anexe pelo menos uma foto do serviço concluído <span class="req">*</span></span><div class="fotos" id="c-fotos"></div></div>
+      <div class="grid2"><div class="f"><label for="c-data">Data de conclusão <span class="req">*</span></label><input id="c-data" type="date" value="${it.dataConcl || (it.dataPrev && it.dataPrev <= today() ? it.dataPrev : today())}"></div></div>
+      <div class="f"><label for="c-obs">O que foi feito</label><textarea id="c-obs" rows="3" placeholder="Ex.: silicone refeito na cuba, cliente conferiu no local">${esc(it.obsConcl)}</textarea></div>
+    </div>
+    <div class="modal-foot"><button class="btn" data-close>Cancelar</button><button class="btn btn-primary" id="ok">Concluir solicitação</button></div>`,
+    ov => {
+      mountFotos(ov, '#c-fotos', fotosR, { big: true, ph: 'Legenda (ex.: Cuba vedada)', label: '+ Foto do reparo<br>(câmera ou galeria)',
+        onChange: () => { const f = ov.querySelector('#c-fotos-f'); if (f && fotosR.length) f.classList.remove('invalid'); } });
+      ov.querySelector('#ok').addEventListener('click', async e => {
+        const d = ov.querySelector('#c-data').value;
+        const fOk = fotosR.length > 0;
+        ov.querySelector('#c-fotos-f').classList.toggle('invalid', !fOk);
+        ov.querySelector('#c-data').closest('.f').classList.toggle('invalid', !d);
+        if (!fOk) return toast('Anexe a foto do reparo para dar baixa.');
+        if (!d) return toast('Informe a data de conclusão.');
+        it.fotosReparo = fotosR; it.dataConcl = d; it.obsConcl = ov.querySelector('#c-obs').value.trim();
+        it.status = 'concluido'; it.historico.push({ t: nowStr(), s: `Concluída em ${fmt(d)} · ${fotosR.length} foto(s) do reparo` });
+        if (!(await persist(it, e.currentTarget))) return;
+        close(); toast(proto(it.num) + ' concluída');
+      });
+    });
+}
+
+function openReabrir(it) {
+  const n = (it.visitas?.length || 0) + 2;
+  modal(head('Reabrir ficha', `${proto(it.num)} · ${esc(it.nome)} · volta para Agendamento como ${n}º atendimento`) +
+    `<div class="modal-body">
+      <p style="font-size:13px;color:var(--text-2)">A baixa atual (data, o que foi feito e fotos do reparo) fica guardada na ficha como ${n - 1}º atendimento. Nada é apagado.</p>
+      <div class="f"><label for="r-mot">O que o cliente reclamou agora <span class="req">*</span></label><textarea id="r-mot" rows="3" placeholder="Ex.: voltou a escorrer água para dentro do gabinete"></textarea></div>
+      <div class="grid2">
+        <div class="f"><label for="r-data">Nova data agendada <span class="req">*</span></label><input id="r-data" type="date" value=""></div>
+        <div class="f"><label for="r-resp">Responsável / instalador <span class="req">*</span></label><input id="r-resp" value="${esc(it.resp)}"></div>
+        <div class="f"><span class="lab">Prioridade</span>${radios('r-prio', [['normal', 'Normal'], ['urgente', 'Urgente']], 'urgente')}</div>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn" data-close>Cancelar</button><button class="btn" id="ok">Reabrir</button><button class="btn btn-primary" id="ok-print">Reabrir e imprimir AT</button></div>`,
+    ov => {
+      const go = async (print, btn) => {
+        const m = ov.querySelector('#r-mot'), d = ov.querySelector('#r-data'), r = ov.querySelector('#r-resp');
+        let ok = true;
+        [m, d, r].forEach(x => { const bad = !x.value.trim(); x.closest('.f').classList.toggle('invalid', bad); if (bad) ok = false; });
+        if (!ok) return toast('Preencha a reclamação, a data e o responsável.');
+        it.visitas = it.visitas || []; it.reaberturas = it.reaberturas || [];
+        it.visitas.push({ n: it.visitas.length + 1, dataPrev: it.dataPrev, resp: it.resp, dataConcl: it.dataConcl, obsConcl: it.obsConcl, fotosReparo: it.fotosReparo || [] });
+        it.reaberturas.push({ data: today(), motivo: m.value.trim() });
+        it.dataConcl = ''; it.obsConcl = ''; it.fotosReparo = []; it.dataArq = '';
+        it.dataPrev = d.value; it.resp = r.value.trim();
+        it.prioridade = ov.querySelector('[name=r-prio]:checked').value;
+        it.status = 'agendado';
+        it.historico.push({ t: nowStr(), s: 'Reaberta: cliente voltou a reclamar' });
+        it.historico.push({ t: nowStr(), s: `Agendado (${it.visitas.length + 1}º atendimento): ${fmt(it.dataPrev)} · ${it.resp}` });
+        if (!(await persist(it, btn))) return;
+        close();
+        if (print) printAT(it); else toast(proto(it.num) + ' reaberta e de volta ao Agendamento');
+      };
+      ov.querySelector('#ok').addEventListener('click', e => go(false, e.currentTarget));
+      ov.querySelector('#ok-print').addEventListener('click', e => go(true, e.currentTarget));
+    });
+}
+
+function openArquivarTodas() {
+  const list = state.items.filter(i => i.status === 'concluido');
+  modal(head('Arquivar concluídas', `${list.length} solicitaç${list.length > 1 ? 'ões' : 'ão'} na coluna “Solicitação concluída”`) +
+    `<div class="modal-body"><p style="font-size:13px;color:var(--text-2)">Elas saem do quadro, continuam contando no dashboard e podem ser encontradas pela busca.</p></div>
+     <div class="modal-foot"><button class="btn" data-close>Cancelar</button><button class="btn btn-primary" id="ok">Arquivar ${list.length}</button></div>`,
+    ov => ov.querySelector('#ok').addEventListener('click', () => { close(); arquivar(list); }));
+}
+
+function openDetalhe(it) {
+  const row = (k, v) => `<dt>${k}</dt><dd>${v ? esc(v) : '—'}</dd>`;
+  const gal = (arr, def = 'Referência') => (arr || []).map(f => `<div class="foto foto-big"><img src="${f.src}" alt=""><input value="${esc(f.ambiente || def)}" readonly></div>`).join('');
+  const moves = Object.keys(STATUS).filter(s => s !== it.status).map(s => `<option value="${s}">${STATUS[s]}</option>`).join('');
+  const arq = it.status === 'arquivado';
+  modal(head(`${proto(it.num)} · ${esc(it.nome)}`, STATUS[it.status]) +
+    `<div class="modal-body">
+      ${arq ? `<div class="banner-arq">Arquivada em ${fmt(it.dataArq)}. Não aparece no quadro, só na busca.</div>` : ''}
+      <div class="sec-title">Solicitação</div>
+      <dl class="info">${row('Vendedor', it.vendedor)}${row('Data da solicitação', fmt(it.dataSolic))}${row('Ano da venda', it.anoVenda || 'Não informado')}${row('Telefone', it.tel)}${row('Endereço', it.end)}${row('Categoria', it.categoria)}${row('Descrição', it.motivo)}</dl>
+      ${it.fotos?.length ? `<div class="fotos">${gal(it.fotos)}</div>` : ''}
+      ${it.status !== 'solicitacao' ? `<div class="sec-title">Agendamento</div>
+      <dl class="info">${row('Data agendada', fmt(it.dataPrev))}${row('Responsável', it.resp)}${row('Tipo', it.tipo === 'fora' ? 'Fora de garantia' + (it.cortesia ? ' (cortesia)' : '') : 'Garantia')}${row('Prioridade', it.prioridade === 'urgente' ? 'Urgente' : 'Normal')}</dl>` : ''}
+      ${it.status === 'concluido' || arq ? `<div class="sec-title">Baixa</div>
+      <dl class="info">${row('Concluída em', fmt(it.dataConcl))}${row('Dias até concluir', it.dataConcl ? daysBetween(it.dataSolic, it.dataConcl) + ' dias' : '')}${row('O que foi feito', it.obsConcl)}</dl>
+      ${it.fotosReparo?.length ? `<div class="fotos">${gal(it.fotosReparo, 'Reparo')}</div>` : '<p style="font-size:12px;color:var(--text-3)">Sem foto do reparo anexada.</p>'}` : ''}
+      ${it.reaberturas?.length ? `<div class="sec-title">Retornos do cliente</div>
+      <dl class="info">${it.reaberturas.map((r, k) => row(`${k + 2}º atend. · ${fmt(r.data)}`, r.motivo)).join('')}</dl>` : ''}
+      ${it.visitas?.length ? `<div class="sec-title">Atendimentos anteriores</div>
+      ${it.visitas.map(v => `<dl class="info">${row(`${v.n}º atendimento`, `${fmt(v.dataConcl)} · ${v.resp || '—'}`)}${row('O que foi feito', v.obsConcl)}</dl>
+        ${v.fotosReparo?.length ? `<div class="fotos">${gal(v.fotosReparo, 'Reparo')}</div>` : ''}`).join('')}` : ''}
+      <div class="sec-title">Histórico</div>
+      <div class="timeline">${it.historico.map(h => `<div><span class="mono">${esc(h.t)}</span><span>${esc(h.s)}</span></div>`).join('')}</div>
+      <div id="del-zone"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-danger" id="del" style="margin-right:auto">Excluir</button>
+      ${arq ? '<button class="btn" id="desarq">Desarquivar</button>' : `<select id="mv" class="btn" aria-label="Mover para"><option value="">Mover para…</option>${moves}</select>`}
+      <button class="btn" id="edit">Editar dados</button>
+      ${it.status === 'agendado' ? '<button class="btn" id="edit-ag">Editar agendamento</button>' : ''}
+      ${it.status === 'concluido' ? '<button class="btn" id="edit-baixa">Editar baixa</button><button class="btn" id="arq">Arquivar</button>' : ''}
+      ${it.status === 'concluido' || arq ? '<button class="btn" id="reabrir">Reabrir ficha</button>' : ''}
+      ${it.status !== 'solicitacao' ? '<button class="btn btn-primary" id="pr">Imprimir AT</button>' : ''}
+    </div>`,
+    ov => {
+      const on = (id, fn) => { const b = ov.querySelector('#' + id); if (b) b.addEventListener('click', fn); };
+      const mv = ov.querySelector('#mv'); if (mv) mv.addEventListener('change', e => { if (e.target.value) { close(); moveTo(it, e.target.value); } });
+      on('desarq', () => { close(); moveTo(it, 'concluido'); });
+      on('arq', () => { close(); arquivar([it]); });
+      on('reabrir', () => openReabrir(it));
+      on('edit', () => openEditar(it));
+      on('edit-ag', () => openAgendar(it));
+      on('edit-baixa', () => openConcluir(it));
+      on('pr', () => printAT(it));
+      on('del', () => {
+        ov.querySelector('#del-zone').innerHTML = `<div class="confirm-bar">Excluir ${proto(it.num)} definitivamente? Ela também sai do dashboard.
+          <button class="btn btn-sm btn-danger" id="del-yes">Sim, excluir</button><button class="btn btn-sm" id="del-no">Não</button></div>`;
+        ov.querySelector('#del-no').onclick = () => ov.querySelector('#del-zone').innerHTML = '';
+        ov.querySelector('#del-yes').onclick = async () => { if (await removeItem(it)) { close(); toast(proto(it.num) + ' excluída'); } };
+      });
+    });
+}
+
+function openEditar(it) {
+  fotosTmp = (it.fotos || []).map(f => Object.assign({}, f));
+  modal(head('Editar solicitação', proto(it.num)) +
+    `<div class="modal-body">${fieldsSolicitacao(it)}</div>
+     <div class="modal-foot"><button class="btn" data-close>Cancelar</button><button class="btn btn-primary" id="ok">Salvar</button></div>`,
+    ov => {
+      mountFotos(ov, '#s-fotos', fotosTmp);
+      ov.querySelector('#ok').addEventListener('click', async e => {
+        const d = readSolicitacao(ov); if (!d) return;
+        Object.assign(it, d); it.historico.push({ t: nowStr(), s: 'Dados da solicitação editados' });
+        if (!(await persist(it, e.currentTarget))) return;
+        close(); toast('Alterações salvas');
+      });
+    });
+}
+
+/* ================= Dashboard ================= */
+const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+function periodo() {
+  const v = document.getElementById('periodo').value, fim = today();
+  if (v === 'tudo') {
+    const datas = state.items.map(i => i.dataSolic).filter(Boolean).sort();
+    return { ini: datas[0] || fim, fim };
+  }
+  if (v === 'ano') return { ini: fim.slice(0, 4) + '-01-01', fim };
+  return { ini: addDays(-(+v - 1)), fim };
+}
+const inP = (d, p) => d && d >= p.ini && d <= p.fim;
+
+function hbars(rows, total, unit = '') {
+  if (!rows.length) return '<div class="dash-empty">Sem dados no período.</div>';
+  const max = Math.max(...rows.map(r => r[1]));
+  return rows.map(([n, c], k) => `<div class="hbar ${k === 0 ? 'top' : ''}"><span class="name" title="${esc(n)}">${esc(n)}</span>
+    <div class="track"><div class="fill" style="width:${max ? c / max * 100 : 0}%"></div></div>
+    <span class="knum"><b>${c}</b>${total ? ` · ${Math.round(c / total * 100)}%` : unit}</span></div>`).join('');
+}
+const countBy = (arr, fn) => Object.entries(arr.reduce((m, i) => { const k = fn(i) || '—'; m[k] = (m[k] || 0) + 1; return m; }, {})).sort((a, b) => b[1] - a[1]);
+
+function renderDash() {
+  const p = periodo();
+  document.getElementById('range').textContent = `${fmt(p.ini)} a ${fmt(p.fim)}`;
+  const its = state.items;
+  const abertas = its.filter(i => inP(i.dataSolic, p));
+  const realizadas = its.filter(i => (i.status === 'concluido' || i.status === 'arquivado') && inP(i.dataConcl, p));
+  const andamento = its.filter(i => i.status === 'solicitacao' || i.status === 'agendado');
+  const reabertas = its.filter(i => (i.reaberturas || []).some(r => inP(r.data, p)));
+  const vencidas = its.filter(i => i.status === 'agendado' && i.dataPrev && i.dataPrev < today());
+  const tempos = realizadas.filter(i => i.dataSolic && i.dataConcl).map(i => daysBetween(i.dataSolic, i.dataConcl));
+  const tMedio = tempos.length ? (tempos.reduce((a, b) => a + b, 0) / tempos.length) : null;
+  const comTipo = abertas.filter(i => i.status !== 'solicitacao');
+  const nFora = comTipo.filter(i => i.tipo === 'fora').length, nCort = comTipo.filter(i => i.tipo === 'fora' && i.cortesia).length;
+  const nGar = comTipo.length - nFora;
+  const motivos = countBy(abertas, i => i.categoria);
+  const top = motivos[0];
+
+  // Meses do período (até 12)
+  const meses = [];
+  let d = new Date(p.ini.slice(0, 7) + '-01T12:00:00');
+  const fimM = p.fim.slice(0, 7);
+  while (iso(d).slice(0, 7) <= fimM) { meses.push(iso(d).slice(0, 7)); d.setMonth(d.getMonth() + 1); }
+  const mesesV = meses.slice(-12);
+  const mData = mesesV.map(m => [m, its.filter(i => i.dataSolic?.startsWith(m)).length, its.filter(i => (i.status === 'concluido' || i.status === 'arquivado') && i.dataConcl?.startsWith(m)).length]);
+  const mMax = Math.max(1, ...mData.flatMap(x => [x[1], x[2]]));
+
+  const statusAtual = [['Solicitação de AT', its.filter(i => i.status === 'solicitacao').length], ['Agendamento realizado', its.filter(i => i.status === 'agendado').length],
+    ['Concluída (no quadro)', its.filter(i => i.status === 'concluido').length], ['Arquivada', its.filter(i => i.status === 'arquivado').length]];
+
+  document.getElementById('dash').innerHTML = `
+    <div class="kpis">
+      <div class="kpi"><span class="lbl">Abertas</span><span class="kval">${abertas.length}</span><span class="note">solicitações no período</span></div>
+      <div class="kpi"><span class="lbl">Realizadas</span><span class="kval">${realizadas.length}</span><span class="note">com baixa no período</span></div>
+      <div class="kpi"><span class="lbl">Em andamento</span><span class="kval">${andamento.length}</span><span class="note">${its.filter(i => i.status === 'solicitacao').length} aguardando agenda · ${its.filter(i => i.status === 'agendado').length} agendadas</span></div>
+      <div class="kpi ${vencidas.length ? 'alert' : ''}"><span class="lbl">Agendas vencidas</span><span class="kval">${vencidas.length}</span><span class="note">data passou e não teve baixa</span></div>
+      <div class="kpi ${reabertas.length ? 'alert' : ''}"><span class="lbl">Reabertas</span><span class="kval">${reabertas.length}</span><span class="note">cliente voltou a reclamar</span></div>
+      <div class="kpi"><span class="lbl">Tempo médio</span><span class="kval">${tMedio == null ? '—' : tMedio.toFixed(1).replace('.', ',')}<small>${tMedio == null ? '' : 'dias'}</small></span><span class="note">da solicitação até a baixa</span></div>
+    </div>
+    <div class="panels">
+      <div class="panel">
+        <h3>Principal motivo</h3>
+        <p class="ksub">${top ? `<b style="color:var(--text)">${esc(top[0])}</b> responde por ${Math.round(top[1] / abertas.length * 100)}% das solicitações abertas no período.` : 'Sem solicitações no período.'}</p>
+        ${hbars(motivos, abertas.length)}
+      </div>
+      <div class="panel">
+        <h3>Abertas × realizadas por mês</h3>
+        <div class="legend"><span><i style="background:var(--amber)"></i>Abertas</span><span><i style="background:var(--green)"></i>Realizadas</span></div>
+        <div class="months-scroll">
+          <div class="months">${mData.map(([m, a, r]) => `<div class="mcol"><div class="mbars">
+            <div class="mbar a" style="height:${a / mMax * 100}%"><span>${a || ''}</span></div>
+            <div class="mbar r" style="height:${r / mMax * 100}%"><span>${r || ''}</span></div></div></div>`).join('')}</div>
+          <div class="mlabels">${mData.map(([m]) => `<div>${MESES[+m.slice(5) - 1]}/${m.slice(2, 4)}</div>`).join('')}</div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Garantia × fora de garantia</h3>
+        <p class="ksub">Entre as solicitações do período que já foram agendadas (${comTipo.length}).</p>
+        ${comTipo.length ? `<div class="split">
+          <div style="flex:${nGar};background:var(--green)">${nGar ? Math.round(nGar / comTipo.length * 100) + '%' : ''}</div>
+          <div style="flex:${nFora - nCort};background:var(--amber)">${nFora - nCort ? Math.round((nFora - nCort) / comTipo.length * 100) + '%' : ''}</div>
+          <div style="flex:${nCort};background:var(--gold)">${nCort ? Math.round(nCort / comTipo.length * 100) + '%' : ''}</div></div>
+          <div class="legend"><span><i style="background:var(--green)"></i>Garantia ${nGar}</span><span><i style="background:var(--amber)"></i>Fora de garantia ${nFora - nCort}</span><span><i style="background:var(--gold)"></i>Cortesia ${nCort}</span></div>`
+          : '<div class="dash-empty">Sem dados no período.</div>'}
+      </div>
+      <div class="panel">
+        <h3>Situação atual</h3>
+        <p class="ksub">Todas as solicitações, independente do período.</p>
+        ${hbars(statusAtual, 0)}
+      </div>
+      <div class="panel">
+        <h3>Abertas por vendedor</h3>
+        <p class="ksub">Quem mais registrou solicitações no período.</p>
+        ${hbars(countBy(abertas, i => i.vendedor), abertas.length)}
+      </div>
+      <div class="panel">
+        <h3>Realizadas por responsável</h3>
+        <p class="ksub">Baixas por equipe/instalador no período.</p>
+        ${hbars(countBy(realizadas, i => i.resp), realizadas.length)}
+      </div>
+    </div>`;
+}
+document.getElementById('periodo').addEventListener('change', renderDash);
+
+/* ================= Impressão da AT ================= */
+const HEADER = `<div class="at-ph-left"><h1>ARANTES MARMORARIA</h1><p>Pedras Decorativas Arantes Ltda &nbsp;|&nbsp; CNPJ 02.681.183/0001-83<br>Rua Dinamarca, 129 — São José dos Campos, SP</p></div>`;
+const FOOTER = `<div class="at-footer-print">Arantes Marmoraria — Rua Dinamarca, 129, São José dos Campos/SP — CNPJ 02.681.183/0001-83</div>`;
+const cb = on => `<div class="at-checkbox-print ${on ? 'checked' : ''}">${on ? '✓' : ''}</div>`;
+const fotoBox = (f, cap) => `<div><div class="at-foto-tag">${esc(f.ambiente || cap.tag)}</div><img src="${f.src}" alt=""><div class="at-foto-cap">${f.ambiente ? esc(f.ambiente) + ' — ' : ''}${cap.txt}</div></div>`;
+const CAP_CLIENTE = { tag: 'Referência', txt: 'Foto de referência enviada pelo cliente.' };
+
+/* Páginas extras de fotos, com o mesmo cabeçalho da AT */
+function photoPages(it, titulo, fotos, cap) {
+  let out = '';
+  const total = Math.ceil(fotos.length / 4);
+  for (let k = 0; k < fotos.length; k += 4) {
+    out += `<div class="at-page-break">
+      <div class="at-print-header">${HEADER}<div class="at-ph-right"><div class="at-title">Ordem de Assistência Técnica</div>
+        <p>Cliente: <strong>${esc(it.nome)}</strong> · ${proto(it.num)}</p><p style="font-size:9px;color:#5C5A54">${titulo}${total > 1 ? ` — pág. ${k / 4 + 1} de ${total}` : ''}</p></div></div>
+      <div class="at-section-title">${titulo}</div>
+      <div class="at-foto-grid at-foto-grid-4">${fotos.slice(k, k + 4).map(f => fotoBox(f, cap)).join('')}</div>${FOOTER}</div>`;
+  }
+  return out;
+}
+
+function printAT(it) {
+  const fotos = it.fotos || [];
+  const p1 = fotos.slice(0, 2), rest = fotos.slice(2);
+  const visitas = it.visitas || [], reab = it.reaberturas || [];
+  const nAtual = visitas.length + 1;
+  const concluida = (it.status === 'concluido' || it.status === 'arquivado') && it.dataConcl;
+  const reabTxt = reab.length ? `\n\n— Retorno do cliente em ${fmt(reab[reab.length - 1].data)} (${nAtual}º atendimento):\n${reab[reab.length - 1].motivo}` : '';
+
+  const anteriores = visitas.length ? `<div class="at-section"><div class="at-section-title">Atendimentos anteriores desta ficha</div>
+    ${visitas.map((v, k) => `<div class="at-visit"><div class="at-visit-h"><b>${v.n}º atendimento</b> · concluído em ${fmt(v.dataConcl)} · ${esc(v.resp || '—')}${v.fotosReparo?.length ? ` · ${v.fotosReparo.length} foto(s) no anexo` : ''}</div>
+      <div>${esc(v.obsConcl || 'Sem descrição.')}</div>${reab[k] ? `<div class="at-visit-r">Cliente voltou a reclamar em ${fmt(reab[k].data)}: ${esc(reab[k].motivo)}</div>` : ''}</div>`).join('')}
+  </div>` : '';
+
+  const baixa = concluida ? `<div class="at-section"><div class="at-section-title">Reparo realizado${nAtual > 1 ? ` — ${nAtual}º atendimento` : ''}</div>
+      <div class="at-row-pair">
+        <div class="at-row"><span class="at-row-label">Concluído em</span><span class="at-row-value">${fmt(it.dataConcl)}</span></div>
+        <div class="at-row"><span class="at-row-label">Executado por</span><span class="at-row-value">${esc(it.resp)}</span></div>
+      </div>
+      <div class="at-desc-box" style="min-height:40px">${esc(it.obsConcl || 'Sem descrição.')}</div>
+      ${it.fotosReparo?.length ? `<div class="at-foto-grid">${it.fotosReparo.slice(0, 2).map(f => fotoBox(f, { tag: 'Reparo', txt: 'Foto do reparo realizado.' })).join('')}</div>` : ''}
+    </div>` : '';
+
+  // Página 1: fotos do problema só se não houver baixa (para caber o reparo); senão vão para o anexo
+  const fotosProbP1 = concluida ? [] : p1;
+  const fotosProbAnexo = concluida ? fotos : rest;
+  let anexos = '';
+  if (fotosProbAnexo.length) anexos += photoPages(it, 'Fotos do problema (enviadas pelo cliente)', fotosProbAnexo, CAP_CLIENTE);
+  if (concluida && it.fotosReparo?.length > 2) anexos += photoPages(it, 'Fotos do reparo realizado', it.fotosReparo.slice(2), { tag: 'Reparo', txt: 'Foto do reparo realizado.' });
+  visitas.forEach(v => { if (v.fotosReparo?.length) anexos += photoPages(it, `Fotos do ${v.n}º atendimento (${fmt(v.dataConcl)})`, v.fotosReparo, { tag: 'Reparo', txt: 'Foto do reparo realizado.' }); });
+
+  const doc = document.getElementById('at-print-doc');
+  doc.innerHTML = `
+    <div class="at-print-header">${HEADER}
+      <div class="at-ph-right"><div class="at-title">Ordem de Assistência Técnica</div>
+        ${concluida ? '<div class="at-status-ok">✓ Concluída</div>' : nAtual > 1 ? `<div class="at-status-ret">Retorno · ${nAtual}º atendimento</div>` : ''}
+        <p>Data de abertura: <strong>${fmt(it.dataSolic)}</strong></p>
+        <p>N° do protocolo: <span class="at-protocolo">${proto(it.num)}</span></p></div>
+    </div>
+    <div class="at-section"><div class="at-section-title">Dados do Cliente</div>
+      <div class="at-row"><span class="at-row-label">Nome completo</span><span class="at-row-value">${esc(it.nome)}</span></div>
+      <div class="at-row"><span class="at-row-label">Telefone</span><span class="at-row-value">${esc(it.tel)}</span></div>
+      <div class="at-row"><span class="at-row-label">Endereço</span><span class="at-row-value">${esc(it.end)}</span></div>
+      <div class="at-row-pair">
+        <div class="at-row"><span class="at-row-label">Ano da venda</span><span class="at-row-value">${esc(it.anoVenda || '')}</span></div>
+        <div class="at-row"><span class="at-row-label">Vendedor</span><span class="at-row-value">${esc(it.vendedor)}</span></div>
+      </div>
+    </div>
+    <div class="at-section"><div class="at-section-title">Descrição do Problema${it.categoria ? ' — ' + esc(it.categoria) : ''}</div><div class="at-desc-box">${esc(it.motivo)}${esc(reabTxt)}</div></div>
+    ${anteriores}
+    <div class="at-section"><div class="at-section-title">Controle Interno</div>
+      <div class="at-ctrl-grid">
+        <div class="at-ctrl-box"><div class="at-ctrl-box-title">Tipo</div><div class="at-ctrl-item">${cb(it.tipo === 'garantia')} Garantia</div><div class="at-ctrl-item">${cb(it.tipo === 'fora')} Fora de garantia</div></div>
+        <div class="at-ctrl-box"><div class="at-ctrl-box-title">Prioridade</div><div class="at-ctrl-item">${cb(it.prioridade === 'normal')} Normal</div><div class="at-ctrl-item">${cb(it.prioridade === 'urgente')} Urgente</div></div>
+        <div class="at-ctrl-box"><div class="at-ctrl-box-title">Responsável</div><div class="at-ctrl-line">${esc(it.resp)}</div></div>
+        <div class="at-ctrl-box"><div class="at-ctrl-box-title">Data prevista</div><div class="at-ctrl-line">${fmt(it.dataPrev)}</div></div>
+      </div>
+      ${it.cortesia ? '<div class="at-cortesia-print">⚑ Atendimento fora de garantia — realizado em caráter de cortesia.</div>' : ''}
+    </div>
+    ${baixa}
+    ${concluida ? '' : `<div class="at-section"><div class="at-section-title">Observações Complementares</div>
+      <div class="at-obs">
+        <p>Se a equipe comparecer ao local e não houver condições para execução — área não liberada, sem autorização de acesso ou situação similar — a visita será considerada <strong>improdutiva</strong> e será cobrada a <strong>taxa de retorno</strong>, com reagendamento conforme disponibilidade da agenda técnica.</p>
+        <p>A presente assistência técnica limita-se <strong>exclusivamente aos serviços descritos neste formulário</strong>, não abrangendo quaisquer outras solicitações que não estejam expressamente registradas.</p>
+      </div>
+    </div>`}
+    ${fotosProbP1.length ? `<div class="at-foto-grid">${fotosProbP1.map(f => fotoBox(f, CAP_CLIENTE)).join('')}</div>` : ''}
+    ${FOOTER}
+    ${anexos}`;
+  it.historico.push({ t: nowStr(), s: concluida ? 'AT reimpressa (com reparo)' : 'AT impressa' }); saveItem(it);
+  const imgs = [...doc.querySelectorAll('img')];
+  Promise.all(imgs.map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }))).then(() => {
+    doc.style.display = 'block';
+    document.body.classList.add('printing-at');
+    window.print();
+    setTimeout(() => { doc.style.display = 'none'; document.body.classList.remove('printing-at'); }, 500);
+  });
+}
+
+/* ================= Diversos ================= */
+let tTimer;
+function toast(msg) {
+  let t = document.querySelector('#atk .toast');
+  if (!t) { t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); document.getElementById('atk').appendChild(t); }
+  t.textContent = msg; t.hidden = false;
+  clearTimeout(tTimer); tTimer = setTimeout(() => t.hidden = true, 2600);
+}
+document.getElementById('btn-nova').addEventListener('click', openNova);
+document.getElementById('busca').addEventListener('input', e => { busca = e.target.value; render(); });
+document.getElementById('btn-atualizar').addEventListener('click', () => load());
+
+/* Atualiza sozinho a cada 60 s enquanto a aba AT estiver aberta (sem atrapalhar quem está editando) */
+setInterval(() => {
+  const aba = document.getElementById('pane-at');
+  if (aba && aba.classList.contains('active') && !root.innerHTML && !ocupado && !document.hidden) load(true);
+}, 60000);
+window.atkAoAbrir = () => load(!carregado ? false : true);
+
+render(); load();
+
+})();
+</script>
 </body>
 </html>
